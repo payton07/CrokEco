@@ -1,0 +1,16 @@
+- faire des recherches dans le fichier ou l'api web
+- faire les recherches à chaque fois ou stocker dans une bdd de "déjà trouvé"
+- algo pour tester des petites variations de texte
+- serveur : sqlite ou postgresql
+- est-ce que la recherche se fait sur le client ou le serveur
+- si on utilise le fichier : est-ce qu'on filtre en changeant où à l'ouverture du fichiers en runtime
+- modèle : plus local possible, envoie les données une fois traité
+- page stats globales
+- alternatives : menus à côtés mieux (avec ou sans cartes (nouvelle page))
+- serveur : s'assurer que ce sont bien nos applis qui envoient les demandes
+- api publique pour stats globales
+
+- fixage potentiellement remise en question : local mais serveur en plus pour stats globales
+
+- page aliments, favoris (scroll horizontal) et conseillé (scroll horizontal) boutons pour aller dans des pages
+- historique quand on clique sur la barre de recherche
