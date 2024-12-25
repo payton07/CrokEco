@@ -14,3 +14,6 @@
 
 - page aliments, favoris (scroll horizontal) et conseillé (scroll horizontal) boutons pour aller dans des pages
 - historique quand on clique sur la barre de recherche
+
+- qu'est-ce qu'on envoie comme stats globales : au moins plats mais aussi sans doute menus, sans doute pas les historiques
+- pas de compte donc perte de son historique si on désintalle l'appli (à voir avec le prof)
