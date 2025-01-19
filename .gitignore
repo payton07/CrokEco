@@ -1,1 +1,11 @@
 ./packages/frontend/node_modules/
+packages/frontend/.devenv
+
+.env
+packages/frontend/.android
+.direnv
+.devenv
+*~
+
+packages/frontend/android
+packages/frontend/ios

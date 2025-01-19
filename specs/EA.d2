@@ -1,0 +1,168 @@
+# Client: {
+    Menu: {
+        shape: sql_table
+        near: top-left
+        id_menu: {constraint: primary_key}
+        nom
+        localisation
+        etablissement
+        temps de scan
+    }
+
+    Compose: {
+        shape: oval
+        # near: top-center
+    }
+    Plat -- Compose: {
+        source-arrowhead: 0..*
+    }
+    Menu -- Compose {
+        source-arrowhead: 1..*
+    }
+
+
+    Plat: {
+        shape: sql_table
+        id_plat: {constraint: [primary_key]}
+        nom_français
+        nom_anglais
+        nom_espagnole
+        score
+        unité_français
+        unité_espagnole
+        transparence
+        qualité
+        incertitude
+        autres qualités
+        source
+        programme
+    }
+
+
+    Catégorie: {
+        shape: sql_table
+        near: bottom-left
+        nom
+        parent
+    }
+    Historique: {
+        shape: sql_table
+        near: center-left
+    }
+
+    Classe: {shape: oval}
+    Plat -- Classe: {
+        source-arrowhead: 1..1
+    }
+    Catégorie -- Classe: {
+        source-arrowhead: 1..*
+    }
+
+    Contient: {
+        shape: oval
+        near: bottom-center
+    }
+    Catégorie -- Contient {
+        source-arrowhead: 0..1
+    }
+    Catégorie -- Contient {
+        source-arrowhead: 1..1
+    }
+
+    Enregistre: {shape: oval}
+    Menu -- Enregistre {
+        source-arrowhead: 1..1
+    }
+    Historique -- Enregistre {
+        source-arrowhead: 1..*
+    }
+
+    Qualifie_anglais: {
+        shape: oval
+    }
+    Tags_anglais -- Qualifie_anglais {
+        source-arrowhead: 1..*
+    }
+    Plat -- Qualifie_anglais {
+        source-arrowhead: 0..*
+    }
+
+    Qualifie_français: {
+        shape: oval
+    }
+    Tags_français -- Qualifie_français {
+        source-arrowhead: 1..*
+    }
+    Plat -- Qualifie_français {
+        source-arrowhead: 0..*
+    }
+
+    Qualifie_espagnols: {shape: oval}
+    Tags_espagnols -- Qualifie_espagnols {
+        source-arrowhead: 1..*
+    }
+    Plat -- Qualifie_espagnols {
+        source-arrowhead: 0..*
+    }
+
+    Tags_français: {
+        shape: sql_table
+        near: top-right
+    }
+
+    Tags_anglais: {
+        shape: sql_table
+        near: center-right
+    }
+
+    Tags_espagnols: {
+        shape: sql_table
+        near: bottom-right@
+    }
+# }
+
+# Serveur: {
+#     Menu_stats: {
+#         shape: sql_table
+#         nb_occurences
+#     }
+    
+
+#     Liste_Menu: {shape: sql_table}
+
+#     Liste_Plat: {shape: sql_table}
+
+#     Stats: {shape: sql_table}
+
+#     Plat_stats: {
+#         shape: sql_table
+#         nb_occurences
+#     }
+
+
+#     Stats -- Liste_Menu: {
+#         source-arrowhead: 1
+#         target-arrowhead: 1
+#     }
+
+#     Stats -- Liste_Plat {
+#         source-arrowhead: 1
+#         target-arrowhead: 1
+#     }
+
+#     EstUnItemMenu: {shape: oval}
+#     Menu_stats -- EstUnItemMenu: {
+#         source-arrowhead: 1..1
+#     }
+#     Liste_Menu -- EstUnItemMenu: {
+#         source-arrowhead: 1..*
+#     }
+
+#     EstUnItemPlat: {shape: oval}
+#     Plat_stats -- EstUnItemPlat: {
+#         source-arrowhead: 1..1
+#     }
+#     Liste_Plat-- EstUnItemPlat: {
+#         source-arrowhead: 1..*
+#     }
+# }
