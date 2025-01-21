@@ -1,0 +1,4 @@
+- faire l'EA et dico
+- faire la base de données + docs
+- extraction du csv
+- (plus tard) frontend
