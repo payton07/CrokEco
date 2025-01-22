@@ -32,6 +32,10 @@
               modules = [
                 {
                   # https://devenv.sh/reference/options/
+                  packages = [
+                    pkgs.chromium
+                  ];
+
                   languages = {
                     java = {
                       enable = true;
@@ -54,17 +58,6 @@
                       cd android
                       ./gradlew app:assembleRelease
                     '';
-                  };
-
-                  git-hooks.hooks = {
-                    actionlint.enable = true;
-                    denolint = {
-                      enable = true;
-                      excludes = [ ".js" ];
-                    };
-                    nixpkgs-fmt.enable = true;
-                    nil.enable = true;
-                    prettier.enable = true;
                   };
                 }
               ];
