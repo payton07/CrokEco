@@ -54,6 +54,12 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
       />
+      <Tabs.Screen
+        name="bdd_test"
+        options={{
+          title: 'Bdd test',
+        }}
+      />
     </Tabs>
   );
 }
