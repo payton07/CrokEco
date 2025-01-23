@@ -59,6 +59,10 @@
                       ./gradlew app:assembleRelease
                     '';
                   };
+
+                  git-hooks.hooks = {
+                    prettier.enable = true;
+                  };
                 }
               ];
             };
