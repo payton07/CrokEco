@@ -1,5 +1,4 @@
 from math import isnan
-import math 
 import pandas as pd 
 INPUT_FILE = "../assets/base_carboner_filtre_sans_NaN.csv"
 
@@ -26,11 +25,16 @@ def Affiche_val_col_et_max(colone):
         print("Taille : ",len(neg), neg)
 # Affiche_val_col_et_max("Nom frontière français")
 
-def val_tags_fr(f):
+def Affiche_distinct_val_col_et_taille(f):
     data=pd.read_csv(INPUT_FILE, sep=',')
     res = []
     for ele in data[f]:
         if not(res.__contains__(ele)):
             res.append(ele)
-    print("la taille : ",res,len(res))
-# val_tags_fr("Source")
+    if(len(res)==len(data[f])):
+        print("Tous les éléments sont distincts")
+    else:
+        print("Il y a des éléments qui sont dupliqués")
+        print(f"Les éléments : {res} \nla taille  : {len(res)}")
+# Affiche_distinct_val_col_et_taille("Tags français")
+# Affiche_distinct_val_col_et_taille("Identifiant de l'élément")
