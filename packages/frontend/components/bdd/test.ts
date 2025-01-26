@@ -25,7 +25,7 @@ export function test_create(test: Test) {
         SELECT * FROM test WHERE idApp LIKE '${test.idApp}';
     `);
   if (res === null) {
-    db.execSync(`
+    db.runSync(`
           INSERT INTO test (idApp, value, intValue) VALUES (${test.idApp}, '${test.value}', ${test.intValue});
       `);
   }
@@ -37,4 +37,25 @@ export async function test_read() {
         SELECT * FROM test;
     `);
   return await testOut;
+}
+
+export function test_update(value: Test["value"], idApp: Test["idApp"]) {
+  const db = SQLite.openDatabaseSync("databaseName");
+  db.runSync(
+    `
+    UPDATE test SET value = ? WHERE idApp = ?
+  `,
+    value,
+    idApp,
+  );
+}
+
+export function test_delete(test: Test) {
+  const db = SQLite.openDatabaseSync("databaseName");
+  db.runSync(
+    `
+    DELETE FROM test WHERE idApp = ?
+ `,
+    test.idApp,
+  );
 }

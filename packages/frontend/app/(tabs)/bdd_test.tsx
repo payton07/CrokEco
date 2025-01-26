@@ -3,7 +3,14 @@ import { StyleSheet } from "react-native";
 import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
 
-import { Test, test_init, test_read, test_create } from "@/components/bdd/test";
+import {
+  Test,
+  test_init,
+  test_read,
+  test_create,
+  test_update,
+  test_delete,
+} from "@/components/bdd/test";
 import { useEffect, useState } from "react";
 
 const before_new: Test = {
@@ -32,11 +39,27 @@ export default function BddTestScreen() {
   useEffect(() => {
     test_init();
     test_create(before_new);
+    test_update("javascript", before_new.idApp);
     test_read().then((val) => {
       if (val != undefined) {
         for (const test of val) {
           if (test.idApp === before_new.idApp) {
             after_newState(test);
+          }
+        }
+      }
+    });
+  }, []);
+  const [after_new2Exists, after_new2ExistsState] = useState(true);
+
+  useEffect(() => {
+    test_create(before_new2);
+    test_delete(before_new2);
+    test_read().then((val) => {
+      if (val != undefined) {
+        for (const test of val) {
+          if (test.idApp === before_new2.idApp) {
+            after_newState(false);
           }
         }
       }
@@ -52,7 +75,8 @@ export default function BddTestScreen() {
         darkColor="rgba(255,255,255,0.1)"
       />
       <EditScreenInfo path="app/(tabs)/bdd_test.tsx" />
-      <Text>Test 3 : {after_new.value}</Text>
+      <Text>Test 1 : {after_new.value}</Text>
+      <Text>Test 2 marche : {after_new2Exists.toString()}</Text>
     </View>
   );
 }
