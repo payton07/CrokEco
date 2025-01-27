@@ -1,0 +1,41 @@
+Les gars étaient en CMI et avaient commencé en octobre pour les recherches
+
+Ils ont fait les recherches sur l'impact écologique de l'alimentation
+
+leur projet : développer une app avec 2 "pôles", les cantines pouvaient remplir la composition des plat et ça généraient des étiquettes avec l'éco-score déjà sur l'étiquette et le qr code pour que les étudiants, avec l'autre pôle de l'appli, puisse scanner le qr code et avoir la compo et l'impact de chaque ingrédient
+
+bonne idée qu'ils ont eu :
+- ils ont parlé de faire des recherches sur des solutions similaires (il y a déjà Yuka)
+- de faire faire des tests sur des personnes extérieures pour avoir des retours.
+- donner des équivalents aux coûts CO2 avec d'autres domaines genre avion
+
+il y a glimpact qui est comme yuka mais que l'ecoscore.il y a aussi Floop et eaternity en anglis et allemand.
+
+ils ont utilisés flutter
+
+et ils ont fait un serveur web avec flask (un framework web en python), qu'ils avaient déjà utilisés dans leur projet en L2.
+
+ils ont parlé de l'éditeur, en disant qu'ils ont utilisé android studio, avec une extensions pour flutter
+
+ils ont bien détaillé leur architecture avec un texte
+
+il y a agribalyse qui est une autre base de l'Ademe, à voir si on peut pas y prendre des données
+
+leur idée : 
+eux avaient comme idée de pouvoir voir les impacts sans compte mais de devoir faire un compte pour rajouter des plats
+la bdd allaient être distante
+l'application devaient être tout le temps connecté mais au final ils ont pas fait de compte donc pas besoin
+
+eux ils avaient pris d'agribalyse et ils avaient pris que les ingrédient, les plats allaient être construit au fur et à mesure
+
+En gros eux, on rajoute tous les plats mais du coup les gens peuvent mettre les quantités précises de chaque ingrédient
+
+ils avaient un QR code par plat et un global pour le menu
+
+les données étaient contenu dans le QR code
+
+faire gaffe à l'input en frontend, de vérifier qu'on reçoit pas de la merde
+
+En pratique :
+ils ont pas fait la partie compte de l'application, il y a moyen de rajouter des menu dans des établissements mais sans authentification.
+la bdd était dans l'application

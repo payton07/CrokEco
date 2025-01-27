@@ -17,3 +17,8 @@
 
 - qu'est-ce qu'on envoie comme stats globales : au moins plats mais aussi sans doute menus, sans doute pas les historiques
 - pas de compte donc perte de son historique si on désintalle l'appli (à voir avec le prof)
+
+
+- pipeline python va dans une sqlite crée en python avec nos tables. On le mettra dans l'appli, qui aura directement accès à la BDD déjà construite et remplie côté ADEME
+
+- peut-être avoir un mécanisme clé privé/publique ou équivalent pour s'assurer que les clients qui envoient des données au serveurs soient bien nos applis.
