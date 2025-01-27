@@ -4,31 +4,9 @@
   # https://devenv.sh/basics/
   env.GREET = "projet-co2-frontend";
 
-  # https://devenv.sh/packages/
-
-  # https://devenv.sh/languages/
-  # languages.rust.enable = true;
-
-  # https://devenv.sh/processes/
-  # processes.cargo-watch.exec = "cargo-watch";
-
-  # https://devenv.sh/services/
-  # services.postgres.enable = true;
-
-  # https://devenv.sh/scripts/
-  scripts.hello.exec = ''
+  enterShell = ''
     echo hello from $GREET
   '';
-
-  enterShell = ''
-    hello
-  '';
-
-  # https://devenv.sh/tasks/
-  # tasks = {
-  #   "myproj:setup".exec = "mytool build";
-  #   "devenv:enterShell".after = [ "myproj:setup" ];
-  # };
 
   # https://devenv.sh/tests/
   enterTest = ''
@@ -54,11 +32,11 @@
     javascript = {
       enable = true;
       npm.enable = true;
+      package = pkgs.nodejs_latest;
     };
     typescript.enable = true;
   };
 
-  env.ANDROID_HOME="/home/$USER/Android/Sdk";
 
   scripts = {
     build.exec = ''
@@ -70,7 +48,7 @@
 
   git-hooks.hooks = {
     prettier.enable = true;
-    eslint.enable = true;
+    # eslint.enable = true;
   };
 
 }
