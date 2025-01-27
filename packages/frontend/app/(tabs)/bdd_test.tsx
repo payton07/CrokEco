@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-
+import React from 'react';
 import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
 
@@ -35,6 +35,7 @@ export default function BddTestScreen() {
     value: "",
     intValue: 0,
   });
+  const [after_new2Exists, after_new2ExistsState] = useState(true);
 
   useEffect(() => {
     test_init();
@@ -50,7 +51,6 @@ export default function BddTestScreen() {
       }
     });
   }, []);
-  const [after_new2Exists, after_new2ExistsState] = useState(true);
 
   useEffect(() => {
     test_create(before_new2);
@@ -59,7 +59,7 @@ export default function BddTestScreen() {
       if (val != undefined) {
         for (const test of val) {
           if (test.idApp === before_new2.idApp) {
-            after_newState(false);
+            after_new2ExistsState(false);
           }
         }
       }
