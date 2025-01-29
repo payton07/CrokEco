@@ -1,5 +1,6 @@
 **/**/.env
 .pre-commit-config.yaml
+assets/carbon_score.db
 packages/frontend/*
 !packages/frontend/package.json
 !packages/frontend/package-lock.json

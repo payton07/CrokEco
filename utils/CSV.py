@@ -2,8 +2,10 @@ import pandas as pd
 from math import isnan
 import sqlite3
 from pathlib import Path
+import os
 
 INPUT_FILE = "assets/base-carboner.csv"
+INPUT_SQL = "specs/CodeE_A2.sql"
 OUTPUT_FILE = "assets/base_carboner_filtre.csv"
 OUTPUT_DB = "assets/carbon_score.db"
 USELESS_KEYS = ["Type Ligne","Structure","Type de l'élément","Statut de l'élément","Nom base espagnol","Nom attribut espagnol","Tags espagnol","Contributeur","Autres Contributeurs",
@@ -73,18 +75,16 @@ def suppr_keys(data_in, keys):
     
     return data_out
 
-def export_sqlite(data_in):
-    exists = Path(OUTPUT_DB).exists()
+def export_sqlite(data_in,input_sql,output_db):
+    os.remove(output_db)
 
-    connection = sqlite3.connect(OUTPUT_DB)
+    connection = sqlite3.connect(output_db)
     cursor = connection.cursor()
-
-    if not exists:
-        cursor.execute("""
-            CREATE TABLE movie(title);
-        """);
-        cursor.execute("INSERT INTO movie VALUES ('Cars')")
-        connection.commit()
+    with open(input_sql) as script_sql_file:
+        script_sql = script_sql_file.read()
+        print(script_sql)
+        cursor.executescript(script_sql)
+    connection.commit()
     connection.close()
 
 if __name__ == '__main__':
@@ -92,5 +92,5 @@ if __name__ == '__main__':
     data=categorie(data)
     data=archive(data)
     suppr_keys(data, USELESS_KEYS)
-    export_sqlite(data)
+    export_sqlite(data,INPUT_SQL,OUTPUT_DB)
     data.to_csv(OUTPUT_FILE, index=False)

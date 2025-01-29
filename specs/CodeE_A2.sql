@@ -93,6 +93,6 @@ CREATE TABLE "Designe_Tags"(
   "ID_tags" INT(6),
   "ID_plat" INT(6),
   CONSTRAINT PK_DESIGNE_TAGS PRIMARY KEY ("ID_tags", "ID_plat"),
-  CONSTRAINT FK_Designe_Tags__TAGS ADD FOREIGN KEY ("ID_tags") REFERENCES "Tags" ("ID_tags"),
-  CONSTRAINT FK_Designe_Tags__PLAT ADD FOREIGN KEY ("ID_plat") REFERENCES "Plat" ("ID_plat")
+  CONSTRAINT FK_Designe_Tags__TAGS FOREIGN KEY ("ID_tags") REFERENCES "Tags" ("ID_tags"),
+  CONSTRAINT FK_Designe_Tags__PLAT FOREIGN KEY ("ID_plat") REFERENCES "Plat" ("ID_plat")
 );
