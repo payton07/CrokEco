@@ -1,8 +1,11 @@
 import pandas as pd
 from math import isnan
+import sqlite3
+from pathlib import Path
 
 INPUT_FILE = "assets/base-carboner.csv"
 OUTPUT_FILE = "assets/base_carboner_filtre.csv"
+OUTPUT_DB = "assets/carbon_score.db"
 USELESS_KEYS = ["Type Ligne", "Structure", "Type de l'élément", "Statut de l'élément", "Contributeur","Programme","Url du programme","Localisation géographique"]
 # Il faudra peut etre en lever le NaN et mettre toutes les catégories à supprimer ici car avec d'autres valeurs on ne sait pas ce que la fonction rique de renvoyer
 
@@ -66,10 +69,26 @@ def suppr_keys(data_in, keys):
     
     return data_out
 
+def export_sqlite(data_in):
+    exists = Path(OUTPUT_DB).exists()
+
+    connection = sqlite3.connect(OUTPUT_DB)
+    cursor = connection.cursor()
+
+    if not exists:
+        cursor.execute("""
+            CREATE TABLE movie(title);
+        """);
+        cursor.execute("INSERT INTO movie VALUES ('Cars')");
+        connection.commit();
+    
+    
+
 if __name__ == '__main__':
     data=pd.read_csv(INPUT_FILE, sep=',')
     data=categorie(data)
     data=archive(data)
     data=suppr_nan(data)
     suppr_keys(data, USELESS_KEYS)
+    export_sqlite(data)
     data.to_csv(OUTPUT_FILE, index=False)
