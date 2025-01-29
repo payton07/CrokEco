@@ -6,8 +6,12 @@ from pathlib import Path
 INPUT_FILE = "assets/base-carboner.csv"
 OUTPUT_FILE = "assets/base_carboner_filtre.csv"
 OUTPUT_DB = "assets/carbon_score.db"
-USELESS_KEYS = ["Type Ligne", "Structure", "Type de l'élément", "Statut de l'élément", "Contributeur","Programme","Url du programme","Localisation géographique"]
-# Il faudra peut etre en lever le NaN et mettre toutes les catégories à supprimer ici car avec d'autres valeurs on ne sait pas ce que la fonction rique de renvoyer
+USELESS_KEYS = ["Type Ligne","Structure","Type de l'élément","Statut de l'élément","Nom base espagnol","Nom attribut espagnol","Tags espagnol","Contributeur","Autres Contributeurs",
+                "Programme","Url du programme","Localisation géographique", "Sous-localisation géographique français","Sous-localisation géographique anglais",
+                "Sous-localisation géographique espagnol", "Réglementations", "Type poste","Nom poste français","Nom poste anglais","Nom poste espagnol","CO2f",
+                "CH4f","CH4b","N2O","Code gaz supplémentaire 1","Valeur gaz supplémentaire 1","Code gaz supplémentaire 2","Valeur gaz supplémentaire 2",
+                "Valeur gaz supplémentaire 3","Valeur gaz supplémentaire 4","Code gaz supplémentaire 5","Valeur gaz supplémentaire 5","Autres GES","CO2b"]
+
 
 def categorie(data_in):
     T=[]
@@ -88,7 +92,6 @@ if __name__ == '__main__':
     data=pd.read_csv(INPUT_FILE, sep=',')
     data=categorie(data)
     data=archive(data)
-    data=suppr_nan(data)
     suppr_keys(data, USELESS_KEYS)
     export_sqlite(data)
     data.to_csv(OUTPUT_FILE, index=False)
