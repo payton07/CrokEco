@@ -83,10 +83,9 @@ def export_sqlite(data_in):
         cursor.execute("""
             CREATE TABLE movie(title);
         """);
-        cursor.execute("INSERT INTO movie VALUES ('Cars')");
-        connection.commit();
-    
-    
+        cursor.execute("INSERT INTO movie VALUES ('Cars')")
+        connection.commit()
+    connection.close()
 
 if __name__ == '__main__':
     data=pd.read_csv(INPUT_FILE, sep=',')
