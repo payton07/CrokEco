@@ -1,7 +1,9 @@
 CREATE TABLE "Plat" (
   "ID_plat" INT(6),
+  "Nom" VARCHAR(30),
   "ID_categorie" VARCHAR(20),
-  CONSTRAINT PK_PLAT PRIMARY KEY("ID_plat")
+  CONSTRAINT PK_PLAT PRIMARY KEY("ID_plat"),
+  CONSTRAINT FK_PLAT_CATEGORIE FOREIGN KEY ("ID_categorie") REFERENCES Categorie("ID_categorie")
 );
 
 CREATE TABLE "Element" (
