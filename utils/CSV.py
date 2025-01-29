@@ -87,10 +87,26 @@ def export_sqlite(data_in,input_sql,output_db):
     connection.commit()
     connection.close()
 
+
+def insertion_bd(dico_in, input_db):
+    dico_copy = dico_in.copy()
+    del dico_copy["Tags français"]
+    del dico_copy["Tags anglais"]
+    del dico_copy["Code de la catégorie"]
+    data = list(dico_copy.itertuples(index=False, name=None))
+    con = sqlite3.connect(input_db)
+    cur = con.cursor
+    cur.executemany("INSERT INTO ELEMENT movie VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", data)
+    con.commit()
+    con.close()
+
+
+
 if __name__ == '__main__':
     data=pd.read_csv(INPUT_FILE, sep=',')
     data=categorie(data)
     data=archive(data)
     suppr_keys(data, USELESS_KEYS)
     export_sqlite(data,INPUT_SQL,OUTPUT_DB)
-    data.to_csv(OUTPUT_FILE, index=False)
+    insertion_bd(OUTPUT_DB, INPUT_SQL)
+    #data.to_csv(OUTPUT_FILE, index=False)
