@@ -23,11 +23,11 @@ const before_new2: Test = {
   value: "php",
   intValue: 10000,
 };
-const before_new3: Test = {
-  idApp: 1,
-  value: "rust",
-  intValue: 99,
-};
+// const before_new3: Test = {
+//   idApp: 1,
+//   value: "rust",
+//   intValue: 99,
+// };
 
 export default function BddTestScreen() {
   const [after_new, after_newState] = useState({
