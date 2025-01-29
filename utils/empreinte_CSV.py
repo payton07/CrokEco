@@ -7,12 +7,12 @@ import os
 INPUT_FILE = "assets/base-carboner.csv"
 INPUT_SQL = "specs/CodeE_A2.sql"
 OUTPUT_FILE = "assets/base_carboner_filtre.csv"
-OUTPUT_DB = "assets/carbon_score.db"
+OUTPUT_DB = "assets/empreinte_carbon_score.db"
 USELESS_KEYS = ["Type Ligne","Structure","Type de l'élément","Statut de l'élément","Nom base espagnol","Nom attribut espagnol","Tags espagnol","Contributeur","Autres Contributeurs",
                 "Programme","Url du programme","Localisation géographique", "Sous-localisation géographique français","Sous-localisation géographique anglais",
                 "Sous-localisation géographique espagnol", "Réglementations", "Type poste","Nom poste français","Nom poste anglais","Nom poste espagnol","CO2f",
                 "CH4f","CH4b","N2O","Code gaz supplémentaire 1","Valeur gaz supplémentaire 1","Code gaz supplémentaire 2","Valeur gaz supplémentaire 2",
-                "Valeur gaz supplémentaire 3","Valeur gaz supplémentaire 4","Code gaz supplémentaire 5","Valeur gaz supplémentaire 5","Autres GES","CO2b"]
+                "Valeur gaz supplémentaire 3","Valeur gaz supplémentaire 4","Code gaz supplémentaire 5","Valeur gaz supplémentaire 5","Autres GES","CO2b", "Qualité GR"]
 
 
 def categorie(data_in):
@@ -75,31 +75,31 @@ def suppr_keys(data_in, keys):
     
     return data_out
 
-def export_sqlite(data_in,input_sql,output_db):
+def export_sqlite(input_sql,output_db):
     os.remove(output_db)
 
     connection = sqlite3.connect(output_db)
     cursor = connection.cursor()
     with open(input_sql) as script_sql_file:
         script_sql = script_sql_file.read()
-        print(script_sql)
+        # print(script_sql)
         cursor.executescript(script_sql)
     connection.commit()
     connection.close()
 
 
-def insertion_bd(dico_in, input_db):
-    dico_copy = dico_in.copy()
-    del dico_copy["Tags français"]
-    del dico_copy["Tags anglais"]
-    del dico_copy["Code de la catégorie"]
-    data = list(dico_copy.itertuples(index=False, name=None))
-    con = sqlite3.connect(input_db)
-    cur = con.cursor
-    cur.executemany("INSERT INTO ELEMENT movie VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", data)
+def insertion_bd(dico_in, output_db):
+    # dico_copy = dico_in.copy()
+    del dico_in["Tags français"]
+    del dico_in["Tags anglais"]
+    del dico_in["Code de la catégorie"]
+    # print(dico_in.keys())
+    data = list(dico_in.itertuples(index=False, name=None))
+    con = sqlite3.connect(output_db)
+    cur = con.cursor()
+    cur.executemany("INSERT INTO Element VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", data)
     con.commit()
     con.close()
-
 
 
 if __name__ == '__main__':
@@ -107,6 +107,13 @@ if __name__ == '__main__':
     data=categorie(data)
     data=archive(data)
     suppr_keys(data, USELESS_KEYS)
-    export_sqlite(data,INPUT_SQL,OUTPUT_DB)
-    insertion_bd(OUTPUT_DB, INPUT_SQL)
+    export_sqlite(INPUT_SQL,OUTPUT_DB)
+    insertion_bd(data.copy(),OUTPUT_DB)
+    con = sqlite3.connect(OUTPUT_DB)
+    cur = con.cursor()
+    cur.execute("SELECT * FROM Element;")
+    res = cur.fetchall()
+    print(res)
+    con.close()
+
     #data.to_csv(OUTPUT_FILE, index=False)
