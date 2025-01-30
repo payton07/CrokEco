@@ -14,7 +14,7 @@ CREATE TABLE "Plat" (
 
 CREATE TABLE "Ingredients" (
   "ID_ingredient" INTEGER PRIMARY KEY,
-  "Ciqual_AGB" VARCHAR(10),
+  "Ciqual_AGB" VARCHAR(10) NOT NULL,
   /*"Nom_Francais" VARCHAR(50),
   "Groupe_d_aliment" VARCHAR(50),
   "Sous_groupe_d_aliment" VARCHAR(50),

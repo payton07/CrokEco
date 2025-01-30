@@ -37,6 +37,7 @@ def insertion_bd(dico_in, output_db):
     suppr_keys(dico_in, ["Nom Français", "LCI Name", "Sous-groupe d'aliment", "Groupe d'aliment"])
     data = list(dico_in.itertuples(index=False, name=None))
     con = sqlite3.connect(output_db)
+    con.execute("PRAGMA foreign_keys = 1")
     cur = con.cursor()
     cur.executemany("""INSERT INTO Ingredients(Ciqual_AGB,Ingredient,Score_unique_EF,Changement_climatique,
                     Appauvrissement_de_la_couche_d_ozone,Rayonnements_ionisants,Formation_photochimique_d_ozone,Particules_fines,
