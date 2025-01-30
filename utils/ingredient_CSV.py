@@ -7,7 +7,11 @@ INPUT_FILE = "assets/Agribalyse_Detail_ingredient.csv"
 OUTPUT_FILE = "assets/Agribalyse_Detail_ingredient_v2.csv"
 INPUT_SQL = "specs/CodeE_A3.sql"
 OUTPUT_DB = "assets/ingredient_carbon_score.db"
-USELESS_KEYS = ["Ciqual  code"]
+INGREDIENTS_KEYS = [0] + [i for i in range(6,24)]
+PLATS_KEYS = [0,2,5]
+GROUPE_KEYS = [4]
+SOUS_GROUPE_KEYS = [5]
+
 
 def suppr_keys(data_in, keys):
     data_out = data_in.copy()
@@ -32,9 +36,9 @@ def export_sqlite(input_sql,output_db):
     connection.close()
 
 
-def insertion_ingredients_bd(dico_in, output_db):
-    suppr_keys(dico_in, ["Nom Français", "LCI Name", "Sous-groupe d'aliment", "Groupe d'aliment"])
-    data = list(dico_in.itertuples(index=False, name=None))
+def insertion_Ingredients_bd(dico_in, output_db):
+    data = list(map(lambda x: [x[i] for i in INGREDIENTS_KEYS], list(dico_in.itertuples(index=False, name=None))))
+    
     con = sqlite3.connect(output_db)
     con.execute("PRAGMA foreign_keys = 1")
     cur = con.cursor()
@@ -48,17 +52,44 @@ def insertion_ingredients_bd(dico_in, output_db):
     con.close()
 
 
-def insertion_plats_bd(dico_in, output_db):
-    suppr_keys(dico_in, [dico_in.keys()[i] for i in range(5,len(dico_in.keys()))])
-    data = list(dico_in.itertuples(index=False, name=None))
-    datafordb = []
-    for elt in data:
-        if elt not in datafordb:
-            datafordb.append(elt)
+def insertion_Plats_bd(dico_in, output_db):
+    data = list(map(lambda x: [x[i] for i in PLATS_KEYS], list(dico_in.itertuples(index=False, name=None))))
+    #datafordb=list({tuple(elt) for elt in data})
+    datafordb=[elt for i, elt in enumerate(data) if elt not in data[:i]]
+
     con = sqlite3.connect(output_db)
     con.execute("PRAGMA foreign_keys = 1")
     cur = con.cursor()
-    cur.executemany("""INSERT INTO Plats("Ciqual_AGB","Nom_Francais","Groupe_d_aliment","Sous_groupe_d_aliment","LCI_Name") VALUES(?, ?, ?, ?, ?)""", datafordb)
+    cur.executemany("""INSERT INTO Plats(Ciqual_AGB,Nom_Francais,LCI_Name) VALUES(?, ?, ?)""", datafordb)
+    con.commit()
+    con.close()
+
+def insertion_Groupes_bd(dico_in, output_db):
+    data = list(map(lambda x: [x[i] for i in GROUPE_KEYS], list(dico_in.itertuples(name=None))))
+    datafordb=list({tuple(elt) for elt in data})
+
+    con = sqlite3.connect(output_db)
+    con.execute("PRAGMA foreign_keys = 1")
+    cur = con.cursor()
+    cur.executemany("""INSERT INTO Groupes(Groupe_d_aliment) VALUES(?)""", datafordb)
+    con.commit()
+    con.close()
+
+
+def insertion_Sous_Groupes_bd(dico_in, output_db):
+    data = list(map(lambda x: [x[i] for i in SOUS_GROUPE_KEYS], list(dico_in.itertuples(name=None))))
+    datafordb=list({tuple(elt) for elt in data})
+    print(datafordb)
+
+    con = sqlite3.connect(output_db)
+    con.execute("PRAGMA foreign_keys = 1")
+    cur = con.cursor()
+    cur.execute("""SELECT ID_Groupe, Groupe_d_aliment FROM Groupes;""")
+    ass_gr_ssgr = list(map(lambda x:[x[GROUPE_KEYS[0]], x[SOUS_GROUPE_KEYS[0]]], list(dico_in.itertuples(name=None))))
+    res = cur.fetchall()
+    
+
+    cur.executemany("""INSERT INTO Sous_Groupes(ID_Groupe, Sous_Groupe_d_aliment) VALUES(?, ?)""", datafordb)
     con.commit()
     con.close()
 
@@ -66,21 +97,22 @@ def insertion_plats_bd(dico_in, output_db):
 
 if __name__ == '__main__':
     data=pd.read_csv(INPUT_FILE, sep=',')
-    suppr_keys(data, USELESS_KEYS)
     export_sqlite(INPUT_SQL,OUTPUT_DB)
-    insertion_plats_bd(data.copy(),OUTPUT_DB)
-
-    insertion_ingredients_bd(data.copy(),OUTPUT_DB)
+    insertion_Groupes_bd(data,OUTPUT_DB)
+    insertion_Sous_Groupes_bd(data, OUTPUT_DB)
+    insertion_Plats_bd(data,OUTPUT_DB)
+    insertion_Ingredients_bd(data,OUTPUT_DB)
 
     con = sqlite3.connect(OUTPUT_DB)
     cur = con.cursor()
-    cur.execute("SELECT ID_ingredient,Ciqual_AGB,Ingredient FROM Ingredients;")
-    res = cur.fetchone()
-    print(res)
-    cur.execute("SELECT Ciqual_AGB, Nom_Francais FROM Plats;")
-    res = cur.fetchone()
-    print(res)
-    cur.execute("SELECT Plats.Ciqual_AGB, Plats.Nom_Francais, Ingredients.ID_ingredient, Ingredients.Ingredient FROM Plats JOIN Ingredients ON Plats.Ciqual_AGB=Ingredients.Ciqual_AGB;")
+    cur.execute("SELECT * FROM Groupes;")
     res = cur.fetchall()
     print(res)
+    #cur.execute("SELECT COUNT(*), Ciqual_AGB, Nom_Francais FROM Plats;")
+    #res = cur.fetchone()
+    #print(res)
+    #cur.execute("SELECT Plats.Ciqual_AGB, Plats.Nom_Francais, Ingredients.ID_ingredient, Ingredients.Ingredient FROM Plats JOIN Ingredients ON Plats.Ciqual_AGB=Ingredients.Ciqual_AGB WHERE Plats.Ciqual_AGB=13147;")
+    #res = cur.fetchall()
+    #for elt in res:
+    #    print(elt)
     con.close()
