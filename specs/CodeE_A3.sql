@@ -1,5 +1,3 @@
-PRAGMA foreign_keys = ON;
-
 CREATE TABLE "Plats" (
   "Ciqual_AGB" VARCHAR(10),
   /*"ID_categorie" VARCHAR(20),*/
@@ -7,7 +5,7 @@ CREATE TABLE "Plats" (
   "Groupe_d_aliment" VARCHAR(50),
   "Sous_groupe_d_aliment" VARCHAR(50),
   "LCI_Name" VARCHAR(50),
-  CONSTRAINT PK_PLAT PRIMARY KEY("Ciqual_AGB")/*,
+  CONSTRAINT PK_PLATS PRIMARY KEY("Ciqual_AGB")/*,
   CONSTRAINT FK_PLAT_CATEGORIE FOREIGN KEY ("ID_categorie") REFERENCES Categorie("ID_categorie")*/
 );
 
@@ -37,7 +35,7 @@ CREATE TABLE "Ingredients" (
   "Epuisement_des_ressources_energetiques" DECIMAL(10,8),
   "Epuisement_des_ressources_mineraux" DECIMAL(10,8),
   /*CONSTRAINT PK_ELEMENT PRIMARY KEY("ID_element"),*/
-  CONSTRAINT FK_PLAT_CATEGORIE FOREIGN KEY ("Ciqual_AGB") REFERENCES Plat("Ciqual_AGB")
+  CONSTRAINT FK_PLATS_CATEGORIE FOREIGN KEY ("Ciqual_AGB") REFERENCES Plats("Ciqual_AGB")
 );
 
 CREATE TABLE "Categorie" (

@@ -56,8 +56,11 @@ def insertion_plats_bd(dico_in, output_db):
         if elt not in datafordb:
             datafordb.append(elt)
     con = sqlite3.connect(output_db)
+    con.execute("PRAGMA foreign_keys = 1")
     cur = con.cursor()
     cur.executemany("""INSERT INTO Plats("Ciqual_AGB","Nom_Francais","Groupe_d_aliment","Sous_groupe_d_aliment","LCI_Name") VALUES(?, ?, ?, ?, ?)""", datafordb)
+    con.commit()
+    con.close()
 
 
 
@@ -66,11 +69,18 @@ if __name__ == '__main__':
     suppr_keys(data, USELESS_KEYS)
     export_sqlite(INPUT_SQL,OUTPUT_DB)
     insertion_plats_bd(data.copy(),OUTPUT_DB)
+
     insertion_ingredients_bd(data.copy(),OUTPUT_DB)
 
     con = sqlite3.connect(OUTPUT_DB)
     cur = con.cursor()
     cur.execute("SELECT ID_ingredient,Ciqual_AGB,Ingredient FROM Ingredients;")
     res = cur.fetchone()
+    print(res)
+    cur.execute("SELECT Ciqual_AGB, Nom_Francais FROM Plats;")
+    res = cur.fetchone()
+    print(res)
+    cur.execute("SELECT Plats.Ciqual_AGB, Plats.Nom_Francais, Ingredients.ID_ingredient, Ingredients.Ingredient FROM Plats JOIN Ingredients ON Plats.Ciqual_AGB=Ingredients.Ciqual_AGB;")
+    res = cur.fetchall()
     print(res)
     con.close()
