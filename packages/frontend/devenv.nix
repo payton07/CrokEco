@@ -48,7 +48,10 @@
 
   git-hooks.hooks = {
     prettier.enable = true;
-    # eslint.enable = true;
+    eslint.enable = true;
+
+    commitizen.enable = true;
+    alejandra.enable = true;
   };
 
 }

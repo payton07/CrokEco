@@ -14,6 +14,6 @@ import pluginReact from "eslint-plugin-react";
 
 export default tseslint.config({
   rules: {
-    "@typescript-eslint/no-require-imports": "error"
-  }
+    "@typescript-eslint/no-require-imports": "error",
+  },
 });
