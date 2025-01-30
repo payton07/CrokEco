@@ -1,6 +1,5 @@
 **/**/.env
 .pre-commit-config.yaml
-assets/carbon_score.db
 *.DS_Store*
 packages/frontend/*
 !packages/frontend/package.json
@@ -13,3 +12,4 @@ packages/frontend/*
 !packages/frontend/components
 !packages/frontend/constants
 !packages/frontend/eslint.config.mjs
+*.db
