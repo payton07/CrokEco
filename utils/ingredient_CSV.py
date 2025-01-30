@@ -16,8 +16,7 @@ def suppr_keys(data_in, keys):
         try:
             del data_in[key]
         except KeyError:
-            print("Mauvaise clé")
-    
+            print("Mauvaise clé :", key)
     return data_out
 
 def export_sqlite(input_sql,output_db):
@@ -33,7 +32,7 @@ def export_sqlite(input_sql,output_db):
     connection.close()
 
 
-def insertion_bd(dico_in, output_db):
+def insertion_ingredients_bd(dico_in, output_db):
     suppr_keys(dico_in, ["Nom Français", "LCI Name", "Sous-groupe d'aliment", "Groupe d'aliment"])
     data = list(dico_in.itertuples(index=False, name=None))
     con = sqlite3.connect(output_db)
@@ -48,17 +47,29 @@ def insertion_bd(dico_in, output_db):
     con.close()
 
 
+def insertion_plats_bd(dico_in, output_db):
+    suppr_keys(dico_in, [dico_in.keys()[i] for i in range(5,len(dico_in.keys()))])
+    data = list(dico_in.itertuples(index=False, name=None))
+    datafordb = []
+    for elt in data:
+        if elt not in datafordb:
+            datafordb.append(elt)
+    con = sqlite3.connect(output_db)
+    cur = con.cursor()
+    cur.executemany("""INSERT INTO Plats("Ciqual_AGB","Nom_Francais","Groupe_d_aliment","Sous_groupe_d_aliment","LCI_Name") VALUES(?, ?, ?, ?, ?)""", datafordb)
+
+
+
 if __name__ == '__main__':
     data=pd.read_csv(INPUT_FILE, sep=',')
     suppr_keys(data, USELESS_KEYS)
     export_sqlite(INPUT_SQL,OUTPUT_DB)
-    insertion_bd(data.copy(),OUTPUT_DB)
+    insertion_plats_bd(data.copy(),OUTPUT_DB)
+    insertion_ingredients_bd(data.copy(),OUTPUT_DB)
 
     con = sqlite3.connect(OUTPUT_DB)
     cur = con.cursor()
     cur.execute("SELECT ID_ingredient,Ciqual_AGB,Ingredient FROM Ingredients;")
-    res = cur.fetchall()
+    res = cur.fetchone()
     print(res)
     con.close()
-
-    #data.to_csv(OUTPUT_FILE, index=False)
