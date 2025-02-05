@@ -1,10 +1,10 @@
 CREATE TABLE "Plats" (
   "Ciqual_AGB" VARCHAR(10),
-  /*"ID_categorie" VARCHAR(20),*/
+  "ID_sous_groupe" VARCHAR(20),
   "Nom_Francais" VARCHAR(50),
   "LCI_Name" VARCHAR(50),
-  CONSTRAINT PK_PLATS PRIMARY KEY("Ciqual_AGB")/*,
-  CONSTRAINT FK_PLAT_CATEGORIE FOREIGN KEY ("ID_categorie") REFERENCES Categorie("ID_categorie")*/
+  CONSTRAINT PK_PLATS PRIMARY KEY("Ciqual_AGB"),
+  CONSTRAINT FK_PLAT_SOUSGROUPES FOREIGN KEY ("ID_sous_groupe") REFERENCES Sous_Groupes("ID_sous_groupe")
 );
 
 CREATE TABLE "Ingredients" (
@@ -36,14 +36,14 @@ CREATE TABLE "Ingredients" (
 );
 
 CREATE TABLE "Sous_Groupes" (
-  "ID_categorie" INTEGER PRIMARY KEY,
-  "ID_groupes" INTEGER,
-  "Sous_groupe_d_aliment" VARCHAR(50)
-  /*CONSTRAINT FK_SOUS_GROUPE_GROUPE_PLATS FOREIGN KEY ("ID_groupes") REFERENCES Groupes("ID_groupes")*/
+  "ID_sous_groupe" INTEGER PRIMARY KEY,
+  "Sous_groupe_d_aliment" VARCHAR(50),
+  "ID_groupe" INTEGER,
+  CONSTRAINT FK_SOUS_GROUPE_GROUPE_PLATS FOREIGN KEY ("ID_groupe") REFERENCES Groupes("ID_groupe")
 );
 
 CREATE TABLE "Groupes" (
-  "ID_groupes" INTEGER PRIMARY KEY,
+  "ID_groupe" INTEGER PRIMARY KEY,
   "Groupe_d_aliment" VARCHAR(50)
 );
 
