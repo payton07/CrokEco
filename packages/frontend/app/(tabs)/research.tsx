@@ -1,11 +1,10 @@
 import { StyleSheet, TextInput } from "react-native";
-// import { SearchBar } from '@rneui/themed';
 import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
 import React from "react";
-// import { SearchBar } from "react-native-screens";
 import Searcher from "@/components/Searcher";
 import Favoris from "@/components/Favoris";
+import Fav from "@/components/Fav";
 
 export default function Research(this: any) {
   return (

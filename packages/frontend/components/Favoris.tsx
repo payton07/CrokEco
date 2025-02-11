@@ -6,15 +6,12 @@ import Fav from "./Fav";
 export default function Favoris({ path }: { path: string }) {
     // const load = fetchfavoris({});
     const loads = {"first":"21"};
-  return (
-      <View>
-          <View style={styles.getStartedContainer}>
+  return (<>
             {loads ? <><Fav value={loads?.first} /></>
                 : 
                 <></>
-                }
-          </View>
-      </View>
+            }
+            </>
   );
 }
 
