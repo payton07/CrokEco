@@ -1,18 +1,17 @@
-import { StyleSheet } from "react-native";
-
+import { StyleSheet, TextInput } from "react-native";
+// import { SearchBar } from '@rneui/themed';
 import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
 import React from "react";
+// import { SearchBar } from "react-native-screens";
+import Searcher from "@/components/Searcher";
+import Favoris from "@/components/Favoris";
 
-export default function Research() {
+export default function Research(this: any) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Research page </Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
+      <Searcher path="app/(tabs)/research.tsx"/>
+      <Favoris path="app/(tabs)/research.tsx"/>
       <EditScreenInfo path="app/(tabs)/research.tsx" />
     </View>
   );
@@ -22,11 +21,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    // justifyContent: "center",
   },
   title: {
     fontSize: 20,
     fontWeight: "bold",
+    backgroundColor :" black",
   },
   separator: {
     marginVertical: 30,

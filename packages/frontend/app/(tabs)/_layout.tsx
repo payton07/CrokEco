@@ -55,7 +55,20 @@ export default function TabLayout() {
         name="research"
         options={{
           title: "Research ",
-          tabBarIcon: ({ color }) => <Ionicons name="search-outline" size={24} color="black" />,
+          tabBarIcon: ({ color }) => <Ionicons name="search-sharp" size={24} color={color} />,
+          headerRight: () => (
+            <Link href="../sideMenu" asChild>
+            <Pressable>
+            {({pressed})=>(
+              pressed ?<>
+              <SideMenu path="app/(tabs)/scanner.tsx" />
+              </> : <>
+              <Ionicons name="menu" size={24} color="black" />
+              </>
+          )}
+            </Pressable> 
+            </Link>
+            ),
         }}
       />
       <Tabs.Screen

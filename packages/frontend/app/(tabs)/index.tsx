@@ -4,7 +4,7 @@ import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
 import React from "react";
 
-export default function Scanner() {
+export default function Scanner(){
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Scanner page</Text>
