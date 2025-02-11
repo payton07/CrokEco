@@ -1,76 +1,80 @@
 import { StyleSheet } from "react-native";
 
 import EditScreenInfo from "@/components/EditScreenInfo";
-import { Text, View } from "@/components/Themed";
-import React from "react";
+import React, { useRef } from "react";
 
-import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
+import { CameraView, CameraType, useCameraPermissions, CameraCapturedPicture, CameraViewProps } from 'expo-camera';
 import { useState } from 'react';
-import { Button, TouchableOpacity} from 'react-native';
+import { Button, TouchableOpacity, TranslateXTransform, View, Image, Text} from 'react-native';
 
 
 export default function Scanner() {
-  const [facing, setFacing] = useState<CameraType>('back');
-  const [permission, requestPermission] = useCameraPermissions();
+// Référence à la caméra
+const cameraRef = useRef<CameraView | null>(null);
+const [photoUri, setPhotoUri] = useState('');
 
-  if (!permission) {
-    // Camera permissions are still loading.
-    return <View />;
+// Fonction pour prendre une photo
+const takePicture = async () => {
+  try {
+    if (cameraRef.current) {
+      // Utilisation de la méthode takePictureAsync seulement si la référence est prête
+      const picture = await cameraRef.current.takePictureAsync({
+        quality: 1, // Haute qualité
+        base64: true, // Inclure la version base64 de l'image
+      });
+      if (picture && picture.uri) {
+        setPhotoUri(picture.uri); // Stocke l'URI de la photo
+      } else {
+        console.error('Erreur: la photo n\'a pas été prise correctement');
+      }
+    } else {
+      console.error('La caméra n\'est pas prête');
+    }
+  } catch (error) {
+    setPhotoUri('');
+    console.error('Erreur lors de la prise de photo:', error);
   }
+};
 
-  if (!permission.granted) {
-    // Camera permissions are not granted yet.
-    return (
-      <View style={styles.container}>
-        <Text style={styles.message}>We need your permission to show the camera</Text>
-        <Button onPress={requestPermission} title="Grant permission" />
+return (
+  <View style={styles.container}>
+    {/* Affichage de la vue de la caméra */}
+    <CameraView
+      ref={cameraRef}
+      style={styles.camera}
+      onCameraReady={() => console.log('La caméra est prête')}
+    />
+    {/* Bouton pour prendre la photo */}
+    <Button title="Prendre une photo" onPress={takePicture} />
+    {/* Affichage de l'image capturée si disponible */}
+    {photoUri ? (
+      <View style={styles.photoContainer}>
+        <Text>Photo prise avec succès: </Text>
+        <Image source={{ uri: photoUri }} style={styles.photo} />
       </View>
-    );
-  }
-
-  function toggleCameraFacing() {
-    setFacing(current => (current === 'back' ? 'front' : 'back'));
-  }
-
-  return (
-    <View style={styles.container}>
-      <CameraView style={styles.camera} facing={facing}>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
-            <Text style={styles.text}>Flip Camera</Text>
-          </TouchableOpacity>
-        </View>
-      </CameraView>
-    </View>
-  );
+    ) : null}
+  </View>
+);
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  message: {
-    textAlign: 'center',
-    paddingBottom: 10,
-  },
-  camera: {
-    flex: 1,
-  },
-  buttonContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    backgroundColor: 'transparent',
-    margin: 64,
-  },
-  button: {
-    flex: 1,
-    alignSelf: 'flex-end',
-    alignItems: 'center',
-  },
-  text: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'white',
-  },
+container: {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+camera: {
+  width: '100%',
+  height: '70%',
+},
+photoContainer: {
+  marginTop: 20,
+  alignItems: 'center',
+},
+photo: {
+  width: 200,
+  height: 200,
+  marginTop: 10,
+  borderRadius: 10,
+},
 });
