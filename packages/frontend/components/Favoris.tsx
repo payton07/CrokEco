@@ -7,10 +7,9 @@ export default function Favoris({ path }: { path: string }) {
     // const load = fetchfavoris({});
     const loads = {"first":"21"};
   return (<>
-            {loads ? <><Fav value={loads?.first} /></>
-                : 
-                <></>
-            }
+            {
+            <>
+            <Fav value={loads?.first} /></>}
             </>
   );
 }

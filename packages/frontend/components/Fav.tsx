@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import {StyleSheet} from "react-native";
-import {View,Text } from "./Themed";
 import {Image, useImage} from "expo-image"
 
 export default function Fav({ value }: { value: string }) {
-      const img = require('@/assets/images/image.png');
+  const [img, setImg] = useState(require('@/assets/images/image.png'));
+
+  function change(){
+    setImg(value)
+  }
   return ( <Image style={styles1.image} source={img}/> );
 }
 
@@ -30,7 +33,7 @@ const styles1 = StyleSheet.create({
   },
   image: {
     flex: 1/2,
-    width: '100%',
+    width: '50%',
     height:'50%',
     backgroundColor: 'black',
   },

@@ -4,7 +4,6 @@ import { Text, View } from "@/components/Themed";
 import React from "react";
 import Searcher from "@/components/Searcher";
 import Favoris from "@/components/Favoris";
-import Fav from "@/components/Fav";
 
 export default function Research(this: any) {
   return (
