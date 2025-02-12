@@ -32,7 +32,7 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="scanner"
+        name="index"
         options={{
           title: "Scanner",
           tabBarIcon: ({ color }) => <MaterialCommunityIcons name="line-scan" size={24} color={color} />,
@@ -41,7 +41,7 @@ export default function TabLayout() {
             <Pressable>
             {({pressed})=>(
               pressed ?<>
-              <SideMenu path="app/(tabs)/scanner.tsx" />
+              <SideMenu path="app/(tabs)/index.tsx" />
               </> : <>
               <Ionicons name="menu" size={24} color="black" />
               </>
