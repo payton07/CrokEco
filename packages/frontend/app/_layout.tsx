@@ -11,6 +11,12 @@ import { useEffect } from "react";
 import "react-native-reanimated";
 
 import { useColorScheme } from "@/components/useColorScheme";
+import { Slot } from "expo-router";
+
+// Import your global CSS file
+import "../global.css";
+
+// export default Slot;
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -56,8 +62,7 @@ function RootLayoutNav() {
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-        <Stack.Screen name="sideMenu"/>
+        {/* <Stack.Screen name="modal" options={{ presentation: "modal" }} /> */}
       </Stack>
     </ThemeProvider>
   );

@@ -15,8 +15,8 @@ export default function Searcher({ path }: { path: string }) {
 
 const styles = StyleSheet.create({
   getStartedContainer: {
-    // alignItems: "center",
     marginHorizontal: 5,
+    alignItems: 'center',
   }
 });
 const styles1 = StyleSheet.create({
@@ -25,12 +25,12 @@ const styles1 = StyleSheet.create({
       paddingHorizontal: 10,
       paddingBottom: 10,
       borderRadius: 25,
-      borderWidth: 1,
+      borderWidth: 3,
       alignItems: 'center',
       borderColor: '#000',
-      width : 300,
-      top : 10,
-      bottom : 100,
+      width : 380,
+      height : 40,
       position : "relative",
+      backgroundColor : "white"
   },
 });

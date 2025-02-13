@@ -55,7 +55,7 @@ export default function EditScreenInfo({ path }: { path: string }) {
 const styles = StyleSheet.create({
   getStartedContainer: {
     alignItems: "center",
-    marginHorizontal: 50,
+    marginHorizontal: 5,
   },
   homeScreenFilename: {
     marginVertical: 7,

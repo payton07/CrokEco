@@ -3,9 +3,11 @@ import { StyleSheet } from "react-native";
 import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
 import React from "react";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function Scanner(){
   return (
+    <SafeAreaProvider>
     <View style={styles.container}>
       <Text style={styles.title}>Scanner page</Text>
       <View
@@ -15,6 +17,7 @@ export default function Scanner(){
       />
       <EditScreenInfo path="app/(tabs)/scanner.tsx" />
     </View>
+    </SafeAreaProvider>
   );
 }
 
