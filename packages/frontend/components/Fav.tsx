@@ -13,12 +13,7 @@ export default function Fav({ id }: { id: string }) {
     setImg(id)
   }
   return (
-    // /(hidden)/details/[{id}]"
-    <Link href={{
-      pathname : "/(hidden)/details/",
-      params : {id : []}}
-    }
-     style={styles.image}>
+    <Link href={"/(hidden)/details/[{id}]"} style={styles.image}>
     <Image style={styles.image} source={img}/>
   </Link>
   );
