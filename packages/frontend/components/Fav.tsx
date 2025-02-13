@@ -1,17 +1,24 @@
 import React, { useState } from "react";
 import {StyleSheet, View,Text, Dimensions, Pressable, TouchableOpacity} from "react-native";
 import {Image} from "expo-image"
-import { Link } from "expo-router";
+import { Link, usePathname } from "expo-router";
+import { ExternalLink } from "./ExternalLink";
 
 export default function Fav({ id }: { id: string }) {
   const [img, setImg] = useState(require('@/assets/images/image.png'));
   // const [page,setPage] = useState(false);
+  const ide: String | number = id;
 
   function change(){
     setImg(id)
   }
   return (
-    <Link href={"/(hidden)/details/[{id}]"} style={styles.image}>
+    // /(hidden)/details/[{id}]"
+    <Link href={{
+      pathname : "/(hidden)/details/",
+      params : {id : []}}
+    }
+     style={styles.image}>
     <Image style={styles.image} source={img}/>
   </Link>
   );
