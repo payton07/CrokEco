@@ -9,13 +9,16 @@ import Suggestion from "@/components/Suggestion";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function Research(this: any) {
-  // const [menuVisible, setMenuVisible] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
   return (
     <SafeAreaProvider>
     <View style={styles.container}>
-          {/* <TouchableOpacity style={styles.header} onPress={() => setMenuVisible(!menuVisible)}>
+      <View style={styles.header}>
+      <TouchableOpacity onPress={() => setMenuVisible(!menuVisible)}>
             <Ionicons name="menu" size={30} color="black" />
           </TouchableOpacity>
+          <Text style={styles.text}> Research</Text>
+      </View>
         {menuVisible && (
           <View style={styles.absoluteContainer}>
           <View style={styles.overlay}>
@@ -27,7 +30,7 @@ export default function Research(this: any) {
           </View>
           </View>
           </View>
-        )} */}
+        )}
         <Searcher path="app/(tabs)/research.tsx"/>
         <Favoris path="app/(tabs)/research.tsx"/>
         <Suggestion path="app/(tabs)/research.tsx"/>
@@ -40,6 +43,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // backgroundColor : "black",
+    paddingVertical: 60,
   },
     header: {
       flexDirection: "row",
@@ -65,15 +69,15 @@ const styles = StyleSheet.create({
     },
     absoluteContainer: {
       position: "absolute",
-      top: 35,
+      top: 100,
       left: 0,
       width: "100%",
       height: "100%",
       zIndex: 10,
+      backgroundColor : "black"
     },
     overlay: {
       position: "absolute",
-      top: 35,
       left: 0,
       width: "100%",
       height: "100%",
@@ -90,5 +94,10 @@ const styles = StyleSheet.create({
       fontSize: 16,
       marginBottom: 10,
     },
+    text : {
+      fontSize: 22,
+      fontWeight: "bold",
+      margin : 2
+    }
   });
   

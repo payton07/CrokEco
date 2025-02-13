@@ -18,13 +18,14 @@ function TabBarIcon(props: {
 import React, { ReactNode, useState } from "react";
 import { ScrollView, Image, View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { hide } from 'expo-splash-screen';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 <MaterialCommunityIcons name="line-scan" size={24} color="black" /> 
   return (
     <Tabs
-    
+
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         // Disable the static render of the header on web
@@ -37,6 +38,7 @@ export default function TabLayout() {
         options={{
           title: "Scanner",
           tabBarIcon: ({ color }) => <MaterialCommunityIcons name="line-scan" size={24} color={color} />,
+          headerShown: false,
         }}
       />
       <Tabs.Screen
@@ -44,6 +46,7 @@ export default function TabLayout() {
         options={{
           title: "Research ",
           tabBarIcon: ({ color }) => <Ionicons name="search-sharp" size={24} color={color} />,
+          headerShown: false,
         }}
       />
       <Tabs.Screen
@@ -51,8 +54,20 @@ export default function TabLayout() {
         options={{
           title: "info",
           tabBarIcon: ({ color }) => <FontAwesome5 name="info-circle" size={24} color="black" />, 
+          headerShown: false,
         }}
       />
+      {/* <Tabs.Screen
+        name="(hidden)"
+        options={{
+          title: "hidden",
+          tabBarIcon: ({ color }) => <FontAwesome5 name="info-circle" size={24} color="black" />, 
+          headerShown: false,
+          tabBarIconStyle : {display : 'none'}
+          // tabBarStyle: {display : 'none'}
+          
+        }}
+      /> */}
     </Tabs>
   );
 }

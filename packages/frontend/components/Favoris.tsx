@@ -13,7 +13,7 @@ export default function Favoris({ path }: { path: string }) {
         </Text>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.container}>
       {loads.map((a) => (
-        <Fav key={a.first} value={a.first}/>
+        <Fav key={a.first} id={a.first}/>
       ))}
     </ScrollView>
   </View>

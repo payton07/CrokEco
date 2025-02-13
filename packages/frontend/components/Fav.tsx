@@ -1,19 +1,19 @@
 import React, { useState } from "react";
-import {StyleSheet, View,Text, Dimensions, Pressable} from "react-native";
+import {StyleSheet, View,Text, Dimensions, Pressable, TouchableOpacity} from "react-native";
 import {Image} from "expo-image"
 import { Link } from "expo-router";
 
-export default function Fav({ value }: { value: string }) {
+export default function Fav({ id }: { id: string }) {
   const [img, setImg] = useState(require('@/assets/images/image.png'));
+  // const [page,setPage] = useState(false);
 
   function change(){
-    setImg(value)
+    setImg(id)
   }
   return (
-    <Link href={"/(tabs)/info"} style={styles.image}>
-      <Image style={styles.image} source={img}/>
-    </Link>
-    
+    <Link href={"/(hidden)/details/[{id}]"} style={styles.image}>
+    <Image style={styles.image} source={img}/>
+  </Link>
   );
 }
 
@@ -25,5 +25,5 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     backgroundColor : 'black',
     margin : 5,
-  },
+  }
 });

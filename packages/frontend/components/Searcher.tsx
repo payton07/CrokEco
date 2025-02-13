@@ -22,8 +22,7 @@ const styles = StyleSheet.create({
 const styles1 = StyleSheet.create({
   homeScreenFilename:{
       margin: 20,
-      paddingHorizontal: 10,
-      paddingBottom: 10,
+      paddingHorizontal: 15,
       borderRadius: 25,
       borderWidth: 3,
       alignItems: 'center',
@@ -31,6 +30,6 @@ const styles1 = StyleSheet.create({
       width : 380,
       height : 40,
       position : "relative",
-      backgroundColor : "white"
+      backgroundColor : "white",
   },
 });
