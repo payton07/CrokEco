@@ -1,7 +1,7 @@
 import { StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Searcher from "@/components/Searcher";
 import Favoris from "@/components/Favoris";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -10,6 +10,9 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function Research(this: any) {
   const [menuVisible, setMenuVisible] = useState(false);
+  useEffect(()=>{
+
+  },[menuVisible])
   return (
     <SafeAreaProvider>
     <View style={styles.container}>
