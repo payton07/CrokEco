@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import {ScrollView, StyleSheet, TextInput,Text} from "react-native";
 import {View } from "./Themed";
 import Fav from './Fav';
-import { getIngredients } from "@/utils/libs";
+import { getIngredients } from "@/utils/bdd";
 
 export default function Favoris({ path }: { path: string }) {
   const [loads ,setloads] = useState<any[]>([]);
   useEffect(() => {
     async function setup() {
       const loa = await getIngredients();
-      setloads(loa);
-      console.log(loa.length);
+      if(loa != undefined) setloads(loa);
+      console.log(loa?.length);
     }
     setup();
   }, []);
@@ -21,7 +21,7 @@ export default function Favoris({ path }: { path: string }) {
         </Text>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.container}>
       {loads.map((a) => (
-        <Fav key={a.ID_ingredient} id={a.ID_ingredient}/>
+        <Fav key={a.ID_ingredient} id={{id :a.Ciqual_AGB,Ingredient : a.Ingredient}}/>
       ))}
     </ScrollView>
   </View>

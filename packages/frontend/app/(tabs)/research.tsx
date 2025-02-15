@@ -7,6 +7,7 @@ import Favoris from "@/components/Favoris";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Suggestion from "@/components/Suggestion";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { SQLiteProvider } from "expo-sqlite";
 
 export default function Research(this: any) {
   const [menuVisible, setMenuVisible] = useState(false);

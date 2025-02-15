@@ -1,19 +1,25 @@
-import React, { useState } from "react";
-import {StyleSheet, View,Text, Dimensions, Pressable, TouchableOpacity} from "react-native";
+import React, { useEffect, useState } from "react";
+import {StyleSheet} from "react-native";
 import {Image} from "expo-image"
-import { Link, usePathname } from "expo-router";
-import { ExternalLink } from "./ExternalLink";
+import { Link} from "expo-router";
+import { getIngredients } from "@/utils/bdd";
 
-export default function Fav({ id }: { id: string }) {
+export default function Fav({ id }: { id: any }) {
   const [img, setImg] = useState(require('@/assets/images/image.png'));
-  // const [page,setPage] = useState(false);
-  const ide: String | number = id;
-
-  function change(){
-    setImg(id)
-  }
+  const ide: number = id.id;
+  useEffect(() => {
+    function change(){   
+      const aq ="@/assets/images/";
+      const as = id.Ingredient;
+      const ze = ".jpg";
+      const rese = `${aq}${as}${ze}`;
+      setImg(require(rese));
+      console.log(as);
+    }
+    change();
+  },[]);
   return (
-    <Link href={"/(hidden)/details/[{id}]"} style={styles.image}>
+    <Link href={`/(hidden)/details/${ide}`} style={styles.image}>
     <Image style={styles.image} source={img}/>
   </Link>
   );
