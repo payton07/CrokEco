@@ -3,21 +3,23 @@ import {StyleSheet} from "react-native";
 import {Image} from "expo-image"
 import { Link} from "expo-router";
 import { getIngredients } from "@/utils/bdd";
+import {images} from "@/utils/picture";
 
 export default function Fav({ id }: { id: any }) {
-  const [img, setImg] = useState(require('@/assets/images/image.png'));
-  const ide: number = id.id;
-  useEffect(() => {
-    function change(){   
-      const aq ="@/assets/images/";
-      const as = id.Ingredient;
-      const ze = ".jpg";
-      const rese = `${aq}${as}${ze}`;
-      setImg(require(rese));
-      console.log(as);
-    }
-    change();
-  },[]);
+  const [img, setImg] = useState(images.github);
+  const ide: number = id?.id;
+  // useEffect(() => {
+  //   /**
+  //    * TODO Faire un gros import des images pour aleger le chargement 
+  //    * EXEMPLE : 
+  //    */
+  //   function change(){   
+  //     const as : string = id?.Ingredient;
+  //     setImg(images.carotte);
+  //     console.log(as);
+  //   }
+  //   change();
+  // },[]);
   return (
     <Link href={`/(hidden)/details/${ide}`} style={styles.image}>
     <Image style={styles.image} source={img}/>

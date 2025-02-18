@@ -1,27 +1,63 @@
 import React, { useEffect, useState } from "react";
-import {StyleSheet, View,Text, Dimensions, Pressable, TouchableOpacity} from "react-native";
-import {Image} from "expo-image"
+import {StyleSheet, View,Text} from "react-native";
+import { Image} from 'expo-image';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Link, Stack, useLocalSearchParams } from "expo-router";
 import { getIngredients } from "@/utils/bdd";
+import { images } from "@/utils/picture";
+import * as FileSystem from 'expo-file-system';
 
-export default function details({ value }: { value: string | undefined}) {
-  const [img, setImg] = useState(require('@/assets/images/carotte.jpg'));
+const imagePath = FileSystem.documentDirectory;
+const end = ".png";
+export default function details() {
+  const [img, setImg] = useState<string|null>("@/assets/ingImage.image.png");
   const [info, setInfo] = useState(" hello ici les infos de cet element !!! :)");
-  const params = useLocalSearchParams();
+  const params = useLocalSearchParams(); 
   useEffect(() => {
+    /**
+     * TODO Faire un gros import des images pour aleger le chargement 
+     * EXEMPLE : 
+     */
     async function change(){
-      setImg(value)
-      const res = await getIngredients({"Ciqual_AGB" : params.id});
-      // console.log("la res ",res,"le id :",params.id);
-      
-      let as ="";
-      res?.map((a)=> {as= a.Ingredient;});
-      setInfo(as)
-      setImg(require('@/assets/images/carotte.jpg'))
-      console.log("carotte");
-      
+      const res = await getIngredients({ID_ingredient : params.id});
+      if(res !=undefined){
+        const ele= res[0];
+        const as = ele.Ingredient;
+        setInfo(ele.Ingredient);
+        // const name = images.ele;
+        // const n = "Carotte";
+        console.log(as);
+        const fin = `${imagePath}${as}${end}`;
+        // const imageUrl = "@/assets/ingImages/"+as;
+        const imageUrl = "http://localhost:8888/"+as;
+        // const fin = require(imageUrl);
+        // setImg(fin);
+
+        const fileInfo = await FileSystem.getInfoAsync(fin);
+        await FileSystem.deleteAsync(fin, { idempotent: true });
+        // await reloadImage(fin,imageUrl)
+        if (fileInfo.exists) {
+          console.log("l'image exists",fileInfo.size);
+          setImg(fin);
+          return ;
+        }
+
+        console.log("Suppression de l'ancienne image...");
+        await FileSystem.deleteAsync(fin, { idempotent: true });
+  
+        console.log("Téléchargement de l'image...");
+        const downloadResumable = FileSystem.createDownloadResumable(imageUrl, fin);
+  
+        try {
+          const { uri } = await downloadResumable.downloadAsync();
+          console.log("Téléchargement terminé :", uri);
+          setImg(uri);
+        } catch (error) {
+          console.error("Erreur lors du téléchargement :", error);
+        }
+      }
     }
+
     change();
   },[]);
   return (

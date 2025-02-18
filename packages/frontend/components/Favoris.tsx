@@ -21,7 +21,7 @@ export default function Favoris({ path }: { path: string }) {
         </Text>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.container}>
       {loads.map((a) => (
-        <Fav key={a.ID_ingredient} id={{id :a.Ciqual_AGB,Ingredient : a.Ingredient}}/>
+        <Fav key={a.ID_ingredient} id={{id :a.ID_ingredient,Ingredient : a.Ingredient}}/>
       ))}
     </ScrollView>
   </View>
