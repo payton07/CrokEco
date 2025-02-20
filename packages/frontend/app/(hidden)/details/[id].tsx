@@ -3,7 +3,7 @@ import {StyleSheet, View,Text} from "react-native";
 import { Image} from 'expo-image';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Link, Stack, useLocalSearchParams } from "expo-router";
-import { getIngredients } from "@/utils/bdd";
+import { getIngredients, getPlats } from "@/utils/bdd";
 import { images } from "@/utils/picture";
 import * as FileSystem from 'expo-file-system';
 
@@ -20,6 +20,9 @@ export default function details() {
      */
     async function change(){
       const res = await getIngredients({ID_ingredient : params.id});
+      const ras = await getPlats({Nom_Francais: '%carotte%'},true,true);
+      console.log("Plat : ", ras);
+      
       if(res !=undefined){
         const ele= res[0];
         const as = ele.Ingredient;
@@ -34,7 +37,8 @@ export default function details() {
         // setImg(fin);
 
         const fileInfo = await FileSystem.getInfoAsync(fin);
-        await FileSystem.deleteAsync(fin, { idempotent: true });
+        // TODO : ligne de delete à enlever potentielement
+        await FileSystem.deleteAsync(fin, { idempotent: true }); 
         // await reloadImage(fin,imageUrl)
         if (fileInfo.exists) {
           console.log("l'image exists",fileInfo.size);
@@ -68,7 +72,7 @@ export default function details() {
           <AntDesign name="arrowleft" size={24} color="black" />
         </Link>
         <View style={styles.container}>
-        <Text style={styles.title}>This screen doesn't exist.</Text>
+        <Text style={styles.title}>{info}</Text>
         <Image style={styles.image} source={img}/>
         <Text>
           {info}
