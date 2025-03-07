@@ -21,6 +21,14 @@ function Qualite(score : number) {
   }
   return "Red";
 }
+async function clearAllCache() {
+  try {
+    await AsyncStorage.clear();
+    console.log("Tout le cache a été supprimé !");
+  } catch (error) {
+    console.error("Erreur lors de la suppression de tout le cache :", error);
+  }
+}
 async function change(ide : number  ) {
   let back = "black";
   if(ide != undefined){
@@ -44,7 +52,7 @@ async function change(ide : number  ) {
 }
 
 
-async function getDataWithCacheExpiration(key:string, apiCallFunction : ()=>{}, expirationTimeInMinutes = 30, params=null) {
+async function getDataWithCacheExpiration(key:string, apiCallFunction : ()=>{}, expirationTimeInMinutes = 30) {
   try {
     const cachedData = await AsyncStorage.getItem(key);
     if (cachedData) {
@@ -68,14 +76,17 @@ async function getDataWithCacheExpiration(key:string, apiCallFunction : ()=>{}, 
 
 async function setup1() {
   const loa1 = await getPlats(false, true, false);
-  const loa2 = await getPlats(false, true, false, 30);
+  const loa2 = await getPlats(false, true, false, 100);
   if (loa1 && loa2) {
-    let lod1 = [], lod2 = [];
+    let lod1 = [], lodInter = [] ,lod2 = [];
     for (const a of loa1) {
       if (a.Ciqual_AGB) lod1.push(await change(a.Ciqual_AGB));
     }
     for (const a of loa2) {
-      if (a.Ciqual_AGB) lod2.push(await change(a.Ciqual_AGB));
+      if (a.Ciqual_AGB) lodInter.push(await change(a.Ciqual_AGB));
+    }
+    for (const a of lodInter){
+      if(a?.back =="Green") lod2.push(a)
     }
     return { loads1: lod1, loads2: lod2 };
   }
@@ -93,7 +104,7 @@ export default function Research() {
   useEffect(() => {
     async function loadData() {
       if (!isLoaded) {
-        const donne = await getDataWithCacheExpiration("21", setup1, 30,null);
+        const donne = await getDataWithCacheExpiration("21", setup1, 30);
         if (donne) {
           setData(donne);
           setLoads1(donne.loads1);
@@ -124,6 +135,9 @@ export default function Research() {
                   <Text style={styles.menuText}>Option 1</Text>
                   <Text style={styles.menuText}>Option 2</Text>
                   <Text style={styles.menuText}>Option 3</Text>
+                  <TouchableOpacity style={styles.clearButton} onPress={clearAllCache}>
+                    <Text style={styles.clearButtonText}>Vider le cache</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>
