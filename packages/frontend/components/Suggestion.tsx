@@ -1,20 +1,19 @@
-import React, { useState } from "react";
-import {ScrollView, StyleSheet, TextInput,Text} from "react-native";
+import React, { useEffect, useState } from "react";
+import {ScrollView, StyleSheet, TextInput,Text, ActivityIndicator} from "react-native";
 import {View } from "./Themed";
 import Fav from './Fav';
 
-export default function Suggestion({ path }: { path: string }) {
-    // const loads = fetchSuggestion({});
-    const loads  = [{"first":"1"},{"first":"2"},{"first":"3"},{"first":"4"},{"first":"5"},{"first":"6"},{"first":"7"},{"first":"8"},{"first":"9"}];
+export default function Suggestion({ loads }: { loads : any[] }) {
   return (
     <View style={styles.wrapper}>
       <Text style={styles.title}>
         <Text style={styles.title2}>   Suggestion</Text>
         </Text>
-      <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
+        {/* contentContainerStyle={styles.container}  */}
+      <ScrollView contentContainerStyle={styles.container} horizontal={false} scrollEnabled={true} showsVerticalScrollIndicator={true}>
         <View style={styles.grid}>
-          {loads.map((a) => (
-            <Fav key={a.first} value={""} />
+          {loads.map((a,i) => (
+            <Fav key={i} out={a}/>
           ))}
         </View>
       </ScrollView>
@@ -27,6 +26,7 @@ const styles = StyleSheet.create({
     wrapper: {
       marginBottom: 10,
       backgroundColor : "#C0F3F0",
+      // "#C0F3F0",
     },
     title: {
         backgroundColor : "white",
@@ -44,17 +44,17 @@ const styles = StyleSheet.create({
       },
     container: {
       paddingVertical: 10,
+      flexGrow: 1,
       alignItems: "center",
+      backgroundColor : "white",
+      // minHeight: "50%",
+      // flexDirection: "column",
+      // paddingBottom : 100,
     },
     grid: {
       flexDirection: "row",
       flexWrap: "wrap",
-      justifyContent: "center",
-    },
-    image: {
-      width: 120,
-      height: 120,
-      borderRadius: 10,
-      margin: 5,
+      justifyContent: "flex-start",
+      backgroundColor : "#C0F3F0",
     },
   });

@@ -1,28 +1,25 @@
 import React, { useEffect, useState } from "react";
-import {StyleSheet} from "react-native";
+import {StyleSheet, View,Text} from "react-native";
 import {Image} from "expo-image"
 import { Link} from "expo-router";
-import { getIngredients } from "@/utils/bdd";
 import {images} from "@/utils/picture";
 
-export default function Fav({ id }: { id: any }) {
+export default function Fav({ out }: { out: any }) {
   const [img, setImg] = useState(images.github);
-  const ide: number = id?.id;
-  // useEffect(() => {
-  //   /**
-  //    * TODO Faire un gros import des images pour aleger le chargement 
-  //    * EXEMPLE : 
-  //    */
-  //   function change(){   
-  //     const as : string = id?.Ingredient;
-  //     setImg(images.carotte);
-  //     console.log(as);
-  //   }
-  //   change();
-  // },[]);
+  const info = out?.info;
+  const ide = info?.id;
+  const back = out?.back;
   return (
     <Link href={`/(hidden)/details/${ide}`} style={styles.image}>
-    <Image style={styles.image} source={img}/>
+      <View style={styles.container}>
+      {img != null ? <></>: <Image style={styles.image} source={img}/>}
+      <View style={{ backgroundColor: back === "Green" ? "#4CAF50" : back === "Orange" ? "orange" :"red", ...styles.Info}}>
+      <Text style={styles.title}>{info?.Nom}</Text>
+      {/* <Text style={styles.text}>{info?.categorie}</Text> */}
+      <Text style={{...styles.title}}>{info?.Score}</Text>
+      <Text style={styles.text}>{info?.Unite}</Text>
+      </View>
+      </View>
   </Link>
   );
 }
@@ -32,8 +29,41 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 10,
-    marginHorizontal: 5,
-    backgroundColor : 'black',
+    // marginHorizontal: 5,
+    // backgroundColor : 'black',
     margin : 5,
-  }
+    left : 10,
+  },
+  text :{
+    fontSize: 8,
+    fontWeight: "bold",
+    left : 1,
+    marginTop : 10,
+    marginBottom: 10,
+  },
+  title: {
+    fontSize: 9,
+    fontWeight: "bold",
+    marginTop: 10,
+    marginLeft : 5,
+    marginRight : 5,
+  },
+  // title1: {
+  //   fontSize: 10,
+  //   fontWeight: "bold",
+  //   marginTop: 10,
+  // },
+  container: {
+    height: "100%",
+    width: "100%",
+    alignItems: "center",
+  },
+  Info : {
+    height: "100%",
+    width: "100%",
+    borderRadius: 10,
+    marginHorizontal: 5,
+    alignItems: "center",
+    marginBottom : 10,
+  },
 });

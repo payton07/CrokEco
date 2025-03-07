@@ -2,29 +2,18 @@ import React, { useEffect, useState } from "react";
 import {ScrollView, StyleSheet, TextInput,Text, ActivityIndicator} from "react-native";
 import {View } from "./Themed";
 import Fav from './Fav';
-import { getIngredients } from "@/utils/bdd";
+import { getIngredients, getPlats, getSous_Groupes } from "@/utils/bdd";
 
-export default function Favoris({ path }: { path: string }) {
-  const [loads ,setloads] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    async function setup() {
-      const loa = await getIngredients();
-      if(loa != undefined) {setloads(loa);setLoading(false);}
-      console.log(loa?.length);
-    }
-    setup();
-  }, []);
+export default function Favoris({ loads }: { loads: any[] }) {
+  const [loading, setLoading] = useState(false);
   return (
     <View style={styles.wrapper}>
       <Text style={styles.title}>
         <Text style={styles.title2}>   Favoris </Text>
         </Text>
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.container}>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={true} style={styles.container}>
         {loading ?<ActivityIndicator size="large" color="#0000ff" /> :
-      loads.map((a) => (
-        <Fav key={a.ID_ingredient} id={{id :a.ID_ingredient,Ingredient : a.Ingredient}}/>
-      ))}
+      loads.map((a,i) =>( <Fav key={i} out={a}/> ))}
     </ScrollView>
   </View>
   );
