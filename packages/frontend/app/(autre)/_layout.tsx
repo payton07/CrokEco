@@ -32,43 +32,8 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="scanner"
+        name="image/[id]"
         options={{
-          title: "Scanner",
-          tabBarIcon: ({ color }) => <MaterialCommunityIcons name="line-scan" size={24} color={color} />,
-          headerRight: () => (
-            <Link href="../sideMenu" asChild>
-            <Pressable>
-            {({pressed})=>(
-              pressed ?<>
-              <SideMenu path="app/(tabs)/scanner.tsx" />
-              </> : <>
-              <Ionicons name="menu" size={24} color="black" />
-              </>
-          )}
-            </Pressable> 
-            </Link>
-            ),
-        }}
-      />
-      <Tabs.Screen
-        name="research"
-        options={{
-          title: "Research ",
-          tabBarIcon: ({ color }) => <Ionicons name="search-outline" size={24} color="black" />,
-        }}
-      />
-      <Tabs.Screen
-        name="info"
-        options={{
-          title: "info",
-          tabBarIcon: ({ color }) => <FontAwesome5 name="info-circle" size={24} color="black" />,
-        }}
-      />
-      <Tabs.Screen
-        name="test"
-        options={{
-          title: "test",
           //tabBarIcon: ({ color }) => <FontAwesome5 name="info-circle" size={24} color="black" />,
           tabBarStyle : {display : 'none'},
           headerShown :  false,
