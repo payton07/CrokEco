@@ -4,3 +4,6 @@ Moderation nous mm ? :
 - 
 
 Un compte pour ajouter un menu et autre . 
+
+= => Search , Menu  deroulante 
+On peut cliquer sur le plat passer par la Realité Augmenter 

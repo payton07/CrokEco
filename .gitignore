@@ -16,3 +16,4 @@ packages/frontend/*
 !packages/frontend/assets
 !packages/frontend/global.css 
 *.db
+!*.typ
