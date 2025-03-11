@@ -1,0 +1,15 @@
+je revert " UPDATE peut peter" safety
+
+This reverts commit bea35edb8d44c11d2df21ae6e9d227d538089413.
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch patr
+# Your branch is ahead of 'origin/patr' by 1 commit.
+#   (use "git push" to publish your local commits)
+#
+# Changes to be committed:
+#	modified:   packages/frontend/package-lock.json
+#	modified:   packages/frontend/package.json
+#
