@@ -154,8 +154,8 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 10,
     backgroundColor: "white",
-    marginBottom: "83%",
-    paddingBottom: "85%",
+    marginBottom: "73%",
+    paddingBottom: "83%",
   },
   header: {
     flexDirection: "row",
