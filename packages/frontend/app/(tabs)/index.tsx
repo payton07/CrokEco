@@ -1,5 +1,4 @@
 import { StyleSheet , Alert, Image as RNImage} from "react-native";
-
 import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
 import React, { useState } from "react";
