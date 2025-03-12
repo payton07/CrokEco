@@ -4,19 +4,21 @@ import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
 import React, { useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import Tesseract from 'tesseract.js';
-import TextRecognition from "@react-native-ml-kit/text-recognition";
+// import Tesseract from "tesseract.js";
+import TextRecognition , {TextRecognitionScript, }from "@react-native-ml-kit/text-recognition";
 
 export default function Scanner(){
 const [text ,setText] = useState('Rien');
-const imagePath = require('../../assets/ingImages/image4.png'); 
+const imagePath = require('../../assets/ingImages/image5.jpg'); 
 const imageUri = RNImage.resolveAssetSource(imagePath).uri;
 
 async function recognizeText(){
   try {
-    const result = await TextRecognition.recognize(imageUri);
+    const result = await TextRecognition.recognize(imageUri,TextRecognitionScript.LATIN);
+    // const { data } = await Tesseract.recognize(imageUri, "eng");
+    // setText(result.text);
     setText(result.text);
-    console.log("Text :",text,"result :", result.text);
+    console.log("result :\n",result.text);
     
   } catch (error) {
     Alert.alert('Erreur', 'Échec de la reconnaissance de texte');
