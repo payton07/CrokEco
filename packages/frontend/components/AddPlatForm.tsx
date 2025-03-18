@@ -3,59 +3,90 @@ import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useState } from 'react';
+import { getIngredients } from '@/utils/bdd';
+import { set } from 'zod';
+
+type Ingredient = {
+  nom: string;
+  poids: string;
+};
 
 type FormData = {
   name: string;
-  description: string;
-  ingredients: string[];
+  ingredients: Ingredient[];
 };
-
-const ingredientsData = [
-    "Tomate", "Oignon", "Poivron", "Ail", "Basilic", "Piment", "Thym", "Courgette", "Aubergine", "Chou", "Carotte", "Épinard", "Brocoli"
-];
 
 const schema = yup.object({
     name: yup.string().required("Le nom du plat est obligatoire"),
-    description: yup.string().required("La description est obligatoire"),
-    ingredients: yup.array().of(yup.string().required("L'ingrédient est obligatoire")).min(1, "Veuillez ajouter au moins un ingrédient").required(),
+    ingredients: yup.array().min(1, "Veuillez ajouter au moins un ingrédient"),
   }).required();
   
 
 export default function AddDishForm() {
-  const { control, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
+  const { control, handleSubmit, reset,setValue, formState: { errors } } = useForm<FormData>({
     resolver: yupResolver(schema),
     defaultValues: {
         name: "",
-        description: "",
         ingredients: [],
       },
   });
-
+  const forms : FormData[] = [];
   const [loading, setLoading] = useState(false);
   const [ingredient, setIngredient] = useState(''); 
-  const [ingredientsList, setIngredientsList] = useState<string[]>([]);
-  const [filteredIngredients, setFilteredIngredients] = useState<string[]>([]);
+  const [poids, setPoids] = useState(''); 
+  const [ingredientsList, setIngredientsList] = useState<Ingredient[]>([]);
+  const [filteredIngredients, setFilteredIngredients] = useState<any[]>([]);
+  const [ingredientsData, setIngredientsData ]= useState<string[]>([]);
   
 
-  function addIngredient(ingredient: string){
+  async function Alter_IngredientFromBdd(text:string){
+    const query = `%${text}%`;
+    const data = await getIngredients({Ingredient : query},true,true,30); 
+    console.log("J'ai eu la data", data?.length);
+    if(data !== undefined){
+      const Ing : string[]= [];
+      for (const ele of data) {
+        if(!Ing.includes(ele.Ingredient)) Ing.push(ele.Ingredient);
+      }
+      setIngredientsData(Ing);
+    }
+    
+  }
+  function AlterPoids(text:string){
+    setPoids(text);
+  }
+
+  function inter(ingredient: string){
     if (ingredient.trim()) {
-        setIngredientsList(prevState => [...prevState, ingredient.trim()]);
-        setIngredient(''); // Réinitialiser le champ d'entrée de l'ingrédient
-        setFilteredIngredients([]); // Réinitialiser les suggestions
+      setIngredient(ingredient.trim());
+      setFilteredIngredients([]); 
+    }
+  }
+
+  function addIngredient(){
+    if (ingredient.trim() && poids.trim()) {
+        const newdata = [...ingredientsList, {nom: ingredient.trim(), poids: poids.trim()}];
+        setIngredientsList(newdata);
+        setValue("ingredients", newdata);
+        setIngredient('');
+        setPoids('');
       }
   };
 
-  function removeIngredient(index: number){
-    setIngredientsList(prevState => prevState.filter((_, i) => i !== index));
+  function deleteIngredient(index: number){
+    const newdata = ingredientsList.filter((_, i) => i !== index)
+    setIngredientsList(newdata);
+    setValue("ingredients", newdata);
   };
   
-  function filterIngredients(text: string){
+  async function filterIngredients(text: string){
       setIngredient(text);
+      await Alter_IngredientFromBdd(text);
       if (text.trim() === '') {
           setFilteredIngredients([]);
         } else {
-            const filtered = ingredientsData.filter(ingredient =>
-                ingredient.toLowerCase().startsWith(text.toLowerCase())
+            const filtered = ingredientsData.filter(Element =>
+                Element.toLowerCase().startsWith(text.toLowerCase())
             );
             setFilteredIngredients(filtered);
         }
@@ -63,8 +94,18 @@ export default function AddDishForm() {
     
   function onSubmit(data: FormData){
       setLoading(true);
+      console.log("la data du form",data);
+      //
+      
+      //
       Alert.alert("Plat ajouté !", `Nom: ${data.name}\nPrix: ${data.ingredients.length} ingrédients`);
       reset();
+      setLoading(false);
+      setIngredient('');
+      setPoids('');
+      setIngredientsList([]);
+      setFilteredIngredients([]);
+      setIngredientsData([]);
     };
 
   return (
@@ -88,27 +129,12 @@ export default function AddDishForm() {
       </View>
       {errors.name && <Text style={styles.errorText}>{errors.name.message}</Text>}
 
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Description :</Text>
-        <Controller
-          control={control}
-          name="description"
-          render={({ field: { onChange, value } }) => (
-            <TextInput
-              style={styles.input}
-              placeholder="Description"
-              value={value}
-              onChangeText={onChange}
-            />
-          )}
-        />
-      </View>
-      {errors.description && <Text style={styles.errorText}>{errors.description.message}</Text>}
+      
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Ingrédients :</Text>
         <TextInput
-          style={styles.input}
-          placeholder="Commencez à taper un ingrédient"
+          style={styles.input2}
+          placeholder="Taper un ingrédient"
           value={ingredient}
           onChangeText={filterIngredients}
         />
@@ -118,7 +144,7 @@ export default function AddDishForm() {
               data={filteredIngredients}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({ item }) => (
-                <TouchableWithoutFeedback onPress={() => addIngredient(item)}>
+                <TouchableWithoutFeedback onPress={() => inter(item)}>
                   <View style={styles.suggestionItem}>
                     <Text style={styles.suggestionText}>{item}</Text>
                   </View>
@@ -127,6 +153,15 @@ export default function AddDishForm() {
             />
           </View>
         )}
+        <TextInput
+          style={[styles.input, { width: "80%" }]}
+          placeholder="Poids en grammes"
+          value={poids}
+          onChangeText={AlterPoids}
+        />
+        <TouchableOpacity style={styles.addButton} onPress={addIngredient}>
+          <Text style={styles.addButtonText}>+</Text>
+        </TouchableOpacity>
       </View>
 
       {ingredientsList.length > 0 && (
@@ -134,8 +169,8 @@ export default function AddDishForm() {
           data={ingredientsList}
           renderItem={({ item, index }) => (
             <View style={styles.ingredientItem}>
-              <Text style={styles.ingredientText}>{item}</Text>
-              <TouchableOpacity onPress={() => removeIngredient(index)} style={styles.removeButton}>
+              <Text style={styles.ingredientText}>{item.nom}</Text>
+              <TouchableOpacity onPress={() => deleteIngredient(index)} style={styles.removeButton}>
                 <Text style={styles.removeButtonText}>Supprimer</Text>
               </TouchableOpacity>
             </View>
@@ -186,6 +221,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderWidth: 1,
     borderColor: '#ddd',
+    // flexDirection: 'row',
   },
   label: {
     color: '#666',
@@ -197,6 +233,14 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#ddd',
+  },
+  input2: {
+    backgroundColor: 'white',
+    padding: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    // width:"60%"
   },
   errorText: {
     color: '#e74c3c',
@@ -253,6 +297,7 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
     marginTop: 8,
     maxHeight: 200,
+    // width: '45%',
   },
   suggestionItem: {
     padding: 8,
