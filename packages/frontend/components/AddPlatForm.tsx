@@ -7,8 +7,8 @@ import { getIngredients } from '@/utils/bdd';
 import { set } from 'zod';
 
 type Ingredient = {
-  nom: string;
-  quantite: string;
+  name: string;
+  weight: string;
 };
 
 type FormData = {
@@ -17,9 +17,15 @@ type FormData = {
 };
 
 const schema = yup.object({
-    name: yup.string().required("Le nom du plat est obligatoire"),
-    ingredients: yup.array().min(1, "Veuillez ajouter au moins un ingrédient"),
-  }).required();
+  name: yup.string().required("Le nom du plat est obligatoire"),
+  ingredients: yup.array().of(
+    yup.object({
+      name: yup.string().required("Le nom de l'ingrédient est obligatoire"),
+      weight: yup.string().required("Le poids est obligatoire"),
+    })
+  ).min(1, "Veuillez ajouter au moins un ingrédient")
+  .default([]),
+});
   
 
 export default function AddDishForm() {
@@ -65,7 +71,7 @@ export default function AddDishForm() {
 
   function addIngredient(){
     if (ingredient.trim() && quantite.trim()) {
-        const newdata = [...ingredientsList, {nom: ingredient.trim(), quantite: quantite.trim()}];
+        const newdata = [...ingredientsList, {name: ingredient.trim(), weight: quantite.trim()}];
         setIngredientsList(newdata);
         setValue("ingredients", newdata);
         setIngredient('');
@@ -169,7 +175,7 @@ export default function AddDishForm() {
           data={ingredientsList}
           renderItem={({ item, index }) => (
             <View style={styles.ingredientItem}>
-              <Text style={styles.ingredientText}>{item.nom}</Text>
+              <Text style={styles.ingredientText}>{item.name}</Text>
               <TouchableOpacity onPress={() => deleteIngredient(index)} style={styles.removeButton}>
                 <Text style={styles.removeButtonText}>Supprimer</Text>
               </TouchableOpacity>
