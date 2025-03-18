@@ -8,7 +8,7 @@ import { set } from 'zod';
 
 type Ingredient = {
   nom: string;
-  poids: string;
+  quantite: string;
 };
 
 type FormData = {
@@ -33,7 +33,7 @@ export default function AddDishForm() {
   const forms : FormData[] = [];
   const [loading, setLoading] = useState(false);
   const [ingredient, setIngredient] = useState(''); 
-  const [poids, setPoids] = useState(''); 
+  const [quantite, setQuantite] = useState(''); 
   const [ingredientsList, setIngredientsList] = useState<Ingredient[]>([]);
   const [filteredIngredients, setFilteredIngredients] = useState<any[]>([]);
   const [ingredientsData, setIngredientsData ]= useState<string[]>([]);
@@ -52,8 +52,8 @@ export default function AddDishForm() {
     }
     
   }
-  function AlterPoids(text:string){
-    setPoids(text);
+  function Alterquantite(text:string){
+    setQuantite(text);
   }
 
   function inter(ingredient: string){
@@ -64,12 +64,12 @@ export default function AddDishForm() {
   }
 
   function addIngredient(){
-    if (ingredient.trim() && poids.trim()) {
-        const newdata = [...ingredientsList, {nom: ingredient.trim(), poids: poids.trim()}];
+    if (ingredient.trim() && quantite.trim()) {
+        const newdata = [...ingredientsList, {nom: ingredient.trim(), quantite: quantite.trim()}];
         setIngredientsList(newdata);
         setValue("ingredients", newdata);
         setIngredient('');
-        setPoids('');
+        setQuantite('');
       }
   };
 
@@ -102,7 +102,7 @@ export default function AddDishForm() {
       reset();
       setLoading(false);
       setIngredient('');
-      setPoids('');
+      setQuantite('');
       setIngredientsList([]);
       setFilteredIngredients([]);
       setIngredientsData([]);
@@ -129,7 +129,7 @@ export default function AddDishForm() {
       </View>
       {errors.name && <Text style={styles.errorText}>{errors.name.message}</Text>}
 
-      
+
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Ingrédients :</Text>
         <TextInput
@@ -155,9 +155,9 @@ export default function AddDishForm() {
         )}
         <TextInput
           style={[styles.input, { width: "80%" }]}
-          placeholder="Poids en grammes"
-          value={poids}
-          onChangeText={AlterPoids}
+          placeholder="quantite en grammes"
+          value={quantite}
+          onChangeText={Alterquantite}
         />
         <TouchableOpacity style={styles.addButton} onPress={addIngredient}>
           <Text style={styles.addButtonText}>+</Text>
