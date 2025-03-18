@@ -10,5 +10,6 @@ On peut cliquer sur le plat passer par la Realité Augmenter
 
 Page d'ajout de plat :
 - Nom du plat
-- Description
-- Type de plat (entrée, plat, dessert)
+- Ingredients ({nom,poids})
+
+Reste  : Pour faire l'insertion dans la base de donnée => modif de la bdd car on a pas le Ciqual_AGB du plat que l'utilisateur ajoute + Partie de validation de l'ajout du plat
