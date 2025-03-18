@@ -1,5 +1,5 @@
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import {MaterialCommunityIcons, MaterialIcons} from '@expo/vector-icons';
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link, Tabs } from "expo-router";
 
@@ -55,6 +55,16 @@ export default function TabLayout() {
           title: "info",
           tabBarIcon: ({ color }) => <FontAwesome5 name="info-circle" size={24} color="black" />, 
           headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="add"
+        options={{
+          title: "add",
+          tabBarIcon: ({ color }) => <MaterialIcons name="add-shopping-cart" size={24} color="black" />, 
+          headerShown: false,
+          // tabBarIconStyle : {display : 'none'},
+          // tabBarStyle: {display : 'none'}
         }}
       />
       {/* <Tabs.Screen
