@@ -45,7 +45,9 @@
     "react-native-web": "~0.19.13",
     "tesseract.js": "^6.0.0",
     "tesseract.js-core": "^6.0.0",
-    "yup": "^1.6.1"
+    "yup": "^1.6.1",
+    "expo-image-picker": "~16.0.6",
+    "expo-media-library": "~17.0.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.18.0",
@@ -61,5 +63,17 @@
     "typescript": "^5.3.3",
     "typescript-eslint": "^8.21.0"
   },
-  "private": true
+  "private": true,
+  "expo": {
+    "plugins": [
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow $(PRODUCT_NAME) to access your photos.",
+          "savePhotosPermission": "Allow $(PRODUCT_NAME) to save photos.",
+          "isAccessMediaLocationEnabled": true
+        }
+      ]
+    ]
+  }
 }

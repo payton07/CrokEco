@@ -36,7 +36,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Scanner",
+          title: "Index",
           tabBarIcon: ({ color }) => <MaterialCommunityIcons name="line-scan" size={24} color={color} />,
           headerShown: false,
         }}
@@ -61,7 +61,7 @@ export default function TabLayout() {
         name="add"
         options={{
           title: "add",
-          tabBarIcon: ({ color }) => <MaterialIcons name="add-shopping-cart" size={24} color="black" />, 
+          tabBarIcon: ({ color }) => <FontAwesome name="cutlery" size={24} color="black" />, 
           headerShown: false,
           // tabBarIconStyle : {display : 'none'},
           // tabBarStyle: {display : 'none'}
