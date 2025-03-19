@@ -22,6 +22,7 @@ function Qualite(score : number) {
   }
   return "Red";
 }
+// boeuf
 export default function details() {
   const [img, setImg] = useState<string|null>("@/assets/ingImage.image.png");
   const [info, setInfo] = useState<info_t>();
