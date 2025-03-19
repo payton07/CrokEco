@@ -6,6 +6,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 // import Tesseract from "tesseract.js";
 import * as ImagePicker from "expo-image-picker";
 import TextRecognition from "@react-native-ml-kit/text-recognition";
+import { set } from "zod";
 
 interface BoundingBox {
   x: number;
@@ -39,10 +40,12 @@ function sortRecognizedText(blocks: TextBlock[]): string{
 
 
 export default function Index(){
-  const [text ,setText] = useState('Rien');
+  const [text ,setText] = useState('');
   const imagePath = require('../../assets/ingImages/image11.png'); 
   const [filled,setFilled] = useState(false);
+  const [done, setDone] = useState(false);
   const [imageUri , setImageUri] = useState(RNImage.resolveAssetSource(imagePath).uri);
+  // RNImage.resolveAssetSource(imagePath).uri
 
   async function pickImage() {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -53,7 +56,7 @@ export default function Index(){
     }
 
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images', 'videos'],
+      mediaTypes: ['images'],
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
@@ -63,20 +66,20 @@ export default function Index(){
       setImageUri(result.assets[0].uri);
       console.log("Image URI :", imageUri);
     } else {
-      alert('You did not select any image.');
+      alert("Vous n'avez selectionner aucune image.");
     }
   };
 
 
   async function recognizeText(){
-    if(!filled){
+    if(!filled && imageUri){
     try {
       const result = await TextRecognition.recognize(imageUri);
-      // console.log("Résultat OCR brut :", result); 
-      const inter : TextBlock[] = result.blocks;// 🔍 Debug
-      const sortedText = sortRecognizedText(inter || []); // Assurer que blocks existe
+      const inter : TextBlock[] = result.blocks;
+      const sortedText = sortRecognizedText(inter || []); 
       setText(sortedText);
       setFilled(true);
+      setDone(true);
     } catch (error) {
       Alert.alert('Erreur', 'Échec de la reconnaissance de texte');
       console.error("Erreur OCR :", error);
@@ -84,31 +87,47 @@ export default function Index(){
   }
   else{
     setFilled(false);
-    setText('Rien');
+    setText('');
+    setDone(false);
   }
   };
 
     return (
       <SafeAreaProvider>
+        <Text style={styles.title}> Scanner page </Text>
       <View style={styles.container}>
-        <Text style={styles.title} onPress={recognizeText}> Scanner page </Text>
-        <Text style={styles.text}>{text}</Text>
-        <View
+
+        {done ?<View style={styles.RecongnitionContainer}>
+          <Text style={styles.title1}>Text Reconnu : </Text>
+          <Text style={styles.text}>{text}</Text>
+        </View>
+        : 
+        <Text style={styles.text}></Text>
+      }
+        {imageUri && !done? (
+          <RNImage source={{ uri: imageUri }} style={styles.image} />
+        ) : (
+          <></>
+        )}
+        {!done ?<>
+          <TouchableOpacity style={styles.imageButton} onPress={pickImage}>
+        <Text style={styles.imageButtonText}>📷 Choisir une image</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={{...styles.imageButton,top:10}} onPress={recognizeText}>
+      <Text style={styles.imageButtonText} onPress={recognizeText}> Analyser </Text>
+      </TouchableOpacity>
+        </>
+      :
+      <TouchableOpacity style={styles.imageButton} onPress={recognizeText}>
+      <Text style={styles.imageButtonText} onPress={recognizeText} > retour </Text>
+      </TouchableOpacity>
+      }
+
+      <View
           style={styles.separator}
           lightColor="#eee"
           darkColor="rgba(255,255,255,0.1)"
         />
-        {imageUri ? (
-          <RNImage source={{ uri: imageUri }} style={styles.image} />
-        ) : (
-          <Text>Aucune image sélectionnée</Text>
-        )}
-
-      <TouchableOpacity style={styles.imageButton} onPress={pickImage}>
-        <Text style={styles.imageButtonText}>📷 Choisir une image</Text>
-      </TouchableOpacity>
-
-        <EditScreenInfo path="app/(tabs)/index.tsx" />
       </View>
       </SafeAreaProvider>
     );
@@ -122,13 +141,39 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   title: {
+    top : 20,
+    alignSelf: "center",
+    height: "10%",
     fontSize: 20,
     fontWeight: "bold",
     color: "black",
   },
-  text: {
+  title1: {
     fontSize: 20,
     fontWeight: "bold",
+    color: "black",
+    alignSelf : "center",
+  },
+  RecongnitionContainer: {
+    padding: 16,
+    backgroundColor: 'white',
+    borderRadius: 12,
+    borderBlockColor: 'black',
+    borderColor: 'black',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    width: "80%",
+    height: "50%",
+    elevation: 5,
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "black",
+    bottom: 20,
+  },
+  text: {
+    fontSize: 16,
     color: "black",
   },
   separator: {
@@ -141,8 +186,8 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
   image: {
-    width: 200,
-    height: 200,
+    width: "70%",
+    height: "40%",
     borderRadius: 10,
     marginBottom: 10,
   },
