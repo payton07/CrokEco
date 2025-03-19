@@ -13,3 +13,8 @@ Page d'ajout de plat :
 - Ingredients ({nom,poids})
 
 Reste  : Pour faire l'insertion dans la base de donnée => modif de la bdd car on a pas le Ciqual_AGB du plat que l'utilisateur ajoute + Partie de validation de l'ajout du plat
+
+API - IA  : Gemini 
+
+
+Localisation :
