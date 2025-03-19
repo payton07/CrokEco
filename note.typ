@@ -18,3 +18,14 @@ API - IA  : Gemini
 
 
 Localisation :
+
+= Commande pour creer le build android :
+* Faut avoir brancher le telephone par cable ou soit excecuter sans le install et envoyer l'apk au mec qui veut l'installer*
+- npx expo run:android
+- cd android && ./gradlew assembleRelease
+- adb install android/app/build/outputs/apk/release/app-release.apk
+
+= Pour le build ios :
+- npx expo run:ios
+- cd ios && pod install
+le reste c'est sur xcode , autre possibilité : je verrais plus tard
