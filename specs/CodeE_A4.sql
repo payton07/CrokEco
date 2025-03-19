@@ -1,15 +1,15 @@
-CREATE TABLE "Plats" (
-  "Code_AGB" VARCHAR(10),
-  "ID_sous_groupe" VARCHAR(20),
-  "Nom_Francais" VARCHAR(50),
-  "LCI_Name" VARCHAR(50),
-  CONSTRAINT PK_PLATS PRIMARY KEY("Code_AGB"),
-  CONSTRAINT FK_PLAT_SOUSGROUPES FOREIGN KEY ("ID_sous_groupe") REFERENCES Sous_Groupes("ID_sous_groupe")
-);
+/*CREATE TABLE "Plats" (
+  "ID_plat" VARCHAR(10),
+  "Certified" BOOLEAN,
+  "Vote" INT(6),
+  CONSTRAINT PK_PLATS PRIMARY KEY("ID_plat"),
+);*/
 
 CREATE TABLE "Ingredients" (
   "Code_AGB" VARCHAR(10),
-  "Ingredient" VARCHAR(50),
+  "Nom_Francais" VARCHAR(50),
+  "LCI_Name" VARCHAR(50),
+  "ID_sous_groupe" VARCHAR(20),
   "Score_unique_EF" DECIMAL(10,8),
   "Changement_climatique" DECIMAL(10,8),
   "Appauvrissement_de_la_couche_d_ozone" DECIMAL(10,8),
@@ -28,6 +28,7 @@ CREATE TABLE "Ingredients" (
   "Epuisement_des_ressources_energetiques" DECIMAL(10,8),
   "Epuisement_des_ressources_mineraux" DECIMAL(10,8),
   CONSTRAINT PK_INGREDIENTS PRIMARY KEY("Code_AGB"),
+  CONSTRAINT FK_PLAT_SOUSGROUPES FOREIGN KEY ("ID_sous_groupe") REFERENCES Sous_Groupes("ID_sous_groupe")
 );
 
 CREATE TABLE "Plats_Ingredients" (
@@ -35,7 +36,7 @@ CREATE TABLE "Plats_Ingredients" (
   "ID_ingredient" INTEGER,
   "Quantite" DECIMAL(5,3),
   CONSTRAINT PK_PLATS_INGREDIENTS PRIMARY KEY("ID_plat", "ID_ingredient"),
-  CONSTRAINT FK_PLATS_INGREDIENTS_PLATS FOREIGN KEY ("ID_plat") REFERENCES Plats("Code_AGB"),
+  CONSTRAINT FK_PLATS_INGREDIENTS_PLATS FOREIGN KEY ("ID_plat") REFERENCES Plats("ID_plat"),
   CONSTRAINT FK_PLATS_INGREDIENTS_INGREDIENTS FOREIGN KEY ("ID_ingredient") REFERENCES Ingredients("Code_AGB")
 );
 
