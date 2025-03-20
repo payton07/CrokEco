@@ -104,7 +104,7 @@ export default function AddDishForm() {
       //
       
       //
-      Alert.alert("Plat ajouté !", `Nom: ${data.name}\nPrix: ${data.ingredients.length} ingrédients`);
+      Alert.alert("Plat ajouté !", `Nom: ${data.name}\nNombre : ${data.ingredients.length} ingrédients`);
       reset();
       setLoading(false);
       setIngredient('');

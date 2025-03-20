@@ -205,7 +205,7 @@ export async function getIngredients(data : boolean | any =false,all=false,str=f
 }
 export async function getPlats(data : boolean | any =false,all=false,str=false,limit:number | boolean=10): Promise<any[] | undefined> {
   const res:any[]| undefined = await getSmt("Plats",data,all,limit,str);
-  if(!res || res.length ==0){ return all? [] : undefined}
+  if(!res || res.length ==0 || res[0]==null){ return all? [] : undefined}
   else {
     return res ;
   }

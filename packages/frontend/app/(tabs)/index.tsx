@@ -5,6 +5,9 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 // import Tesseract from "tesseract.js";
 import * as ImagePicker from "expo-image-picker";
 import TextRecognition from "@react-native-ml-kit/text-recognition";
+import { getPlats } from "@/utils/bdd";
+import { change } from "@/utils/other";
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 interface BoundingBox {
   x: number;
@@ -38,7 +41,7 @@ function sortRecognizedText(blocks: TextBlock[]): string{
 
 
 export default function Index(){
-  const [text ,setText] = useState('');
+  const [data ,setData] = useState<any[]>([]);
   const imagePath = require('../../assets/ingImages/image11.png'); 
   const [filled,setFilled] = useState(false);
   const [done, setDone] = useState(false);
@@ -67,28 +70,62 @@ export default function Index(){
       alert("Vous n'avez selectionner aucune image.");
     }
   };
+async function setRecoData(){
+  if(!filled && imageUri){
+    const data = await recognizeText();
+    if(data != undefined){    
+      const lines = [];
+      for (const ligne of data) {
+        const query = `${ligne}`;
+        try {
+          const res = await getPlats({Nom_Francais: query},false,true,1);
+          if(res != undefined && res.length > 0 && res != null){
+            const id = res[0].Ciqual_AGB;
+            const color = await change(id);
+            lines.push({"text":ligne,color:color?.back});
+          }
+          else{
+            lines.push({"text":ligne,"color":"black"});
+          }
+        }
+        catch (error) {
+          console.error("Erreur lors de la récupération des plats:", error);
+        }
+      }
+      setData(lines);
+      setFilled(true);
+      setDone(true);
+    }
+    else{
+      setData([]);
+      setFilled(false);
+      setDone(false);
+    }
+}
+else{
+  setData([]);
+  setFilled(false);
+  setDone(false);
+}
+}
 
-
-  async function recognizeText(){
-    if(!filled && imageUri){
+  async function recognizeText(): Promise<string[]|undefined> {
     try {
       const result = await TextRecognition.recognize(imageUri);
       const inter : TextBlock[] = result.blocks;
       const sortedText = sortRecognizedText(inter || []); 
-      setText(sortedText);
-      setFilled(true);
-      setDone(true);
+      const lines = []
+      for (const ligne of sortedText.split("\n")) {
+        const v = ligne.split("*");
+        lines.push(v[0]);
+      }
+      return lines ;
     } catch (error) {
       Alert.alert('Erreur', 'Échec de la reconnaissance de texte');
       console.error("Erreur OCR :", error);
     }
-  }
-  else{
-    setFilled(false);
-    setText('');
-    setDone(false);
-  }
-  };
+}
+
 
     return (
       <SafeAreaProvider>
@@ -97,7 +134,14 @@ export default function Index(){
 
         {done ?<View style={styles.RecongnitionContainer}>
           <Text style={styles.title1}>Text Reconnu : </Text>
-          <Text style={styles.text}>{text}</Text>
+
+          {data ? 
+          data.map((ligne,i)=>{
+            return <View key={i} style={styles.reco}><Text style={styles.text}>{ligne.text}</Text><FontAwesome style={styles.star} name="star" size={24} color={ligne.color} /></View>
+          })
+          : 
+          <Text style={styles.text}>Aucun texte reconnu</Text>
+        }
         </View>
         : 
         <Text style={styles.text}></Text>
@@ -111,13 +155,13 @@ export default function Index(){
           <TouchableOpacity style={styles.imageButton} onPress={pickImage}>
         <Text style={styles.imageButtonText}>📷 Choisir une image</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={{...styles.imageButton,top:10}} onPress={recognizeText}>
-      <Text style={styles.imageButtonText} onPress={recognizeText}> Analyser </Text>
+      <TouchableOpacity style={{...styles.imageButton,top:10}} onPress={setRecoData}>
+      <Text style={styles.imageButtonText} onPress={setRecoData}> Analyser </Text>
       </TouchableOpacity>
         </>
       :
-      <TouchableOpacity style={styles.imageButton} onPress={recognizeText}>
-      <Text style={styles.imageButtonText} onPress={recognizeText} > retour </Text>
+      <TouchableOpacity style={styles.imageButton} onPress={setRecoData}>
+      <Text style={styles.imageButtonText} onPress={setRecoData} > retour </Text>
       </TouchableOpacity>
       }
 
@@ -178,6 +222,14 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: "80%",
+  },
+  star : {
+    right : 50,
+  },
+  reco : {
+    flexDirection : "row",
+    justifyContent : "space-between",
+    alignItems : "center",
   },
   imageContainer: {
     alignItems: "center",
