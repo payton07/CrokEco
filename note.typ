@@ -28,4 +28,4 @@ Localisation :
 = Pour le build ios :
 - npx expo run:ios
 - cd ios && pod install
-le reste c'est sur xcode , autre possibilité : je verrais plus tard
+le reste c'est sur xcode , autre possibilité : je verrais plus tard 
