@@ -3,7 +3,7 @@ import React, { createContext, useEffect, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getIngredients, getPlats, getSous_Groupes } from "@/utils/bdd";
+import { getPlats,} from "@/utils/bdd";
 import Searcher from "@/components/Searcher";
 import Favoris from "@/components/Favoris";
 import Suggestion from "@/components/Suggestion";
@@ -23,7 +23,7 @@ async function clearAllCache() {
 
 async function setup1() {
   const loa1 = await getPlats(false, true, false);
-  const loa2 = await getPlats(false, true, false, 100);
+  const loa2 = await getPlats(false, true, false, 200);
   if (loa1 && loa2) {
     let lod1 = [], lodInter = [] ,lod2 = [];
     for (const a of loa1) {

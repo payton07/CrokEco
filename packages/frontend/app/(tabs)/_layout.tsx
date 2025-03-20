@@ -53,7 +53,7 @@ export default function TabLayout() {
         name="info"
         options={{
           title: "info",
-          tabBarIcon: ({ color }) => <FontAwesome5 name="info-circle" size={24} color="black" />, 
+          tabBarIcon: ({ color }) => <FontAwesome5 name="info-circle" size={24} color={color} />, 
           headerShown: false,
         }}
       />
@@ -61,23 +61,10 @@ export default function TabLayout() {
         name="add"
         options={{
           title: "add",
-          tabBarIcon: ({ color }) => <FontAwesome name="cutlery" size={24} color="black" />, 
+          tabBarIcon: ({ color }) => <FontAwesome name="cutlery" size={24} color={color} />, 
           headerShown: false,
-          // tabBarIconStyle : {display : 'none'},
-          // tabBarStyle: {display : 'none'}
         }}
       />
-      {/* <Tabs.Screen
-        name="(hidden)"
-        options={{
-          title: "hidden",
-          tabBarIcon: ({ color }) => <FontAwesome5 name="info-circle" size={24} color="black" />, 
-          headerShown: false,
-          tabBarIconStyle : {display : 'none'}
-          // tabBarStyle: {display : 'none'}
-          
-        }}
-      /> */}
     </Tabs>
   );
 }

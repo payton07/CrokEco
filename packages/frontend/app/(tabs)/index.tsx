@@ -7,7 +7,7 @@ import * as ImagePicker from "expo-image-picker";
 import TextRecognition from "@react-native-ml-kit/text-recognition";
 import { getPlats } from "@/utils/bdd";
 import { change } from "@/utils/other";
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import Textshow from "@/components/Textshow";
 
 interface BoundingBox {
   x: number;
@@ -82,10 +82,10 @@ async function setRecoData(){
           if(res != undefined && res.length > 0 && res != null){
             const id = res[0].Ciqual_AGB;
             const color = await change(id);
-            lines.push({"text":ligne,color:color?.back});
+            lines.push({"text":ligne,color:color?.back,"id":id});
           }
           else{
-            lines.push({"text":ligne,"color":"black"});
+            lines.push({"text":ligne,color:"black","id":null});
           }
         }
         catch (error) {
@@ -137,7 +137,7 @@ else{
 
           {data ? 
           data.map((ligne,i)=>{
-            return <View key={i} style={styles.reco}><Text style={styles.text}>{ligne.text}</Text><FontAwesome style={styles.star} name="star" size={24} color={ligne.color} /></View>
+            return <Textshow key={i} ligne={ligne} />
           })
           : 
           <Text style={styles.text}>Aucun texte reconnu</Text>
@@ -224,12 +224,13 @@ const styles = StyleSheet.create({
     width: "80%",
   },
   star : {
-    right : 50,
+    right : 40,
   },
   reco : {
     flexDirection : "row",
     justifyContent : "space-between",
     alignItems : "center",
+    width : "100%",
   },
   imageContainer: {
     alignItems: "center",
