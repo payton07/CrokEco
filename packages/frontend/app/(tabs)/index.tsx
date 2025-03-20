@@ -1,12 +1,10 @@
 import { StyleSheet , Alert, Image as RNImage, TouchableOpacity} from "react-native";
-import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
 import React, { useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 // import Tesseract from "tesseract.js";
 import * as ImagePicker from "expo-image-picker";
 import TextRecognition from "@react-native-ml-kit/text-recognition";
-import { set } from "zod";
 
 interface BoundingBox {
   x: number;

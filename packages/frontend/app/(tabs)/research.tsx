@@ -55,7 +55,7 @@ async function change(ide : number  ) {
 async function getDataWithCacheExpiration(key:string, apiCallFunction : ()=>{}, expirationTimeInMinutes = 30) {
   try {
     const cachedData = await AsyncStorage.getItem(key);
-    if (cachedData) {
+    if (cachedData !== null) {
       const { data, timestamp } = JSON.parse(cachedData);
       if (Date.now() - timestamp < expirationTimeInMinutes * 60 * 1000) {
         console.log(`Données récupérées depuis le cache (${key})`);
