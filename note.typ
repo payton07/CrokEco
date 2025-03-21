@@ -37,3 +37,5 @@ le reste c'est sur xcode , autre possibilité : je verrais plus tard
 
 = Test 
 == Mettre en place des tests au moins 
+
+==== (Prise des notes de ewen )peut-être avoir un mécanisme clé privé/publique ou équivalent pour s'assurer que les clients qui envoient des données au serveurs soient bien nos applis.
