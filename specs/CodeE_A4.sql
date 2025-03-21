@@ -1,9 +1,14 @@
-CREATE TABLE "Plats" (
-  "ID_plat" VARCHAR(10),
-  "Nom_plat" VARCHAR(50),
-  "Certified" INTEGER,
-  "Vote" INTEGER,
-  CONSTRAINT PK_PLATS PRIMARY KEY("ID_plat")
+CREATE TABLE "Sous_Groupes" (
+  "ID_sous_groupe" INTEGER PRIMARY KEY,
+  "Sous_groupe_d_aliment" VARCHAR(50),
+  "ID_groupe" INTEGER,
+  CONSTRAINT FK_SOUS_GROUPE_GROUPE_PLATS FOREIGN KEY ("ID_groupe") REFERENCES Groupes("ID_groupe")
+);
+
+
+CREATE TABLE "Groupes" (
+  "ID_groupe" INTEGER PRIMARY KEY,
+  "Groupe_d_aliment" VARCHAR(50)
 );
 
 
@@ -33,9 +38,47 @@ CREATE TABLE "Ingredients" (
   CONSTRAINT FK_PLAT_SOUSGROUPES FOREIGN KEY ("ID_sous_groupe") REFERENCES Sous_Groupes("ID_sous_groupe")
 );
 
+
+CREATE TABLE "Plats" (
+  "ID_plat" VARCHAR(10),
+  "Nom_plat" VARCHAR(50),
+  "Certified" INTEGER,
+  "Vote" INTEGER,
+  CONSTRAINT PK_PLATS PRIMARY KEY("ID_plat")
+);
+
+
+CREATE TABLE "Restaurants" (
+  "ID_restaurant" INT(6),
+  "NomResto" VARCHAR(20),
+  "Longitude" DECIMAL(10,8),
+  "Latitude" DECIMAL(10,8),
+  CONSTRAINT PK_RESTAURANTS PRIMARY KEY("ID_restaurant")
+);
+
+
+CREATE TABLE "Menus" (
+  "ID_menu" INT(6),
+  "NomMenu" VARCHAR(20),
+  "ID_restaurant" INT(6),
+  CONSTRAINT PK_MENUS PRIMARY KEY("ID_menu")
+  CONSTRAINT FK_MENUS_RESTAURANTS FOREIGN KEY ("ID_restaurant") REFERENCES Restaurants("ID_restaurant")
+);
+
+
+CREATE TABLE "Recherches" (
+  "ID_Recherche" INT(6),
+  "Text_request" VARCHAR(30),
+  "ID_menu" INT(6),
+  "Date" Date,
+  CONSTRAINT PK_RECHERCHES PRIMARY KEY("ID_Recherche"),
+  CONSTRAINT FK_RECHERCHES_MENUS FOREIGN KEY ("ID_menu") REFERENCES Menus("ID_menu")
+);
+
+
 CREATE TABLE "Plats_Ingredients" (
   "ID_plat" INTEGER,
-  "ID_ingredient" INTEGER,
+  "ID_ingredient"  VARCHAR(10),
   "Quantite" DECIMAL(5,3),
   CONSTRAINT PK_PLATS_INGREDIENTS PRIMARY KEY("ID_plat", "ID_ingredient"),
   CONSTRAINT FK_PLATS_INGREDIENTS_PLATS FOREIGN KEY ("ID_plat") REFERENCES Plats("ID_plat"),
@@ -43,56 +86,10 @@ CREATE TABLE "Plats_Ingredients" (
 );
 
 
-CREATE TABLE "Sous_Groupes" (
-  "ID_sous_groupe" INTEGER PRIMARY KEY,
-  "Sous_groupe_d_aliment" VARCHAR(50),
-  "ID_groupe" INTEGER,
-  CONSTRAINT FK_SOUS_GROUPE_GROUPE_PLATS FOREIGN KEY ("ID_groupe") REFERENCES Groupes("ID_groupe")
-);
-
-CREATE TABLE "Groupes" (
-  "ID_groupe" INTEGER PRIMARY KEY,
-  "Groupe_d_aliment" VARCHAR(50)
-);
-
-CREATE TABLE "Tags" (
-  "ID_tags" INT(6),
-  "Type" VARCHAR(3),
-  "Valeur" VARCHAR(30),
-  CONSTRAINT PK_TAGS PRIMARY KEY("ID_tags")
-);
-
-CREATE TABLE "Recherche" (
-  "ID_recherche" INT(6),
-  "Text_request" VARCHAR(30),
-  "Resultat" VARCHAR(30),
-  "Temps" time,
-  "Date" Date,
-  "ID_plat" INT(6),
-  "ID_histo" INT(6),
-  CONSTRAINT PK_RECHERCHE PRIMARY KEY("ID_recherche"),
-  CONSTRAINT FK_RECHERCHE_PLAT FOREIGN KEY ("ID_plat") REFERENCES "Plat" ("ID_plat"),
-  CONSTRAINT FK_RECHERCHE_HISTORIQUE FOREIGN KEY ("ID_histo") REFERENCES "Historique" ("ID_historique")
-);
-
-CREATE TABLE "Historique" (
-  "ID_historique" INT(6),
-  "Date_creation" Date,
-  CONSTRAINT PK_HISTORIQUE PRIMARY KEY("ID_historique")
-);
-
-CREATE TABLE "Menu" (
+CREATE TABLE "Menus_Plats" (
   "ID_menu" INT(6),
-  "NomM" VARCHAR(20),
-  "Etablissement" VARCHAR(20),
-  "Localisation" VARCHAR(30),
-  CONSTRAINT PK_MENU PRIMARY KEY("ID_menu")
-);
-
-CREATE TABLE "Designe_Tags"(
-  "ID_tags" INT(6),
   "ID_plat" INT(6),
-  CONSTRAINT PK_DESIGNE_TAGS PRIMARY KEY ("ID_tags", "ID_plat"),
-  CONSTRAINT FK_Designe_Tags__TAGS FOREIGN KEY ("ID_tags") REFERENCES "Tags" ("ID_tags"),
-  CONSTRAINT FK_Designe_Tags__PLAT FOREIGN KEY ("ID_plat") REFERENCES "Plat" ("ID_plat")
+  CONSTRAINT PK_MENUS_PLATS PRIMARY KEY("ID_menu", "ID_plat"),
+  CONSTRAINT FK_MENUS_PLATS_MENUS FOREIGN KEY ("ID_menu") REFERENCES Menus("ID_menu"),
+  CONSTRAINT FK_MENUS_PLATS_PLATS FOREIGN KEY ("ID_plat") REFERENCES Plats("ID_plat")
 );

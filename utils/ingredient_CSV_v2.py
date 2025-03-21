@@ -5,8 +5,10 @@ import os
 
 INPUT_FILE = "../assets/AGRIBALYSE_v2.xlsx"
 COMPARE_FILE = "../assets/Agribalyse_Detail_ingredient.csv"
-INPUT_SQL = "../specs/CodeE_A4.sql"
-OUTPUT_DB = "../packages/frontend/assets/ingredient_carbon_score.db"
+INPUT_SQL_FRONTEND = "../specs/CodeE_A4.sql"
+INPUT_SQL_BACKEND = "../specs/CodeE_A4_Backend.sql"
+OUTPUT_DB_FRONTEND = "../packages/frontend/assets/ingredient_carbon_score.db"
+OUTPUT_DB_BACKEND = "../packages/backend/bdd/ingredient_carbon_score.db"
 # On ne prend pas en compte la 2e colonne
 INGREDIENTS_KEYS = [0] + list(range(2, 22))
 GROUPE_KEYS = [1]
@@ -40,11 +42,11 @@ def suppr_keys(data_in, keys):
             print("Mauvaise clé :", key)
     return data_out
 
-def export_sqlite(input_sql,output_db):
-    if os.path.isfile(output_db):
-        os.remove(output_db)
+def export_sqlite(input_sql,OUTPUT_DB_FRONTEND):
+    if os.path.isfile(OUTPUT_DB_FRONTEND):
+        os.remove(OUTPUT_DB_FRONTEND)
 
-    connection = sqlite3.connect(output_db)
+    connection = sqlite3.connect(OUTPUT_DB_FRONTEND)
     cursor = connection.cursor()
     with open(input_sql) as script_sql_file:
         script_sql = script_sql_file.read()
@@ -53,12 +55,12 @@ def export_sqlite(input_sql,output_db):
     connection.close()
 
 
-def insertion_Groupes_bd(dico_in, output_db):
+def insertion_Groupes_bd(dico_in, OUTPUT_DB_FRONTEND):
     dico = list(dico_in.itertuples(index=False, name=None))
     data = list(map(lambda x: [x[i] for i in GROUPE_KEYS], dico))
     datafordb=list({tuple(elt) for elt in data})
     datafordb.sort()
-    con = sqlite3.connect(output_db)
+    con = sqlite3.connect(OUTPUT_DB_FRONTEND)
     con.execute("PRAGMA foreign_keys = 1")
     cur = con.cursor()
     cur.executemany("""INSERT INTO Groupes(Groupe_d_aliment) VALUES(?)""", datafordb)
@@ -66,13 +68,13 @@ def insertion_Groupes_bd(dico_in, output_db):
     con.close()
 
 
-def insertion_Sous_Groupes_bd(dico_in, output_db):
+def insertion_Sous_Groupes_bd(dico_in, OUTPUT_DB_FRONTEND):
     dico = list(dico_in.itertuples(index=False, name=None))
     data = list(map(lambda x: x[SOUS_GROUPE_KEYS[0]], dico))
     ss_groupe_to_groupe = dict(map(lambda x: [x[SOUS_GROUPE_KEYS[0]], x[GROUPE_KEYS[0]]], dico))
     data_sans_doublon=list({elt for elt in data})
     data_sans_doublon.sort()
-    con = sqlite3.connect(output_db)
+    con = sqlite3.connect(OUTPUT_DB_FRONTEND)
     con.execute("PRAGMA foreign_keys = 1")
     cur = con.cursor()
     cur.execute("""SELECT Groupe_d_aliment, ID_groupe FROM Groupes;""")
@@ -84,10 +86,10 @@ def insertion_Sous_Groupes_bd(dico_in, output_db):
     con.close()
 
 
-def insertion_Ingredients_bd(dico_in, output_db):
+def insertion_Ingredients_bd(dico_in, OUTPUT_DB_FRONTEND):
     data = list(map(lambda x: [str(x[i]) for i in INGREDIENTS_KEYS], list(dico_in.itertuples(index=False, name=None))))
     dico_ingredient_ss_groupe = dict(map(lambda x: [str(x[0]), x[2]], dico_in.itertuples(index=False, name=None)))
-    con = sqlite3.connect(output_db)
+    con = sqlite3.connect(OUTPUT_DB_FRONTEND)
     con.execute("PRAGMA foreign_keys = 1")
     cur = con.cursor()
     cur.execute("""SELECT Sous_groupe_d_aliment, ID_sous_groupe FROM Sous_Groupes;""")
@@ -112,7 +114,8 @@ def insertion_Ingredients_bd(dico_in, output_db):
 
 if __name__ == '__main__':
     data_compare=pd.read_csv(COMPARE_FILE, sep=',')
-    export_sqlite(INPUT_SQL,OUTPUT_DB)
+    export_sqlite(INPUT_SQL_FRONTEND,OUTPUT_DB_FRONTEND)
+    export_sqlite(INPUT_SQL_BACKEND,OUTPUT_DB_BACKEND)
     
     data_file=pd.read_excel(INPUT_FILE, sheet_name="Synthese", usecols="A,C:F,M:AC", skiprows=2)
     # data.replace('\n', ' ', regex=True, inplace=True)
@@ -122,10 +125,13 @@ if __name__ == '__main__':
     
     data = is_in_both(data_file, data_compare, data_file.keys()[0], data_compare.keys()[1])
 
-    insertion_Groupes_bd(data,OUTPUT_DB)
-    insertion_Sous_Groupes_bd(data, OUTPUT_DB)
+    insertion_Groupes_bd(data,OUTPUT_DB_FRONTEND)
+    insertion_Groupes_bd(data,OUTPUT_DB_BACKEND)
+    insertion_Sous_Groupes_bd(data, OUTPUT_DB_FRONTEND)
+    insertion_Sous_Groupes_bd(data, OUTPUT_DB_BACKEND)
 
-    data_ingredient = insertion_Ingredients_bd(data, OUTPUT_DB)
+    data_ingredient = insertion_Ingredients_bd(data, OUTPUT_DB_FRONTEND)
+    data_ingredient = insertion_Ingredients_bd(data, OUTPUT_DB_BACKEND)
     print("Fin de l'insertion dans la base de données")
     pd.DataFrame(data_ingredient).to_csv("data_ingredient.csv", index=False)
     print("Fin de l'export des données")
