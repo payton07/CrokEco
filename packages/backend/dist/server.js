@@ -20,19 +20,19 @@ let users = [
 //   // res.send("bien vue");
 //   res.json(data);
 // });
-//Récupérer un plat par son ID
-app.get('/api/plats/:id', (req, res) => {
-    const id = parseInt(req.params.id);
-    const donne = { id_plat: id };
-    // const data = getPlats(donne,false,false,false);
-    // if (data !== undefined &&data.length > 0) {
-    //   const plat = data[0];
-    //   res.status(201).json(plat);
-    // } else {
-    //   res.status(404).json({ message: 'Plat not found' });
-    // }
-    res.send("bien bien");
-});
+// //Récupérer un plat par son ID
+// app.get('/api/plats/:id', (req: Request, res: Response) => {
+//   const id = parseInt(req.params.id);
+//   const donne = {id_plat: id};
+//   // const data = getPlats(donne,false,false,false);
+//   // if (data !== undefined &&data.length > 0) {
+//   //   const plat = data[0];
+//   //   res.status(201).json(plat);
+//   // } else {
+//   //   res.status(404).json({ message: 'Plat not found' });
+//   // }
+//   res.send("bien bien");
+// });
 // Ajouter un utilisateur
 app.post('/api/users', (req, res) => {
     const { name, email } = req.body;
