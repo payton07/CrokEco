@@ -2,42 +2,34 @@ import Fastify from 'fastify';
 import type { FastifyRequest, FastifyReply } from 'fastify';
 import { getIngredients, getPlats } from './acces_bdd.ts';
 
+///////////////////////////////////////////////////////
+              // "ID_plat" VARCHAR(10),
+              // "Nom_plat" VARCHAR(50),
+              // "Certified" INTEGER,
+              // "Vote" INTEGER,
+///////////////////////////////////////////////////////
 const fastify = Fastify();
-const port = 3000;
+const port = {port :3000};
 
-let users = [
-  { id: 1, name: 'Alice', email: 'alice@example.com' },
-  { id: 2, name: 'Bob', email: 'bob@example.com' },
-];
-
-// Interface pour le body des utilisateurs
-interface User {
-  name: string;
-  email: string;
-}
-
-// Middleware pour parser le JSON (Fastify gère déjà le JSON par défaut)
+// Middleware pour parser le JSON 
 fastify.addContentTypeParser('application/json', { parseAs: 'string' }, (req: FastifyRequest, body: string) => {
   return JSON.parse(body);
 });
 
-// Route de base
+// Route de base Entre 
 fastify.get('/', async (request, reply) => {
   console.log("Le hello world");
   return { message: 'Hello, World!' };
 });
 
-// Route pour récupérer tous les utilisateurs
-fastify.get('/api/users', async (request, reply) => {
-  console.log("Les Users gets");
-  return users;
-});
 
 // Récupérer tous les plats
 fastify.get('/api/plats', async (request, reply) => {
   console.log("get plats");
   try {
-    const data = await getIngredients(false, true, false);
+    const data = await getPlats(false, true, false);
+    console.log("la data",data);
+    
     return reply.send(data);
   } catch (err) {
     console.error("Erreur lors de la récupération des plats:", err);
@@ -45,13 +37,14 @@ fastify.get('/api/plats', async (request, reply) => {
   }
 });
 
+// Recuperer un plat en particulier
 fastify.get('/api/plats/:id', async (request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) => {
   const { id } = request.params; 
   console.log(`get plat avec id: ${id}`);
 
   try {
-    const ide = {code_AGB : id}
-    const data = await getIngredients(ide,false,false,1);
+    const ide = {ID_plat : id}
+    const data = await getPlats(ide,false,false,1);
     
     if (!data) {
       return reply.status(404).send({ error: 'Plat non trouvé' });
@@ -63,16 +56,41 @@ fastify.get('/api/plats/:id', async (request: FastifyRequest<{ Params: { id: str
   }
 });
 
-// Ajouter un utilisateur
-fastify.post('/api/users', async (request, reply) => {
-  const { name, email }: User = request.body as User;
-  const newUser = { id: users.length + 1, name, email };
-  users.push(newUser);
-  return reply.code(201).send(newUser);
+// Récupérer tous les Ingredients
+fastify.get('/api/ingredients', async (request, reply) => {
+  console.log("get plats");
+  try {
+    const data = await getIngredients(false, true, false);
+    
+    return reply.send(data);
+  } catch (err) {
+    console.error("Erreur lors de la récupération des plats:", err);
+    return reply.status(500).send({ error: 'Erreur interne du serveur' });
+  }
 });
 
+// Recuperer un Ingredient en particulier
+fastify.get('/api/ingredients/:id', async (request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) => {
+  const { id } = request.params; 
+  console.log(`get Ingredient avec id: ${id}`);
+
+  try {
+    const ide = {Code_AGB : id}
+    const data = await getIngredients(ide,false,false,1);
+    
+    if (!data) {
+      return reply.status(404).send({ error: 'Ingredient non trouvé' });
+    }
+    return reply.send(data);
+  } catch (err) {
+    console.error("Erreur lors de la récupération de l'ingredient:", err);
+    return reply.status(500).send({ error: 'Erreur interne du serveur' });
+  }
+});
+
+
 // Démarrer le serveur
-fastify.listen({ port: 3000 }, (err, address) => {
+fastify.listen(port, (err, address) => {
   if (err) {
     console.error(err);
     process.exit(1);
