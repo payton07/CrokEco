@@ -1,11 +1,11 @@
-/*CREATE TABLE "Plats" (
+CREATE TABLE "Plats" (
   "ID_plat" VARCHAR(10),
   "Nom_plat" VARCHAR(50),
-  "Certified" INT(1),
-  "Vote" INT(6),
-  CONSTRAINT PK_PLATS PRIMARY KEY("ID_plat"),
+  "Certified" INTEGER,
+  "Vote" INTEGER,
+  CONSTRAINT PK_PLATS PRIMARY KEY("ID_plat")
 );
-*/
+
 
 CREATE TABLE "Ingredients" (
   "Code_AGB" VARCHAR(10),
