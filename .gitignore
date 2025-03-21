@@ -19,5 +19,6 @@ packages/frontend/*
 !*.typ
 packages/backend/*
 !packages/backend/package.json
-!packages/backend/src
+!packages/backend/src/*
 !packages/backend/dist
+!packages/backend/bdd/*
