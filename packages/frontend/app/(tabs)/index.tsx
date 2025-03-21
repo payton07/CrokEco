@@ -78,9 +78,9 @@ async function setRecoData(){
       for (const ligne of data) {
         const query = `${ligne}`;
         try {
-          const res = await getPlats({Nom_Francais: query},false,true,1);
+          const res = await getPlats({Nom_plat: query},false,true,1);
           if(res != undefined && res.length > 0 && res != null){
-            const id = res[0].Ciqual_AGB;
+            const id = res[0].ID_plat;
             const color = await change(id);
             lines.push({"text":ligne,color:color?.back,"id":id});
           }
