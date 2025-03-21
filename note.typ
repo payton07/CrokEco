@@ -29,3 +29,6 @@ Localisation :
 - npx expo run:ios
 - cd ios && pod install
 le reste c'est sur xcode , autre possibilité : je verrais plus tard 
+
+= Test 
+== Mettre en place des tests au moins 
