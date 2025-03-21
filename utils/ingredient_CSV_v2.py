@@ -6,7 +6,7 @@ import os
 INPUT_FILE = "../assets/AGRIBALYSE_v2.xlsx"
 COMPARE_FILE = "../assets/Agribalyse_Detail_ingredient.csv"
 INPUT_SQL_FRONTEND = "../specs/CodeE_A4.sql"
-INPUT_SQL_BACKEND = "../specs/CodeE_A4_Backend.sql"
+INPUT_SQL_BACKEND = "../specs/CodeE_A_Backend.sql"
 OUTPUT_DB_FRONTEND = "../packages/frontend/assets/ingredient_carbon_score.db"
 OUTPUT_DB_BACKEND = "../packages/backend/bdd/ingredient_carbon_score.db"
 # On ne prend pas en compte la 2e colonne

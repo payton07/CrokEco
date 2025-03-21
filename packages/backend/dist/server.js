@@ -1,6 +1,4 @@
 import express from 'express';
-// import { get } from 'http';
-// import { getPlats } from './bdd';
 const app = express();
 const port = 3000;
 // Middleware pour parser le JSON

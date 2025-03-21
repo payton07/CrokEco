@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useState } from 'react';
 import { getIngredients } from '@/utils/bdd';
-import { set } from 'zod';
+
 
 type Ingredient = {
   name: string;
@@ -47,12 +47,12 @@ export default function AddDishForm() {
 
   async function Alter_IngredientFromBdd(text:string){
     const query = `%${text}%`;
-    const data = await getIngredients({Ingredient : query},true,true,30); 
+    const data = await getIngredients({Nom_Francais : query},true,true,30); 
     console.log("J'ai eu la data", data?.length);
     if(data !== undefined){
       const Ing : string[]= [];
       for (const ele of data) {
-        if(!Ing.includes(ele.Ingredient)) Ing.push(ele.Ingredient);
+        if(!Ing.includes(ele.Nom_Francais)) Ing.push(ele.Nom_Francais);
       }
       setIngredientsData(Ing);
     }
@@ -101,7 +101,7 @@ export default function AddDishForm() {
   function onSubmit(data: FormData){
       setLoading(true);
       console.log("la data du form",data);
-      //
+      // Insertion dans la bd de la backend
       
       //
       Alert.alert("Plat ajouté !", `Nom: ${data.name}\nNombre : ${data.ingredients.length} ingrédients`);
@@ -175,7 +175,7 @@ export default function AddDishForm() {
           data={ingredientsList}
           renderItem={({ item, index }) => (
             <View style={styles.ingredientItem}>
-              <Text style={styles.ingredientText}>{item.name}</Text>
+              <Text style={styles.ingredientText}>{item.name} {item.weight} {"g"}</Text>
               <TouchableOpacity onPress={() => deleteIngredient(index)} style={styles.removeButton}>
                 <Text style={styles.removeButtonText}>Supprimer</Text>
               </TouchableOpacity>

@@ -1,20 +1,19 @@
-import { getIngredients, getPlats, getSous_Groupes } from "./bdd";
+import { getIngredients, getPlats, getPlats_Ingredients, getSous_Groupes } from "./bdd";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export type info_t =  {Nom : string ,categorie : string , Score : string , Unite : string,id:number};
+export type info_t =  {Nom : string, Score : string , Unite : string,id:number};
 export async function change(ide : number  ) {
-  let back = "black";
   if(ide != undefined){
-    const ras = await getPlats({Ciqual_AGB : ide},false,true);
-    const res = await getIngredients({Ciqual_AGB : ras?.at(0)?.Ciqual_AGB},true,false);
-    const sous_groupe = await getSous_Groupes({ID_sous_groupe : ras?.at(0)?.ID_sous_groupe},false);
-    if(ras !=undefined && res != undefined && sous_groupe != undefined) {
-      let score : number = 0;
-      for (const ele of res) {
-        score += ele.Changement_climatique;
+    //const ras = await getPlats({ID_plat : ide},false,true);
+    const ras = await getPlats_Ingredients({ID_plat : ide},true, false, 10);
+    let score : number = 0;
+    if(ras !=undefined) {
+      for (const ele of ras) {
+        const res = await getIngredients({Code_AGB : ele.ID_ingredient},false,false);
+        score += res?.at(0).Score_unique_EF;
       }
-      const info :info_t = {Nom: ras?.at(0).Nom_Francais, categorie: sous_groupe?.at(0).Sous_groupe_d_aliment, Score: score.toPrecision(3), Unite:"kg CO2 eq/kg de produit",id:ide};
-      back = Qualite(score);
+      const plat = await getPlats({ID_plat : ide},false,false);
+      const info :info_t = {Nom: plat?.at(0).Nom_plat, Score: score.toPrecision(3), Unite:"mPt / kg de produit",id:ide};
       const out = {info : info, back : Qualite(score)};
       return out;
     }
@@ -25,13 +24,16 @@ export async function change(ide : number  ) {
 }
 
 export function Qualite(score : number) {
-    if (score <= 1) {
-      return "green";
-    }
-    if (score >1 && score <=5) {
-      return "orange";
-    }
-    return "red";
+  if (score == 0) {
+    return "blue";
+  }
+  if (score <= 1) {
+    return "green";
+  }
+  if (score >1 && score <=5) {
+    return "orange";
+  }
+  return "red";
 }
 
 export async function getDataWithCacheExpiration(key:string, apiCallFunction : ()=>{}, expirationTimeInMinutes = 30) {

@@ -27,10 +27,10 @@ async function setup1() {
   if (loa1 && loa2) {
     let lod1 = [], lodInter = [] ,lod2 = [];
     for (const a of loa1) {
-      if (a.Ciqual_AGB) lod1.push(await change(a.Ciqual_AGB));
+      if (a.ID_plat) lod1.push(await change(a.ID_plat));
     }
     for (const a of loa2) {
-      if (a.Ciqual_AGB) lodInter.push(await change(a.Ciqual_AGB));
+      if (a.ID_plat) lodInter.push(await change(a.ID_plat));
     }
     for (const a of lodInter){
       if(a?.back =="green") lod2.push(a)

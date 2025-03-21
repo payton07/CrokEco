@@ -224,36 +224,36 @@ export async function getGroupes(data : boolean | any =false,all=false): Promise
     return res ;
   }
 }
-export async function getTags(data : boolean | any =false,all=false): Promise<any[] | undefined> {
-  const res:any[]| undefined = await getSmt("Tags",data,all,10);
+export async function getRecherches(data : boolean | any =false,all=false): Promise<any[] | undefined> {
+  const res:any[]| undefined = await getSmt("Recherches",data,all,10);
   if(!res || res.length ==0){ return all? [] : undefined}
   else {
     return res ;
   }
 }
-export async function getRecherche(data : boolean | any =false,all=false): Promise<any[] | undefined> {
-  const res:any[]| undefined = await getSmt("Recherche",data,all,10);
+export async function getMenus(data : boolean | any =false,all=false): Promise<any[] | undefined> {
+  const res:any[]| undefined = await getSmt("Menus",data,all,10);
   if(!res || res.length ==0){ return all? [] : undefined}
   else {
     return res ;
   }
 }
-export async function getHistorique(data : boolean | any =false,all=false): Promise<any[] | undefined> {
-  const res:any[]| undefined = await getSmt("Historique",data,all,10);
+export async function getRestaurants(data : boolean | any =false,all=false): Promise<any[] | undefined> {
+  const res:any[]| undefined = await getSmt("Restaurants",data,all,10);
   if(!res || res.length ==0){ return all? [] : undefined}
   else {
     return res ;
   }
 }
-export async function getMenu(data : boolean | any =false,all=false): Promise<any[] | undefined> {
-  const res:any[]| undefined = await getSmt("Menu",data,all,10);
+export async function getPlats_Ingredients(data : boolean | any =false,all=false,str=false,limit: boolean | number=10): Promise<any[] | undefined> {
+  const res:any[] = await getSmt("Plats_Ingredients",data,all,limit,str);
   if(!res || res.length ==0){ return all? [] : undefined}
   else {
     return res ;
   }
 }
-export async function getDesigne_Tags(data : boolean | any =false,all=false): Promise<any[] | undefined> {
-  const res:any[]| undefined = await getSmt("Designe_Tags",data,all,10);
+export async function getMenus_Plats(data : boolean | any =false,all=false): Promise<any[] | undefined> {
+  const res:any[]| undefined = await getSmt("Menus_Plats",data,all,10);
   if(!res || res.length ==0){ return all? [] : undefined}
   else {
     return res ;
@@ -283,29 +283,29 @@ export async function updateGroupes(data : any): Promise<number> {
   const res:number = await updateSmt("Groupes",query,data);
   return res ;
 }
-export async function updateTags(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_tags}'`;
-  const res:number = await updateSmt("Tags",query,data);
-  return res ;
-}
-export async function updateRecherche(data : any): Promise<number> {
+export async function updateRecherches(data : any): Promise<number> {
   const query = `idCD = '${data.ID_recherche}'`;
-  const res:number = await updateSmt("Recherche",query,data);
+  const res:number = await updateSmt("Recherches",query,data);
   return res ;
 }
-export async function updateHistorique(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_historique}'`;
-  const res:number = await updateSmt("Historique",query,data);
-  return res ;
-}
-export async function updateMenu(data : any): Promise<number> {
+export async function updateMenus(data : any): Promise<number> {
   const query = `idCD = '${data.ID_menu}'`;
-  const res:number = await updateSmt("Menu",query,data);
+  const res:number = await updateSmt("Menus",query,data);
   return res ;
 }
-export async function updateDesigne_Tags(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_tags}'`;
-  const res:number = await updateSmt("Designe_Tags",query,data);
+export async function updateRestaurants(data : any): Promise<number> {
+  const query = `idCD = '${data.ID_menu}'`;
+  const res:number = await updateSmt("Restaurants",query,data);
+  return res ;
+}
+export async function updatePlats_Ingredients(data : any): Promise<number> {
+  const query = `idCD = '${data.ID_menu}'`;
+  const res:number = await updateSmt("Plats_Ingredients",query,data);
+  return res ;
+}
+export async function updateMenus_Plats(data : any): Promise<number> {
+  const query = `idCD = '${data.ID_menu}'`;
+  const res:number = await updateSmt("Menus_Plats",query,data);
   return res ;
 }
 /**
@@ -327,24 +327,24 @@ export async function addGroupes(data : boolean | any =false,all=false): Promise
   const res:number = await addSmt("Groupes",data);
   return res ;
 }
-export async function addTags(data : boolean | any =false,all=false): Promise<number> {
-  const res:number = await addSmt("Tags",data);
-  return res ;
-}
 export async function addRecherche(data : boolean | any =false,all=false): Promise<number> {
   const res:number = await addSmt("Recherche",data);
   return res ;
 }
-export async function addHistorique(data : boolean | any =false,all=false): Promise<number> {
-  const res:number = await addSmt("Historique",data);
+export async function addMenus(data : boolean | any =false,all=false): Promise<number> {
+  const res:number = await addSmt("Menus",data);
   return res ;
 }
-export async function addMenu(data : boolean | any =false,all=false): Promise<number> {
-  const res:number = await addSmt("Menu",data);
+export async function addRestaurants(data : boolean | any =false,all=false): Promise<number> {
+  const res:number = await addSmt("Restaurants",data);
   return res ;
 }
-export async function addDesigne_Tags(data : boolean | any =false,all=false): Promise<number> {
-  const res:number = await addSmt("Designe_Tags",data);
+export async function addPlats_Ingredients(data : boolean | any =false,all=false): Promise<number> {
+  const res:number = await addSmt("Plats_Ingredients",data);
+  return res ;
+}
+export async function addMenus_Plats(data : boolean | any =false,all=false): Promise<number> {
+  const res:number = await addSmt("Menus_Plats",data);
   return res ;
 }
 /**
@@ -370,19 +370,9 @@ export async function deleteGroupes(data : any): Promise<number> {
   const res:number = await deleteSmt("Groupes",query);
   return res ;
 }
-export async function deleteTags(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_tags}'`;
-  const res:number = await deleteSmt("Tags",query);
-  return res ;
-}
 export async function deleteRecherche(data : any): Promise<number> {
   const query = `idCD = '${data.ID_recherche}'`;
   const res:number = await deleteSmt("Recherche",query);
-  return res ;
-}
-export async function deleteHistorique(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_historique}'`;
-  const res:number = await deleteSmt("Historique",query);
   return res ;
 }
 export async function deleteMenu(data : any): Promise<number> {
@@ -390,8 +380,18 @@ export async function deleteMenu(data : any): Promise<number> {
   const res:number = await deleteSmt("Menu",query);
   return res ;
 }
-export async function deleteDesigne_Tags(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_tags}'`;
-  const res:number = await deleteSmt("Designe_Tags",query);
+export async function deleteRestaurants(data : any): Promise<number> {
+  const query = `idCD = '${data.ID_menu}'`;
+  const res:number = await deleteSmt("Restaurants",query);
+  return res ;
+}
+export async function deletePlats_Ingredients(data : any): Promise<number> {
+  const query = `idCD = '${data.ID_menu}'`;
+  const res:number = await deleteSmt("Plats_Ingredients",query);
+  return res ;
+}
+export async function deleteMenus_Plats(data : any): Promise<number> {
+  const query = `idCD = '${data.ID_menu}'`;
+  const res:number = await deleteSmt("Menus_Plats",query);
   return res ;
 }
