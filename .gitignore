@@ -17,3 +17,7 @@ packages/frontend/*
 !packages/frontend/global.css 
 *.db
 !*.typ
+packages/backend/*
+!packages/backend/package.json
+!packages/backend/src
+!packages/backend/dist
