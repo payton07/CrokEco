@@ -34,3 +34,6 @@ le reste c'est sur xcode , autre possibilité : je verrais plus tard
 = Notes :
 == Ajout nom resto sur la page de scan 
 == Faudra rajouter un plat ajouter dans la recherche
+
+= Test 
+== Mettre en place des tests au moins 
