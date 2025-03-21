@@ -1,15 +1,17 @@
 /*CREATE TABLE "Plats" (
   "ID_plat" VARCHAR(10),
-  "Certified" BOOLEAN,
+  "Nom_plat" VARCHAR(50),
+  "Certified" INT(1),
   "Vote" INT(6),
   CONSTRAINT PK_PLATS PRIMARY KEY("ID_plat"),
-);*/
+);
+*/
 
 CREATE TABLE "Ingredients" (
   "Code_AGB" VARCHAR(10),
   "Nom_Francais" VARCHAR(50),
   "LCI_Name" VARCHAR(50),
-  "ID_sous_groupe" VARCHAR(20),
+  "ID_sous_groupe" INTEGER,
   "Score_unique_EF" DECIMAL(10,8),
   "Changement_climatique" DECIMAL(10,8),
   "Appauvrissement_de_la_couche_d_ozone" DECIMAL(10,8),
