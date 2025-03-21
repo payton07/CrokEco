@@ -1,18 +1,23 @@
-// import fs from 'fs';
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from "url";
 import sqlite3 from 'sqlite3';
-import { log } from 'console';
 
 let db: sqlite3.Database | null = null;
 
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const dbPath = path.join(__dirname, './bdd_doc/ingredient_carbon_score.db'); // Chemin de ta base
+const dbPath = path.join(__dirname, './bdd_doc/ingredient_carbon_score.db'); 
 
 
-async function openDatabase(): Promise<sqlite3.Database> {
+async function openDatabase(): Promise<sqlite3.Database | null> {
+  if (fs.existsSync(dbPath)) {
+    console.log('Le fichier existe.');
+  } else {
+    console.log('Le fichier n\'existe pas.');
+    return null;
+  }
   if (!db) {
     db = new sqlite3.Database(dbPath, (err) => {
       if (err) {

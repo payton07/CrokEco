@@ -58,13 +58,13 @@ fastify.get('/api/plats/:id', async (request: FastifyRequest<{ Params: { id: str
 
 // Récupérer tous les Ingredients
 fastify.get('/api/ingredients', async (request, reply) => {
-  console.log("get plats");
+  console.log("get Ingredients");
   try {
     const data = await getIngredients(false, true, false);
     
     return reply.send(data);
   } catch (err) {
-    console.error("Erreur lors de la récupération des plats:", err);
+    console.error("Erreur lors de la récupération des ingredients:", err);
     return reply.status(500).send({ error: 'Erreur interne du serveur' });
   }
 });
