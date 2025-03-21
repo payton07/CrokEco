@@ -29,3 +29,8 @@ Localisation :
 - npx expo run:ios
 - cd ios && pod install
 le reste c'est sur xcode , autre possibilité : je verrais plus tard 
+
+
+= Notes :
+== Ajout nom resto sur la page de scan 
+== Faudra rajouter un plat ajouter dans la recherche
