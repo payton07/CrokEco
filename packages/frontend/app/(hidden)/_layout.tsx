@@ -36,8 +36,8 @@ export default function TabLayout() {
      <Tabs.Screen
         name="details/[id]"
         options={{
-            tabBarStyle : {display : 'none'},
-            headerShown : false 
+            headerShown : false,
+            tabBarStyle : {display : "none"},
         }}
       />
     </Tabs>

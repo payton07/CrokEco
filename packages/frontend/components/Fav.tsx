@@ -13,7 +13,7 @@ export default function Fav({ out }: { out: any }) {
     <Link href={`/(hidden)/details/${ide}`} style={styles.image}>
       <View style={styles.container}>
       {img != null ? <></>: <Image style={styles.image} source={img}/>}
-      <View style={{ backgroundColor: back === "Green" ? "#4CAF50" : back === "Orange" ? "orange" :"red", ...styles.Info}}>
+      <View style={{ backgroundColor: back === "green" ? "#4CAF50" : back === "orange" ? "orange" :"red", ...styles.Info}}>
       <Text style={styles.title}>{info?.Nom}</Text>
       {/* <Text style={styles.text}>{info?.categorie}</Text> */}
       <Text style={{...styles.title}}>{info?.Score}</Text>

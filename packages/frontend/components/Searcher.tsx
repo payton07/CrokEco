@@ -12,7 +12,7 @@ export default function Searcher({ path }: { path: string }) {
     }
     async function search(e:string) {
       let s = `%${e}%`;
-      const resa = await getPlats({Nom_Francais: s},false,true);
+      const resa = await getPlats({Nom_Francais: s},false,true,10);
       // TODO : A adapter pour les cas ou y a plusieurs resultats
       router.push({ pathname: `/(hidden)/details/[id]`, params: { id: resa?.at(0)?.Ciqual_AGB}});
     }

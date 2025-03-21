@@ -196,8 +196,8 @@ export async function deleteSmt(table: string, query: string): Promise<number> {
 /**
  * GETS / READS PAR TABLE ///////////////////////////////////////////////////////////////
  */
-export async function getIngredients(data : boolean | any =false,all=false,neutre=false): Promise<any[] | undefined> {
-  const res:any[] = await getSmt("Ingredients",data,all,10);
+export async function getIngredients(data : boolean | any =false,all=false,str=false,limit: boolean | number=10): Promise<any[] | undefined> {
+  const res:any[] = await getSmt("Ingredients",data,all,limit,str);
   if(!res || res.length ==0){ return all? [] : undefined}
   else {
     return res ;
@@ -205,7 +205,7 @@ export async function getIngredients(data : boolean | any =false,all=false,neutr
 }
 export async function getPlats(data : boolean | any =false,all=false,str=false,limit:number | boolean=10): Promise<any[] | undefined> {
   const res:any[]| undefined = await getSmt("Plats",data,all,limit,str);
-  if(!res || res.length ==0){ return all? [] : undefined}
+  if(!res || res.length ==0 || res[0]==null){ return all? [] : undefined}
   else {
     return res ;
   }

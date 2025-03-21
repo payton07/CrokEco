@@ -15,6 +15,7 @@ import { Slot } from "expo-router";
 
 // Import your global CSS file
 import "../global.css";
+import React from "react";
 
 // export default Slot;
 

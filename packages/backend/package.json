@@ -1,19 +1,25 @@
 {
-  "//": "à ajuster",
-  "name": "co2score-backend",
+  "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
-  },
+  "main": "dist/server.ts",
+  "description": "",
+  "type": "module",
   "author": "",
   "license": "ISC",
-  "description": "",
-  "keywords": "",
-  "homepage": "",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Yvaniak/projet-Co2Score.git"
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsc && node dist/server.js",
+    "start": "tsc && node dist/server.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.9.1",
+    "express": "^4.21.2",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.13.10",
+    "typescript": "^5.8.2"
   }
 }

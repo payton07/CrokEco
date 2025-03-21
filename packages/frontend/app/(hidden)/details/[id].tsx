@@ -22,6 +22,7 @@ function Qualite(score : number) {
   }
   return "Red";
 }
+// boeuf
 export default function details() {
   const [img, setImg] = useState<string|null>("@/assets/ingImage.image.png");
   const [info, setInfo] = useState<info_t>();
@@ -130,9 +131,10 @@ export default function details() {
         </View>
         <View style={styles.Ingres}>
           <Text style={styles.text1}>Impact Score par Ingredient :</Text>
-          <ScrollView horizontal={false} contentContainerStyle={styles.container} showsVerticalScrollIndicator={true}>
+          <ScrollView horizontal={false} contentContainerStyle={styles.containerElement} showsVerticalScrollIndicator={true}>
             {ing.map((a,i) =>(
-              <Text style={styles.ing}key={i}>{a[0]} : <ProgressBar progress={a[1]} /></Text> 
+              <View key={i}><Text style={styles.ing}key={i}>{a[0]} :</Text> 
+              <Text key={i+1} style={styles.ing}><ProgressBar progress={a[1]} /></Text></View>
             ))}
           </ScrollView>
         </View>
@@ -178,12 +180,22 @@ const styles = StyleSheet.create({
     marginBottom : 10,
     paddingBottom : "8%",
   },
-  container: {
-    top : 0,
+  container : {
+    top : "2%",
+    height : "100%",
+    paddingBottom : "1%",
+    marginBottom : "5%",
+  },
+  containerElement: {
+    paddingVertical: 10,
+    flexGrow: 1,
+    alignItems: "center",
+    backgroundColor : "white",
+    flexDirection : "column",
     // alignItems: "center",
   },
     container1: {
-      top : 0,
+      // top : "1%",
       alignItems: "center",
       height: "100%",
       // padding: 20,
@@ -232,7 +244,7 @@ const styles = StyleSheet.create({
       fontSize : 15,
       fontWeight : "bold",
       marginLeft : "5%",
-      marginTop : "4%",
+      marginTop : 10,
       marginBottom : "2%",
     },
 });
