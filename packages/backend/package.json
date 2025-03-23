@@ -9,11 +9,13 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsc && node dist/server.d.ts",
-    "start": "ts-node server.ts",
+    "start": "ts-node src/server.ts",
     "build": "tsc"
   },
   "dependencies": {
     "better-sqlite3": "^11.9.1",
+    "crypto-js": "^4.2.0",
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "fastify": "^5.2.1",
     "sqlite3": "^5.1.7"

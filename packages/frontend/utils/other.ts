@@ -1,5 +1,7 @@
+import hmac from 'crypto-js/hmac-sha256';
 import { getIngredients, getPlats, getPlats_Ingredients, getSous_Groupes } from "./bdd";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import dotenv from 'dotenv';
 
 export type info_t =  {Nom : string, Score : string , Unite : string,id:number};
 export async function change(ide : number  ) {
@@ -74,16 +76,49 @@ export type FormData = {
 const port = 3000;
 const url = `http://localhost:${port}/api/`;
 
-async function POST(table : string, data : any){
+// Clé secrète partagée entre le client et le serveur
+dotenv.config(); 
+
+const SECRET_KEY = process.env.SECRET_KEY || 'defaultSecretKey';
+
+function genereHMACSignature(method: string, table: string, data: any) {
+  const timestamp = Math.floor(Date.now() / 1000); 
+  const body = JSON.stringify(data);
+  
+  const message = `${method}\n/api/${table}\n${body}\n${timestamp}`;
+  
+  const signature = hmac(message, SECRET_KEY).toString();
+  
+  return { signature, timestamp };
+}
+
+async function POST(table: string, data: any) {
+  const method = "POST";
   const url1 = `${url}${table}`;
-  const response = await fetch(url1,{
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
+  
+  const { signature, timestamp } = genereHMACSignature(method, table, data);
+  
+  const headers = {
+    "Content-Type": "application/json",
+    "X-Signature": signature,  
+    "X-Timestamp": timestamp.toString(),
+  };
+  const response = await fetch(url1, {
+    method: method,
+    headers: headers,
+    body: JSON.stringify(data),
   });
+
   const res = await response.json();
   return res;
 }
+
+export async function ajouterPlat(data: FormData) {
+  const res = await POST("plats", data);
+  console.log(res);
+}
+
+
 async function GET(table: string ,id:string){
   const url1 = `${url}${table}/${id}`;
   try {
@@ -102,12 +137,6 @@ async function GET(table: string ,id:string){
     return null ;
   }
 }
-
-export async function ajouterPlat(data : FormData) {
-  const res = await POST("plats",data);
-  console.log(res);
-}
-
 
 async function getPlat(id: string) {
   const res = await GET('plats',id);

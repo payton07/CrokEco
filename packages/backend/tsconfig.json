@@ -12,6 +12,6 @@
     "emitDeclarationOnly": true,
     "declaration": true
   },
-  "include": ["src/**/*.ts", "server.ts"],                 
+  "include": ["src/**/*.ts", "src/server.ts","utils/*.ts","utils/*","./utils/others.ts"],                 
   "exclude": ["node_modules"]                 
 }
