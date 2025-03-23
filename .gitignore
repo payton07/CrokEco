@@ -20,6 +20,7 @@ packages/frontend/*
 packages/backend/*
 !packages/backend/package.json
 !packages/backend/src/*
+!packages/backend/utils/*
 !packages/backend/acces_bdd.ts 
 !packages/backend/server.ts 
 !packages/backend/dist
