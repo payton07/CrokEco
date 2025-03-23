@@ -57,3 +57,60 @@ export async function getDataWithCacheExpiration(key:string, apiCallFunction : (
     console.error("Erreur dans getDataWithCacheExpiration :", error);
   }
 }
+
+
+/////////////////////////////////////////////
+//////////////////// API ////////////////////
+/////////////////////////////////////////////
+export type Ingredient = {
+  name: string;
+  weight: string;
+};
+
+export type FormData = {
+  name: string;
+  ingredients: Ingredient[];
+};
+const port = 3000;
+const url = `http://localhost:${port}/api/`;
+
+async function POST(table : string, data : any){
+  const url1 = `${url}${table}`;
+  const response = await fetch(url1,{
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  });
+  const res = await response.json();
+  return res;
+}
+async function GET(table: string ,id:string){
+  const url1 = `${url}${table}/${id}`;
+  try {
+    const response = await fetch(url1, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Erreur ${response.status}: ${response.statusText}`);
+    }
+    const data = await response.json();
+    return data ;
+  } catch (error) {
+    console.error("Erreur lors de la récupération du plat:", error);
+    return null ;
+  }
+}
+
+export async function ajouterPlat(data : FormData) {
+  const res = await POST("plats",data);
+  console.log(res);
+}
+
+
+async function getPlat(id: string) {
+  const res = await GET('plats',id);
+  console.log("Plat récupéré:", res);
+}
+

@@ -86,7 +86,7 @@ CREATE TABLE "Menus_Plats" (
 
 
 CREATE TABLE "Plats_Client" (
-  "ID_plat" VARCHAR(10),
+  "ID_plat" INTEGER AUTOINCREMENT,
   "Nom_plat" VARCHAR(50),
   "Certified" INTEGER,
   "Vote" INTEGER,
@@ -104,7 +104,7 @@ CREATE TABLE "Restaurants_Client" (
 
 
 CREATE TABLE "Plats_Ingredients_Client" (
-  "ID_plat" INTEGER,
+  "ID_plat" INTEGER ,
   "ID_ingredient"  VARCHAR(10),
   "Quantite" DECIMAL(5,3),
   CONSTRAINT PK_PLATS_INGREDIENTS_CLIENT PRIMARY KEY("ID_plat", "ID_ingredient"),

@@ -55,7 +55,7 @@ export async function addSmt(table: string, data: any): Promise<number> {
       if (err) {
         reject(new Error("Erreur lors de l'insertion: " + err.message));
       } else {
-        resolve(this.changes);  
+        resolve(this.lastID);
       }
     });
   });
@@ -271,39 +271,48 @@ export async function updateDesigne_Tags(data : any): Promise<number> {
 /**
  * INSERT PAR TABLE
  */
-export  async function addIngredients(data : boolean | any =false,all=false): Promise<number> {
+export  async function addIngredients(data : boolean | any =false): Promise<number> {
   const res:number =  await addSmt("Ingredients",data);
   return res ;
 }
-export  async function addPlats(data : boolean | any =false,all=false): Promise<number> {
+export  async function addPlats(data : boolean | any =false): Promise<number> {
   const res:number =  await addSmt("Plats",data);
   return res ;
 }
-export  async function addSous_Groupes(data : boolean | any =false,all=false): Promise<number> {
+export  async function addPlats_Client(data : boolean | any =false): Promise<number> {
+  const res:number =  await addSmt("Plats_Client",data);
+  return res ;
+}
+export  async function addPlats_Ingredients_Client(data : boolean | any =false): Promise<number> {
+  const res:number =  await addSmt("Plats_Ingredients_Client",data);
+  return res ;
+}
+
+export  async function addSous_Groupes(data : boolean | any =false): Promise<number> {
   const res:number =  await addSmt("Sous_Groupes",data);
   return res ;
 }
-export  async function addGroupes(data : boolean | any =false,all=false): Promise<number> {
+export  async function addGroupes(data : boolean | any =false): Promise<number> {
   const res:number =  await addSmt("Groupes",data);
   return res ;
 }
-export  async function addTags(data : boolean | any =false,all=false): Promise<number> {
+export  async function addTags(data : boolean | any =false): Promise<number> {
   const res:number =  await addSmt("Tags",data);
   return res ;
 }
-export  async function addRecherche(data : boolean | any =false,all=false): Promise<number> {
+export  async function addRecherche(data : boolean | any =false): Promise<number> {
   const res:number =  await addSmt("Recherche",data);
   return res ;
 }
-export  async function addHistorique(data : boolean | any =false,all=false): Promise<number> {
+export  async function addHistorique(data : boolean | any =false): Promise<number> {
   const res:number =  await addSmt("Historique",data);
   return res ;
 }
-export  async function addMenu(data : boolean | any =false,all=false): Promise<number> {
+export  async function addMenu(data : boolean | any =false): Promise<number> {
   const res:number =  await addSmt("Menu",data);
   return res ;
 }
-export  async function addDesigne_Tags(data : boolean | any =false,all=false): Promise<number> {
+export  async function addDesigne_Tags(data : boolean | any =false): Promise<number> {
   const res:number =  await addSmt("Designe_Tags",data);
   return res ;
 }

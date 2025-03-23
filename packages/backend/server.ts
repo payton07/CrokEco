@@ -1,7 +1,10 @@
 import Fastify from 'fastify';
 import type { FastifyRequest, FastifyReply } from 'fastify';
-import { getIngredients, getPlats } from './acces_bdd.ts';
-
+import { addPlats, addPlats_Client, addPlats_Ingredients_Client, getIngredients, getPlats } from './acces_bdd.ts';
+type Ingredient = {
+  name: string;
+  weight: string;
+};
 ///////////////////////////////////////////////////////
               // "ID_plat" VARCHAR(10),
               // "Nom_plat" VARCHAR(50),
@@ -88,6 +91,34 @@ fastify.get('/api/ingredients/:id', async (request: FastifyRequest<{ Params: { i
   }
 });
 
+// Ajouter un Plats
+fastify.post('/api/plats', async (request: FastifyRequest<{ Body: { name: string; ingredients: Ingredient[] } }>, reply: FastifyReply) => {
+  const {name,ingredients} = request.body ;
+  console.log(`Ajout d'un nouveau plat avec Nom_plat: ${name}`);
+  
+  try {
+    const plat = {Nom_plat : name ,Certified : 0,Vote : 0};
+    const result = await addPlats_Client(plat);
+    if (!result) {
+      return reply.status(400).send({ error: "Échec de l'ajout du Plat" });
+    }
+    for (const obj of ingredients){
+      const ingredient = await getIngredients({Nom_Francais:obj.name},false,true,1);
+      if(!ingredient){
+        return reply.status(400).send({ error: "Échec de l'ajout de l'association Plat_ingrédient, Ingredient inconnu" });
+      }
+      const data = {ID_plat: result,ID_ingredient: ingredient?.[0].Code_AGB,Quantite : obj.weight};
+      const plat_ingredient = await addPlats_Ingredients_Client(data);
+      if(!plat_ingredient){
+        return reply.status(400).send({ error: "Échec de l'ajout de l'association Plat_ingrédient" });  
+      }
+    }
+    return reply.status(201).send({ message: 'Plat ajouté avec succès', code : result });
+  } catch (err) {
+    console.error("Erreur lors de l'ajout du Plat:", err);
+    return reply.status(500).send({ error: 'Erreur interne du serveur' });
+  }
+});
 
 // Démarrer le serveur
 fastify.listen(port, (err, address) => {
@@ -97,3 +128,5 @@ fastify.listen(port, (err, address) => {
   }
   console.log(`Server listening at ${address}`);
 });
+
+
