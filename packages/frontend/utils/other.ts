@@ -1,7 +1,6 @@
 import hmac from 'crypto-js/hmac-sha256';
 import { getIngredients, getPlats, getPlats_Ingredients, getSous_Groupes } from "./bdd";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import dotenv from 'dotenv';
 
 export type info_t =  {Nom : string, Score : string , Unite : string,id:number};
 export async function change(ide : number  ) {
@@ -38,7 +37,7 @@ export function Qualite(score : number) {
   return "red";
 }
 
-export async function getDataWithCacheExpiration(key:string, apiCallFunction : ()=>{}, expirationTimeInMinutes = 30) {
+export async function getDataWithCacheExpiration(key:string, CallFunction : ()=>{}, expirationTimeInMinutes = 30) {
   try {
     const cachedData = await AsyncStorage.getItem(key);
     if (cachedData !== null) {
@@ -49,7 +48,7 @@ export async function getDataWithCacheExpiration(key:string, apiCallFunction : (
       }
     }
     console.log(`Appel API pour récupérer ${key}`);
-    const apiData = await apiCallFunction();
+    const apiData = await CallFunction();
     await AsyncStorage.setItem(
       key,
       JSON.stringify({ data: apiData, timestamp: Date.now() })
@@ -77,7 +76,6 @@ const port = 3000;
 const url = `http://localhost:${port}/api/`;
 
 // Clé secrète partagée entre le client et le serveur
-dotenv.config(); 
 
 const SECRET_KEY = process.env.SECRET_KEY || 'defaultSecretKey';
 
