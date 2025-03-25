@@ -3,8 +3,8 @@ import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useState } from 'react';
-import { getIngredients } from '@/utils/bdd';
-import { FormData , Ingredient, ajouterPlat } from '@/utils/other';
+import { getIngredients, getPlats } from '@/utils/bdd';
+import { FormData , Ingredient, ajouterPlat,getPlat } from '@/utils/other';
 
 const schema = yup.object({
   name: yup.string().required("Le nom du plat est obligatoire"),
@@ -91,9 +91,9 @@ export default function AddDishForm() {
   async function onSubmit(data: FormData){
       setLoading(true);
       console.log("la data du form",data);
-      // Insertion dans la bd de la backend
+      // Insertion dans la bd de la backends
 
-      // await ajouterPlat(data);
+      const re = await ajouterPlat(data);
       //
       Alert.alert("Plat ajouté !", `Nom: ${data.name}\nNombre : ${data.ingredients.length} ingrédients`);
       reset();

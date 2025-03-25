@@ -26,14 +26,11 @@ function verifyHMACSignature(method : string, table: string, data : any, timesta
   
   return computedSignature === clientSignature;
 }
-
+const IP = '192.168.1.129';
 const fastify = Fastify();
-const port = {port :3000};
+const port = {port :3000,host: IP};
 
-// Middleware pour parser le JSON 
-fastify.addContentTypeParser('application/json', { parseAs: 'string' }, (req: FastifyRequest, body: string) => {
-  return JSON.parse(body);
-});
+
 
 // Route de base Entre 
 fastify.get('/', async (request, reply) => {
@@ -44,6 +41,7 @@ fastify.get('/', async (request, reply) => {
 
 // Récupérer tous les plats
 fastify.get('/api/plats', async (request, reply) => {
+  
   console.log("get plats");
   try {
     const data = await getPlats(false, true, false);
@@ -108,8 +106,8 @@ fastify.get('/api/ingredients/:id', async (request: FastifyRequest<{ Params: { i
 });
 
 // Ajouter un Plats
-fastify.post('/api/plats', async (request: FastifyRequest<{ Body: FormsDatas }>, reply: FastifyReply) => {
-  const data = request.body ;
+fastify.post('/api/plats', async (request, reply) => {
+  const data = request.body as FormsDatas;
   const {name,ingredients} = data;
   console.log(`Tentative d'ajout d'un nouveau plat avec Nom_plat: ${name}`);
 

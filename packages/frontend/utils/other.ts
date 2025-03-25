@@ -1,6 +1,7 @@
 import hmac from 'crypto-js/hmac-sha256';
 import { getIngredients, getPlats, getPlats_Ingredients, getSous_Groupes } from "./bdd";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {SECRET_KEY} from '@env'; // C'EST NORMAL QU'IL SIGNALE UNE ERREUR (IGNOREZ) !!!
 
 export type info_t =  {Nom : string, Score : string , Unite : string,id:number};
 export async function change(ide : number  ) {
@@ -73,13 +74,12 @@ export type FormData = {
   ingredients: Ingredient[];
 };
 const port = 3000;
-const url = `http://localhost:${port}/api/`;
-
-// Clé secrète partagée entre le client et le serveur
-
-const SECRET_KEY = process.env.SECRET_KEY || 'defaultSecretKey';
+const IP = '192.168.1.129';
+const url = `http://${IP}:${port}/api/`;
 
 function genereHMACSignature(method: string, table: string, data: any) {
+  console.log("Secret key",SECRET_KEY);
+  
   const timestamp = Math.floor(Date.now() / 1000); 
   const body = JSON.stringify(data);
   
@@ -101,24 +101,27 @@ async function POST(table: string, data: any) {
     "X-Signature": signature,  
     "X-Timestamp": timestamp.toString(),
   };
+  console.log("appel à POST avec url : ",url1);
   const response = await fetch(url1, {
     method: method,
     headers: headers,
     body: JSON.stringify(data),
   });
+  console.log("J'ai eu resultat de POST");
 
   const res = await response.json();
   return res;
 }
 
 export async function ajouterPlat(data: FormData) {
+  console.log("appel à ajout");
   const res = await POST("plats", data);
   console.log(res);
 }
 
 
-async function GET(table: string ,id:string){
-  const url1 = `${url}${table}/${id}`;
+async function GET(table: string ,id:string| boolean){
+  const url1 = id ? `${url}${table}/${id}` : `${url}${table}`;
   try {
     const response = await fetch(url1, {
       method: "GET",
@@ -136,7 +139,7 @@ async function GET(table: string ,id:string){
   }
 }
 
-async function getPlat(id: string) {
+export async function getPlat(id: string | boolean) {
   const res = await GET('plats',id);
   console.log("Plat récupéré:", res);
 }
