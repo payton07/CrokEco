@@ -119,7 +119,7 @@ fastify.post('/api/plats', async (request, reply) => {
   }
 
   try {
-    const plat = {Nom_plat : name ,Certified : 0,Vote : 0};
+    const plat = {'Nom_plat' : name ,'Certified' : 0,'Vote' : 0};
     const result = await addPlats_Client(plat);
     if (!result) {
       return reply.status(400).send({ error: "Échec de l'ajout du Plat" });

@@ -44,14 +44,14 @@ export async function addSmt(table: string, data: any): Promise<number> {
       return reject(new Error("La base de données n'est pas ouverte."));
     }
     const insertQuery = `
-      INSERT INTO ${table} (${Object.keys(data).join(", ")})
-      VALUES (${Object.values(data)
-        .map(a => `'${a}'`)
-        .join(", ")})
+    INSERT INTO ${table} (${Object.keys(data).join(", ")})
+        VALUES (${Object.values(data)
+            .map(a => `'${a}'`)
+            .join(",")})
     `;
     const stmt = db.prepare(insertQuery);
 
-    stmt.run(Object.values(data), function (this: sqlite3.RunResult, err: Error | null) {
+    stmt.run(function (this: sqlite3.RunResult, err: Error | null) {
       if (err) {
         reject(new Error("Erreur lors de l'insertion: " + err.message));
       } else {
@@ -280,6 +280,8 @@ export  async function addPlats(data : boolean | any =false): Promise<number> {
   return res ;
 }
 export  async function addPlats_Client(data : boolean | any =false): Promise<number> {
+  console.log("Dans add plat client");
+  
   const res:number =  await addSmt("Plats_Client",data);
   return res ;
 }

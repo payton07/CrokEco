@@ -86,11 +86,10 @@ CREATE TABLE "Menus_Plats" (
 
 
 CREATE TABLE "Plats_Client" (
-  "ID_plat" INTEGER AUTOINCREMENT,
+  "ID_plat" INTEGER PRIMARY KEY AUTOINCREMENT,
   "Nom_plat" VARCHAR(50),
   "Certified" INTEGER,
-  "Vote" INTEGER,
-  CONSTRAINT PK_PLATS_CLIENT PRIMARY KEY("ID_plat")
+  "Vote" INTEGER
 );
 
 
@@ -111,3 +110,5 @@ CREATE TABLE "Plats_Ingredients_Client" (
   CONSTRAINT FK_PLATS_INGREDIENTS_CLIENT_PLATS_CLIENT FOREIGN KEY ("ID_plat") REFERENCES Plats_Clients("ID_plat"),
   CONSTRAINT FK_PLATS_INGREDIENTS_CLIENT_INGREDIENTS FOREIGN KEY ("ID_ingredient") REFERENCES Ingredients("Code_AGB")
 );
+
+ INSERT INTO 'Plats_Client' (Nom_plat,Certified,Vote) VALUES ('Hjkdb', '0', '0');

@@ -98,9 +98,7 @@ export async function getSmt(table_name:string,data : boolean | any =false,all=f
   await initDB();
   const res:any[] = [];
   await db.withTransactionAsync(async () => {
-    // const
-    const statement = await db.prepareAsync(
-      `SELECT * FROM ${table_name}
+    const query = `SELECT * FROM ${table_name}
       ${
           !data
               ? ""
@@ -115,8 +113,10 @@ export async function getSmt(table_name:string,data : boolean | any =false,all=f
                     .join(" AND ")
       }
       ${limit ? "LIMIT "+limit : ""}
-      `
-    );
+      `;
+      console.log("la query de get : ", query);
+      
+    const statement = await db.prepareAsync(query);
     try {
       const result = await statement.executeAsync();
       
