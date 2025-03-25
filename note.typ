@@ -1,9 +1,7 @@
-Moderation nous mm ? : 
+Moderation nous mm ? : *OUI on le gere en backend*
 - Des qu'il y a ajout , attente de validation : 
-- Des que 5 validation du mec c'est good pour lui 
-- 
 
-Un compte pour ajouter un menu et autre . 
+*Un compte pour ajouter un menu et autre . :* Euh pour l'instant Non 
 
 = => Search , Menu  deroulante 
 On peut cliquer sur le plat passer par la Realité Augmenter 
