@@ -1,6 +1,6 @@
 import Fastify from 'fastify';
 import type { FastifyRequest, FastifyReply } from 'fastify';
-import { addPlats_Client, addPlats_Ingredients_Client, getIngredients, getPlats } from '../utils/acces_bdd.ts';
+import { addPlats_Client, addPlats_Ingredients_Client, getIngredients, getPlats, getPlats_Client } from '../utils/acces_bdd.ts';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
 export type FormsDatas = {
@@ -122,6 +122,9 @@ fastify.post('/api/plats', async (request, reply) => {
   try {
     const plat = {'Nom_plat' : name ,'Certified' : 0,'Vote' : 0};
     const result = await addPlats_Client(plat);
+    const leplat = await getPlats_Client({'ID_plat':result},false,true,1);
+    console.log("l'id du plat stocker : ",result);
+    
     if (!result) {
       return reply.status(400).send({ error: "Échec de l'ajout du Plat" });
     }

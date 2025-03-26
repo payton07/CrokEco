@@ -13,9 +13,6 @@ let db: SQLite.SQLiteDatabase;
  */
 
 async function openDatabase(): Promise<SQLite.SQLiteDatabase> {
-  const dbExists = await FileSystem.getInfoAsync(dbPath);
-  
-  if (!dbExists.exists) {
     console.log("📂 Base de données introuvable dans documentDirectory, copie depuis le bundle...");
 
     try {
@@ -40,9 +37,9 @@ async function openDatabase(): Promise<SQLite.SQLiteDatabase> {
       console.error("Erreur lors de la copie de la base de données :", error);
       throw error;
     }
-  } else {
-    console.log("Base de données déjà existante.");
-  }
+  // } else {
+  //   console.log("Base de données déjà existante.");
+  // }
 
   // Ouvre et retourne la base de données
   return SQLite.openDatabaseAsync(dbName);

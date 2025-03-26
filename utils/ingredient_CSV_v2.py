@@ -130,8 +130,17 @@ if __name__ == '__main__':
     insertion_Sous_Groupes_bd(data, OUTPUT_DB_FRONTEND)
     insertion_Sous_Groupes_bd(data, OUTPUT_DB_BACKEND)
 
-    data_ingredient = insertion_Ingredients_bd(data, OUTPUT_DB_FRONTEND)
-    data_ingredient = insertion_Ingredients_bd(data, OUTPUT_DB_BACKEND)
+    data_ingredient1 = insertion_Ingredients_bd(data, OUTPUT_DB_FRONTEND)
+    data_ingredient2 = insertion_Ingredients_bd(data, OUTPUT_DB_BACKEND)
     print("Fin de l'insertion dans la base de données")
-    pd.DataFrame(data_ingredient).to_csv("data_ingredient.csv", index=False)
+    pd.DataFrame(data_ingredient1).to_csv("data_ingredient1.csv", index=False)
+    pd.DataFrame(data_ingredient2).to_csv("data_ingredient2.csv", index=False)
     print("Fin de l'export des données")
+
+    con = sqlite3.connect(OUTPUT_DB_FRONTEND)
+    cur = con.cursor()
+    cur.execute("SELECT * FROM Ingredients;")
+    res = cur.fetchall()
+    print(res)
+    con.close()
+

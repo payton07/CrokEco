@@ -42,3 +42,6 @@ le reste c'est sur xcode , autre possibilité : je verrais plus tard
 ====== Liste deroulante pour chosir 
 ====== Ajouter sinon donc faut add sur la page de add .
 
+* A chaque ouverture de l'appli , on demande au serveur sa version de la bdd actuel, si elle est differente de celle de l'appli , on effectue une mise à jour de la bd. *
+
+Frontend : faut add  resto , gerer mise à jour 

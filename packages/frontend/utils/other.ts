@@ -74,7 +74,8 @@ export type FormData = {
   ingredients: Ingredient[];
 };
 const port = 3000;
-const IP = '192.168.1.129';
+// const IP = '192.168.1.129';
+const IP = '172.24.23.198';
 const url = `http://${IP}:${port}/api/`;
 
 function genereHMACSignature(method: string, table: string, data: any) {

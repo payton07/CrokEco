@@ -36,7 +36,7 @@ export default function AddDishForm() {
   
 
   async function Alter_IngredientFromBdd(text:string){
-    const query = `%${text}%`;
+    // const query = `%${text}%`;
     const data = await getIngredients(false,true,false,200); 
     console.log("J'ai eu la data", data?.length);
     if(data !== undefined){
