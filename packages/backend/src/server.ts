@@ -26,7 +26,8 @@ function verifyHMACSignature(method : string, table: string, data : any, timesta
   
   return computedSignature === clientSignature;
 }
-const IP = '192.168.1.129';
+// const IP = '192.168.1.129';
+const IP = '172.24.23.198';
 const fastify = Fastify();
 const port = {port :3000,host: IP};
 
