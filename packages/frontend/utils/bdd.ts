@@ -94,47 +94,69 @@ export async function addSmt(table: string, data : any): Promise<number> {
  * @param limit 
  * @returns 
  */
-export async function getSmt(table_name:string,data : boolean | any =false,all=false,limit : boolean | number=false,str : boolean=false): Promise<any[]> {
+export async function getSmt(
+  table_name: string,
+  data: boolean | Record<string, any> = false,
+  all = false,
+  limit: boolean | number = false,
+  str = false
+): Promise<any[]> {
   await initDB();
-  const res:any[] = [];
+  const res: any[] = [];
+  // const tableCheck = await db.getFirstAsync("SELECT name FROM sqlite_master WHERE type='table' AND name=?", ['Ingredients']);
+  // console.log("Table exists:", tableCheck);
+  // const rows = await db.getAllAsync(`SELECT * FROM Ingredients LIMIT 5`);
+  // console.log("Sample Rows:", rows);
+
   await db.withTransactionAsync(async () => {
-    const query = `SELECT * FROM ${table_name}
-      ${
-          !data
-              ? ""
-              : "WHERE "+
-                Object.entries(data)
-                    .map(a => {
-                      let res=``;
-                      !str ? res =`${a[0]} = '${a[1]}'`
-                        : res= `${a[0]} LIKE '${a[1]}'`
-                      return res;
-                    })
-                    .join(" AND ")
-      }
-      ${limit ? "LIMIT "+limit : ""}
-      `;
-      console.log("la query de get : ", query);
-      
+    console.log("Transaction started");
+
+    const whereClause = typeof data === "object" && data !== null
+      ? "WHERE " + Object.entries(data)
+          .map(([key, value]) => `${key} ${str ? "LIKE" : "="} ?`)
+          .join(" AND ")
+      : "";
+
+    let query = `SELECT * FROM ${table_name} ${whereClause}`;
+    const valuesArray = typeof data === "object" && data !== null
+      ? Object.values(data)
+      : [];
+
+    if (typeof limit === "number" && limit > 0) {
+      query += " LIMIT ?";
+      valuesArray.push(limit);
+    }
+
+    console.log("Query:", query);
+    console.log("Params:", valuesArray);
+
     const statement = await db.prepareAsync(query);
     try {
-      const result = await statement.executeAsync();
+      const result = await statement.executeAsync(valuesArray);
       
-      if(data && !all){
-        res.push(await result.getFirstAsync());
-      }
-      else {
+      if (data && !all) {
+        const firstRow = await result.getFirstAsync();
+        if (firstRow) {
+          res.push(firstRow);
+        }
+      } else {
         const rows = await result.getAllAsync();
-        for(const row of rows){
-         res.push(row);
+        if (rows.length > 0) {
+          res.push(...rows);
+        }
       }
-    }
+    } catch (error) {
+      console.error("Database error:", error);
     } finally {
       await statement.finalizeAsync();
     }
+
+    console.log("Transaction ended");
   });
+
   return res;
 }
+
 /**
  * 
  * @param table 
