@@ -93,3 +93,26 @@ CREATE TABLE "Menus_Plats" (
   CONSTRAINT FK_MENUS_PLATS_MENUS FOREIGN KEY ("ID_menu") REFERENCES Menus("ID_menu"),
   CONSTRAINT FK_MENUS_PLATS_PLATS FOREIGN KEY ("ID_plat") REFERENCES Plats("ID_plat")
 );
+
+CREATE TABLE "Restaurants_Historique" (
+  "ID_restaurant" INTEGER PRIMARY KEY AUTOINCREMENT,
+  "NomResto" VARCHAR(20),
+  "Longitude" DECIMAL(10,8),
+  "Latitude" DECIMAL(10,8),
+  "Adresse" VARCHAR(30)
+);
+
+CREATE TABLE "Menus_Historique" (
+  "ID_menu" INTEGER PRIMARY KEY AUTOINCREMENT,
+  "NomMenu" VARCHAR(20),
+  "ID_restaurant" INT(6),
+  CONSTRAINT FK_MENUS_RESTAURANTS_HISTORIQUE FOREIGN KEY ("ID_restaurant") REFERENCES Restaurants_Historique("ID_restaurant")
+);
+
+CREATE TABLE "Recherches_Historique" (
+  "ID_Recherche" INTEGER PRIMARY KEY AUTOINCREMENT,
+  "Text_request" VARCHAR(30),
+  "ID_menu" INT(6),
+  "Date" VARCHAR(10),
+  CONSTRAINT FK_RECHERCHES_MENUS_HISTORIQUE FOREIGN KEY ("ID_menu") REFERENCES Menus_Historique("ID_menu")
+);

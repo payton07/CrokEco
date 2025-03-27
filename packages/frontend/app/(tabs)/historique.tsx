@@ -5,11 +5,11 @@ import { Text, View } from "@/components/Themed";
 import React from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-export default function Info() {
+export default function History() {
   return (
     <SafeAreaProvider>
     <View style={styles.container}>
-      <Text style={styles.title}>Info page</Text>
+      <Text style={styles.title}>Page des Historiques </Text>
       <View
         style={styles.separator}
         lightColor="#eee"

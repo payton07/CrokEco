@@ -1,8 +1,12 @@
 import Fastify from 'fastify';
 import type { FastifyRequest, FastifyReply } from 'fastify';
-import { addPlats_Client, addPlats_Ingredients_Client, getIngredients, getPlats, getPlats_Client } from '../utils/acces_bdd.ts';
+import { addMenus_Client, addPlats_Client, addPlats_Ingredients_Client, addRecherches_Client, addRestaurant_Client, getElementsPlatsAfter, getIngredients, getLastElementPlats, getMenus_Client, getPlats, getPlats_Client, getRecherches_Client, getRestaurant_Client } from '../utils/acces_bdd.ts';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
+
+type resto = {'NomResto':string,'Latitude':number,'Longitude':number};
+type menu = {'NomMenu':string,'ID_restaurant':number};
+type recherche = {'Text_request':string[],'ID_menu':number,'Date':string};
 export type FormsDatas = {
   name: string;
   ingredients: Ingredient[];
@@ -26,8 +30,8 @@ function verifyHMACSignature(method : string, table: string, data : any, timesta
   
   return computedSignature === clientSignature;
 }
-// const IP = '192.168.1.129';
-const IP = '172.24.23.198';
+const IP = '192.168.1.129';
+// const IP = '172.24.23.198';
 const fastify = Fastify();
 const port = {port :3000,host: IP};
 
@@ -122,8 +126,9 @@ fastify.post('/api/plats', async (request, reply) => {
   try {
     const plat = {'Nom_plat' : name ,'Certified' : 0,'Vote' : 0};
     const result = await addPlats_Client(plat);
-    const leplat = await getPlats_Client({'ID_plat':result},false,true,1);
-    console.log("l'id du plat stocker : ",result);
+    const leplat = await getPlats_Client({'ID_plat':result},true,false,1);
+    const platres = leplat != undefined ? leplat[0] : {};
+    console.log("nom du plat: ",platres);
     
     if (!result) {
       return reply.status(400).send({ error: "Échec de l'ajout du Plat" });
@@ -142,6 +147,138 @@ fastify.post('/api/plats', async (request, reply) => {
     return reply.status(201).send({ message: 'Plat ajouté avec succès', code : result });
   } catch (err) {
     console.error("Erreur lors de l'ajout du Plat:", err);
+    return reply.status(500).send({ error: 'Erreur interne du serveur' });
+  }
+});
+
+// Ajout resto 
+fastify.post('/api/restaurants', async (request, reply) => {
+  const data = request.body as resto;
+  const {NomResto,Latitude,Longitude} = data;
+  NomResto && Latitude && Longitude ? console.log(""): console.log("Pas les bonnes valeurs pour insert Restaurants");
+  console.log(`Tentative d'ajout d'un nouveau resto avec NomResto: ${NomResto}`);
+
+  const clientSignature = request.headers['x-signature'] as string;
+  const timestamp = request.headers['x-timestamp'] as string;
+
+  if (!verifyHMACSignature('POST', 'restaurants', data, timestamp, clientSignature)) {
+    return reply.status(400).send({ status: 'error', message: 'Signature invalide' });
+  }
+
+  try {
+    const result = await addRestaurant_Client(data);
+    const leresto = await getRestaurant_Client({'ID_restaurant':result},true,false,1);
+    const platres = leresto != undefined ? leresto[0] : {};
+    console.log("le resto: ",platres);
+    
+    if (!result) {
+      return reply.status(400).send({ error: "Échec de l'ajout du resto" });
+    }
+    
+    return reply.status(201).send({ message: 'Resto ajouté avec succès', code : result });
+  } catch (err) {
+    console.error("Erreur lors de l'ajout du Resto:", err);
+    return reply.status(500).send({ error: 'Erreur interne du serveur' });
+  }
+});
+
+// Ajout Menu 
+fastify.post('/api/menus', async (request, reply) => {
+  const data = request.body as menu;
+  const {NomMenu,ID_restaurant} = data;
+  NomMenu && ID_restaurant ? console.log(""): console.log("Pas les bonnes valeurs pour insert menus");
+  
+  console.log(`Tentative d'ajout d'un nouveau menu avec NomMenu: ${NomMenu}`);
+
+  const clientSignature = request.headers['x-signature'] as string;
+  const timestamp = request.headers['x-timestamp'] as string;
+
+  if (!verifyHMACSignature('POST', 'menus', data, timestamp, clientSignature)) {
+    return reply.status(400).send({ status: 'error', message: 'Signature invalide' });
+  }
+
+  try {
+    const result = await addMenus_Client(data);
+    const lemenu = await getMenus_Client({'ID_menu':result},true,false,1);
+    const platres = lemenu != undefined ? lemenu[0] : {};
+    console.log("le menu: ",platres);
+    
+    if (!result) {
+      return reply.status(400).send({ error: "Échec de l'ajout du Menu" });
+    }
+    
+    return reply.status(201).send({ message: 'Menu ajouté avec succès', code : result });
+  } catch (err) {
+    console.error("Erreur lors de l'ajout du Menu:", err);
+    return reply.status(500).send({ error: 'Erreur interne du serveur' });
+  }
+});
+
+// Ajout recherche
+fastify.post('/api/recherches', async (request, reply) => {
+  const data = request.body as recherche;
+  const {Text_request,ID_menu,Date} = data;
+  Text_request && ID_menu && Date? console.log(""): console.log("Pas les bonnes valeurs pour insert Recherches ");
+  
+  console.log(`Tentative d'ajout d'une nouvelle recherche avec ID_Menu: ${ID_menu}`);
+
+  const clientSignature = request.headers['x-signature'] as string;
+  const timestamp = request.headers['x-timestamp'] as string;
+
+  if (!verifyHMACSignature('POST', 'recherches', data, timestamp, clientSignature)) {
+    return reply.status(400).send({ status: 'error', message: 'Signature invalide' });
+  }
+
+  try {
+    const result = await addRecherches_Client(data);
+    const larecherche = await getRecherches_Client({'ID_Recherche':result},true,false,1);
+    const platres = larecherche != undefined ? larecherche[0] : {};
+    console.log("la recherches: ",platres);
+    
+    if (!result) {
+      return reply.status(400).send({ error: "Échec de l'ajout de La Recherche" });
+    }
+    
+    return reply.status(201).send({ message: 'La Recherche ajouté avec succès', code : result });
+  } catch (err) {
+    console.error("Erreur lors de l'ajout La Recherche:", err);
+    return reply.status(500).send({ error: 'Erreur interne du serveur' });
+  }
+});
+
+// UpdateRequest 
+fastify.post('/api/updates', async (request, reply) => {
+  const data = request.body as { ID_plat: any};
+  const {ID_plat} = data;
+  ID_plat? console.log(""): console.log("Pas les bonnes valeurs pour Update");
+  
+  console.log(`Tentative de mise à jour `);
+
+  const clientSignature = request.headers['x-signature'] as string;
+  const timestamp = request.headers['x-timestamp'] as string;
+
+  if (!verifyHMACSignature('POST', 'updates', data, timestamp, clientSignature)) {
+    return reply.status(400).send({ status: 'error', message: 'Signature invalide' });
+  }
+
+  try {
+    const LastPlatList : any[] | undefined = await getLastElementPlats();
+    const lastPlat = LastPlatList != undefined ? LastPlatList[0] : {};
+
+    if(lastPlat.ID_plat == ID_plat){
+      return reply.status(201).send({ message: 'La BD est à jour !', code : lastPlat.ID_plat});
+    }
+    
+    if(lastPlat.ID_plat > ID_plat){
+      const platsAfter = await getElementsPlatsAfter({ ID_plat: ID_plat});
+
+      return reply.status(201).send(JSON.stringify(platsAfter));
+    }
+
+    return reply.status(400).send({ error: "Échec de la mise à jour y a une incoherence des BDs!" });
+    
+  } catch (err) {
+    console.error("Erreur lors de la mise à jour :", err);
     return reply.status(500).send({ error: 'Erreur interne du serveur' });
   }
 });

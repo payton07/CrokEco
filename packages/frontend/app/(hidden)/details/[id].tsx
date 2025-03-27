@@ -8,7 +8,7 @@ import { images } from "@/utils/picture";
 import * as FileSystem from 'expo-file-system';
 import { set } from "zod";
 import ProgressBar from "@/components/progressBar";
-import Info from '../../(tabs)/info';
+import Info from '../../(tabs)/vote';
 type info_t =  {Nom : string ,categorie : string , Score : string , Unite : string};
 // const imagePath = FileSystem.documentDirectory;
 // const end = ".png";

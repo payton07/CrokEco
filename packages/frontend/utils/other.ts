@@ -74,14 +74,13 @@ export type FormData = {
   ingredients: Ingredient[];
 };
 const port = 3000;
-// const IP = '192.168.1.129';
-const IP = '172.24.23.198';
+const IP = '192.168.1.129';
+// const IP = '172.24.23.198';
 const url = `http://${IP}:${port}/api/`;
 
 function genereHMACSignature(method: string, table: string, data: any) {
-  console.log("Secret key",SECRET_KEY);
-  
   const timestamp = Math.floor(Date.now() / 1000); 
+  
   const body = JSON.stringify(data);
   
   const message = `${method}\n/api/${table}\n${body}\n${timestamp}`;
@@ -90,36 +89,6 @@ function genereHMACSignature(method: string, table: string, data: any) {
   
   return { signature, timestamp };
 }
-
-async function POST(table: string, data: any) {
-  const method = "POST";
-  const url1 = `${url}${table}`;
-  
-  const { signature, timestamp } = genereHMACSignature(method, table, data);
-  
-  const headers = {
-    "Content-Type": "application/json",
-    "X-Signature": signature,  
-    "X-Timestamp": timestamp.toString(),
-  };
-  console.log("appel à POST avec url : ",url1);
-  const response = await fetch(url1, {
-    method: method,
-    headers: headers,
-    body: JSON.stringify(data),
-  });
-  console.log("J'ai eu resultat de POST");
-
-  const res = await response.json();
-  return res;
-}
-
-export async function ajouterPlat(data: FormData) {
-  console.log("appel à ajout");
-  const res = await POST("plats", data);
-  console.log(res);
-}
-
 
 async function GET(table: string ,id:string| boolean){
   const url1 = id ? `${url}${table}/${id}` : `${url}${table}`;
@@ -140,8 +109,75 @@ async function GET(table: string ,id:string| boolean){
   }
 }
 
+async function POST(table: string, data: any) {
+  const method = "POST";
+  const url1 = `${url}${table}`;
+  
+  const { signature, timestamp } = genereHMACSignature(method, table, data);
+  
+  const headers = {
+    "Content-Type": "application/json",
+    "X-Signature": signature,  
+    "X-Timestamp": timestamp.toString(),
+  };
+  console.log("appel à POST avec url : ",url1);
+  const response = await fetch(url1, {
+    method: method,
+    headers: headers,
+    body: JSON.stringify(data),
+  });
+  const res = await response.json();
+  return res;
+}
+
+/**
+ *  OPE suf PLAT 
+ * @param data 
+ */
+export async function ajouterPlat(data: FormData) {
+  console.log("appel à ajoutPlat");
+  const res = await POST("plats", data);
+  console.log("res :",res);
+  return res;
+}
+
 export async function getPlat(id: string | boolean) {
   const res = await GET('plats',id);
   console.log("Plat récupéré:", res);
 }
 
+/**
+ *  ANALYSE 
+ * @param data 
+ */
+type resto = {'NomResto':string,'Latitude':number,'Longitude':number};
+type menu = {'NomMenu':string,'ID_restaurant':number};
+type recherche = {'Text_request':string[],'ID_menu':number,'Date':string};
+
+export async function ajouterResto(data: resto) {
+  console.log("appel à ajoutResto");
+  const res = await POST("restaurants", data);
+  console.log("res resto :",res);
+  return res;
+}
+
+export async function ajouterMenu(data: menu) {
+  console.log("appel à ajoutResto");
+  const res = await POST("menus", data);
+  console.log("res resto :",res);
+  return res;
+}
+
+export async function ajouterRecherche(data: recherche) {
+  console.log("appel à ajoutResto");
+  const res = await POST("recherches", data);
+  console.log("res resto :",res);
+}
+
+
+export async function updateRequest(data:{ ID_plat: any}){
+  console.log("Update request");
+  const res = await POST("updates",data);
+  console.log("Mise à jour :",res);
+  return res;
+}

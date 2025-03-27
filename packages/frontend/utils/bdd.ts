@@ -14,7 +14,9 @@ let db: SQLite.SQLiteDatabase;
 
 async function openDatabase(): Promise<SQLite.SQLiteDatabase> {
     console.log("📂 Base de données introuvable dans documentDirectory, copie depuis le bundle...");
-
+    // const dbExists = await FileSystem.getInfoAsync(dbPath);
+  
+    // if (!dbExists.exists) {
     try {
       // Charger l'asset via expo-asset
       const asset = Asset.fromModule(require('../assets/ingredient_carbon_score.db'));
@@ -106,7 +108,7 @@ export async function getSmt(
   // console.log("Sample Rows:", rows);
 
   await db.withTransactionAsync(async () => {
-    console.log("Transaction started");
+    // console.log("Transaction started");
 
     const whereClause = typeof data === "object" && data !== null
       ? "WHERE " + Object.entries(data)
@@ -123,9 +125,6 @@ export async function getSmt(
       query += " LIMIT ?";
       valuesArray.push(limit);
     }
-
-    console.log("Query:", query);
-    console.log("Params:", valuesArray);
 
     const statement = await db.prepareAsync(query);
     try {
@@ -148,7 +147,7 @@ export async function getSmt(
       await statement.finalizeAsync();
     }
 
-    console.log("Transaction ended");
+    // console.log("Transaction ended");
   });
 
   return res;
@@ -257,8 +256,8 @@ export async function getMenus(data : boolean | any =false,all=false): Promise<a
     return res ;
   }
 }
-export async function getRestaurants(data : boolean | any =false,all=false): Promise<any[] | undefined> {
-  const res:any[]| undefined = await getSmt("Restaurants",data,all,10);
+export async function getRestaurants(data : boolean | any =false,all=false,str=false,limit=10): Promise<any[] | undefined> {
+  const res:any[]| undefined = await getSmt("Restaurants",data,all,limit,str);
   if(!res || res.length ==0){ return all? [] : undefined}
   else {
     return res ;
@@ -277,6 +276,32 @@ export async function getMenus_Plats(data : boolean | any =false,all=false): Pro
   else {
     return res ;
   }
+}
+
+export async function getLastElementPlats(): Promise<any | undefined> {
+  await initDB();
+  const res : any[] = [];
+  await db.withTransactionAsync(async () => {
+    let query = `SELECT * FROM Plats ORDER BY ID_plat DESC LIMIT 1;`;
+
+    const statement = await db.prepareAsync(query);
+    try {
+      const result = await statement.executeAsync();
+      
+      const rows = await result.getFirstAsync();
+      res.push(rows) ;
+      
+    } catch (error) {
+      console.error("Database error:", error);
+    } finally {
+      await statement.finalizeAsync();
+    }
+  });
+  
+  const ele = res.at(0);
+  // const id = ele.ID_plat;
+
+  return ele;
 }
 
 /**
@@ -364,6 +389,21 @@ export async function addPlats_Ingredients(data : boolean | any =false,all=false
 }
 export async function addMenus_Plats(data : boolean | any =false,all=false): Promise<number> {
   const res:number = await addSmt("Menus_Plats",data);
+  return res ;
+}
+
+export async function addRestaurants_Historique(data : boolean | any =false,all=false): Promise<number> {
+  const res:number = await addSmt("Restaurants_Historique",data);
+  return res ;
+}
+
+export async function addMenus_Historique(data : boolean | any =false,all=false): Promise<number> {
+  const res:number = await addSmt("Menus_Historique",data);
+  return res ;
+}
+
+export async function addRecherches_Historique(data : boolean | any =false,all=false): Promise<number> {
+  const res:number = await addSmt("Recherches_Historique",data);
   return res ;
 }
 /**

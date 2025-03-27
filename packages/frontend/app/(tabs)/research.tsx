@@ -3,21 +3,43 @@ import React, { createContext, useEffect, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getPlats,} from "@/utils/bdd";
+import { addPlats, getLastElementPlats, getPlats,} from "@/utils/bdd";
 import Searcher from "@/components/Searcher";
 import Favoris from "@/components/Favoris";
 import Suggestion from "@/components/Suggestion";
-import { change, getDataWithCacheExpiration} from "@/utils/other";
+import { change, getDataWithCacheExpiration, updateRequest} from "@/utils/other";
 
 const ele = { info: { Nom: "Pomme", categorie: "Fruit", Score: "0.5", Unite: "kg CO2 eq/kg de produit", id: 1 }, back: "Green" };
 export const DataContext = createContext({ data: [ele], isLoaded: false });
 
 async function clearAllCache() {
+  console.log("Vide le cache");
+  
   try {
     await AsyncStorage.clear();
     console.log("Tout le cache a été supprimé !");
   } catch (error) {
     console.error("Erreur lors de la suppression de tout le cache :", error);
+  }
+}
+
+async function DoMAj(data : string){
+  const laMaj1 = JSON.parse(data);
+  for(const ele in laMaj1){
+    await addPlats(ele);
+  }
+}
+
+async function MaJPlat(){
+  console.log("Demande de maj");
+  const ele = await getLastElementPlats();
+  if(ele != null){
+    const data = {'ID_plat':ele?.ID_plat};
+    const laMaj = await updateRequest(data);
+    if(laMaj) await DoMAj(laMaj);
+  }
+  else{
+    console.log("Y a pas de plats dans ta BD !");
   }
 }
 
@@ -81,7 +103,9 @@ export default function Research() {
                   <Text style={styles.menuText}>Menu</Text>
                   <Text style={styles.menuText}>Option 1</Text>
                   <Text style={styles.menuText}>Option 2</Text>
-                  <Text style={styles.menuText}>Option 3</Text>
+                  <TouchableOpacity style={styles.MaJButton} onPress={MaJPlat}>
+                    <Text style={styles.clearButtonText}>Demande MàJ</Text>
+                  </TouchableOpacity>
                   <TouchableOpacity style={styles.clearButton} onPress={clearAllCache}>
                     <Text style={styles.clearButtonText}>Vider le cache</Text>
                   </TouchableOpacity>
@@ -146,6 +170,13 @@ const styles = StyleSheet.create({
     marginTop: 20,
     padding: 10,
     backgroundColor: "red",
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  MaJButton: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: "green",
     borderRadius: 5,
     alignItems: "center",
   },

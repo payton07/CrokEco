@@ -26,7 +26,6 @@ export default function AddDishForm() {
         ingredients: [],
       },
   });
-  const forms : FormData[] = [];
   const [loading, setLoading] = useState(false);
   const [ingredient, setIngredient] = useState(''); 
   const [quantite, setQuantite] = useState(''); 
@@ -36,8 +35,8 @@ export default function AddDishForm() {
   
 
   async function Alter_IngredientFromBdd(text:string){
-    // const query = `%${text}%`;
-    const data = await getIngredients(false,true,false,200); 
+    const query = `%${text}%`;
+    const data = await getIngredients({'Nom_Francais':query},true,true,30); 
     console.log("J'ai eu la data", data?.length);
     if(data !== undefined){
       const Ing : string[]= [];

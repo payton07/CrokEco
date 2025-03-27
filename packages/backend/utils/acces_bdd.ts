@@ -84,7 +84,8 @@ export async function getSmt(table: string, data: any, all = false, limit: boole
     if (limit) {
       selectQuery += ` LIMIT ${limit}`;
     }
-
+    // console.log("la query : ",selectQuery);
+    
     const stmt = db.prepare(selectQuery);
 
     const values = Object.values(data);
@@ -170,6 +171,27 @@ export async function getPlats_Client(data : boolean | any =false,all=false,str=
     return res ;
   }
 }
+export async function getMenus_Client(data : boolean | any =false,all=false,str=false,limit: boolean | number=10): Promise<any[] | undefined> {
+  const res:any[] =  await getSmt("Menus_Client",data,all,limit,str);
+  if(!res || res.length ==0){ return all? [] : undefined}
+  else {
+    return res ;
+  }
+}
+export async function getRecherches_Client(data : boolean | any =false,all=false,str=false,limit: boolean | number=10): Promise<any[] | undefined> {
+  const res:any[] =  await getSmt("Recherches_Client",data,all,limit,str);
+  if(!res || res.length ==0){ return all? [] : undefined}
+  else {
+    return res ;
+  }
+}
+export async function getRestaurant_Client(data : boolean | any =false,all=false,str=false,limit: boolean | number=10): Promise<any[] | undefined> {
+  const res:any[] =  await getSmt("Restaurants_Client",data,all,limit,str);
+  if(!res || res.length ==0){ return all? [] : undefined}
+  else {
+    return res ;
+  }
+}
 export async function getPlats(data : boolean | any =false,all=false,str=false,limit:number | boolean=10): Promise<any[] | undefined> {
   const res:any[]| undefined = await getSmt("Plats",data,all,limit,str);
   if(!res || res.length ==0 || res[0]==null){ return all? [] : undefined}
@@ -226,6 +248,61 @@ export async function getDesigne_Tags(data : boolean | any =false,all=false): Pr
     return res ;
   }
 }
+export async function getLastElementPlats(): Promise<any[] | undefined> {
+  await initDB();
+  return new Promise((resolve, reject) => {
+    if (!db) {
+      return reject(new Error("La base de données n'est pas ouverte."));
+    }
+
+    let selectQuery = `SELECT * FROM Plats ORDER BY ID_plat DESC LIMIT 1`;
+    
+    const stmt = db.prepare(selectQuery);
+
+    stmt.all((err: Error | null, rows: any[]) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows || []); 
+      }
+    });
+  });
+}
+export async function getElementsPlatsAfter(data : any , after = true): Promise<any[] | undefined> {
+  await initDB();
+  return new Promise((resolve, reject) => {
+    if (!db) {
+      return reject(new Error("La base de données n'est pas ouverte."));
+    }
+
+    let selectQuery = `SELECT * FROM Plats`;
+
+    if (data) {
+      const conditions = Object.entries(data)
+        .map(([key, value]) => {
+          return after ? `${key} > ?` : `${key} = ?`;
+        })
+        .join(" AND ");
+      
+      selectQuery += ` WHERE ${conditions}`;
+    }
+    // console.log("la query : ",selectQuery);
+    
+    const stmt = db.prepare(selectQuery);
+
+    const values = Object.values(data);
+
+    stmt.all(...values, (err: Error | null, rows: any[]) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows || []); 
+      }
+    });
+  });
+}
+
+
 
 /**
  * UPDATES PAR TABLE
@@ -287,13 +364,23 @@ export  async function addPlats(data : boolean | any =false): Promise<number> {
   return res ;
 }
 export  async function addPlats_Client(data : boolean | any =false): Promise<number> {
-  console.log("Dans add plat client");
-  
   const res:number =  await addSmt("Plats_Client",data);
   return res ;
 }
 export  async function addPlats_Ingredients_Client(data : boolean | any =false): Promise<number> {
   const res:number =  await addSmt("Plats_Ingredients_Client",data);
+  return res ;
+}
+export  async function addMenus_Client(data : boolean | any =false): Promise<number> {
+  const res:number =  await addSmt("Menus_Client",data);
+  return res ;
+}
+export  async function addRestaurant_Client(data : boolean | any =false): Promise<number> {
+  const res:number =  await addSmt("Restaurants_Client",data);
+  return res ;
+}
+export  async function addRecherches_Client(data : boolean | any =false): Promise<number> {
+  const res:number =  await addSmt("Recherches_Client",data);
   return res ;
 }
 

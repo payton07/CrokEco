@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "target": "ESNext",                     
-    "module": "ESNext",                                            
-    "moduleResolution": "node",              
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ESNext",             
     "strict": true,                          
     "esModuleInterop": true,                 
     "skipLibCheck": true,                    
@@ -10,7 +10,7 @@
     "outDir": "./dist",
     "allowImportingTsExtensions": true,
     "emitDeclarationOnly": true,
-    "declaration": true
+    "declaration": true,
   },
   "include": ["src/**/*.ts", "src/server.ts","utils/*.ts","utils/*","./utils/others.ts"],                 
   "exclude": ["node_modules"]                 

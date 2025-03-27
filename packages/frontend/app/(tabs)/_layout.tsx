@@ -1,5 +1,5 @@
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import {MaterialCommunityIcons, MaterialIcons} from '@expo/vector-icons';
+import {Entypo, Fontisto, MaterialCommunityIcons, MaterialIcons} from '@expo/vector-icons';
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link, Tabs } from "expo-router";
 
@@ -36,8 +36,16 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Index",
+          title: "Scan",
           tabBarIcon: ({ color }) => <MaterialCommunityIcons name="line-scan" size={24} color={color} />,
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="historique"
+        options={{
+          title: "Historique",
+          tabBarIcon: ({ color }) => <Fontisto name="history" size={24} color={color} />,
           headerShown: false,
         }}
       />
@@ -50,17 +58,17 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="info"
+        name="vote"
         options={{
-          title: "info",
-          tabBarIcon: ({ color }) => <FontAwesome5 name="info-circle" size={24} color={color} />, 
+          title: "Votes",
+          tabBarIcon: ({ color }) => <Entypo name="thumbs-up" size={24} color={color} />, 
           headerShown: false,
         }}
       />
       <Tabs.Screen
         name="add"
         options={{
-          title: "add",
+          title: "Add",
           tabBarIcon: ({ color }) => <FontAwesome name="cutlery" size={24} color={color} />, 
           headerShown: false,
         }}

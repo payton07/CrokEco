@@ -61,7 +61,7 @@ CREATE TABLE "Menus" (
   "ID_menu" INT(6),
   "NomMenu" VARCHAR(20),
   "ID_restaurant" INT(6),
-  CONSTRAINT PK_MENUS PRIMARY KEY("ID_menu")
+  CONSTRAINT PK_MENUS PRIMARY KEY("ID_menu"),
   CONSTRAINT FK_MENUS_RESTAURANTS FOREIGN KEY ("ID_restaurant") REFERENCES Restaurants("ID_restaurant")
 );
 
@@ -93,22 +93,40 @@ CREATE TABLE "Plats_Client" (
 );
 
 
-CREATE TABLE "Restaurants_Client" (
-  "ID_restaurant" INT(6),
-  "NomResto" VARCHAR(20),
-  "Longitude" DECIMAL(10,8),
-  "Latitude" DECIMAL(10,8),
-  CONSTRAINT PK_RESTAURANTS_CLIENT PRIMARY KEY("ID_restaurant")
-);
-
-
 CREATE TABLE "Plats_Ingredients_Client" (
   "ID_plat" INTEGER ,
   "ID_ingredient"  VARCHAR(10),
   "Quantite" DECIMAL(5,3),
-  CONSTRAINT PK_PLATS_INGREDIENTS_CLIENT PRIMARY KEY("ID_plat", "ID_ingredient"),
+  CONSTRAINT PK_PLATS_INGREDIENTS_CLIENT PRIMARY KEY("ID_plat", "ID_ingredient") ,
   CONSTRAINT FK_PLATS_INGREDIENTS_CLIENT_PLATS_CLIENT FOREIGN KEY ("ID_plat") REFERENCES Plats_Clients("ID_plat"),
   CONSTRAINT FK_PLATS_INGREDIENTS_CLIENT_INGREDIENTS FOREIGN KEY ("ID_ingredient") REFERENCES Ingredients("Code_AGB")
 );
 
- INSERT INTO 'Plats_Client' (Nom_plat,Certified,Vote) VALUES ('Hjkdb', '0', '0');
+-- // AUTRE 
+CREATE TABLE "Restaurants_Client" (
+  "ID_restaurant" INTEGER PRIMARY KEY AUTOINCREMENT,
+  "NomResto" VARCHAR(20),
+  "Longitude" DECIMAL(10,8),
+  "Latitude" DECIMAL(10,8),
+  "Adresse" VARCHAR(30)
+);
+
+CREATE TABLE "Menus_Client" (
+  "ID_menu" INTEGER PRIMARY KEY AUTOINCREMENT,
+  "NomMenu" VARCHAR(20),
+  "ID_restaurant" INT(6),
+  CONSTRAINT FK_MENUS_RESTAURANTS FOREIGN KEY ("ID_restaurant") REFERENCES Restaurants_Client("ID_restaurant")
+);
+
+CREATE TABLE "Recherches_Client" (
+  "ID_Recherche" INTEGER PRIMARY KEY AUTOINCREMENT,
+  "Text_request" VARCHAR(30),
+  "ID_menu" INT(6),
+  "Date" VARCHAR(10),
+  CONSTRAINT FK_RECHERCHES_MENUS FOREIGN KEY ("ID_menu") REFERENCES Menus_Client("ID_menu")
+);
+
+  
+  -- CONSTRAINT PK_RESTAURANTS_CLIENT PRIMARY KEY("ID_restaurant") 
+    -- CONSTRAINT PK_MENUS PRIMARY KEY("ID_menu") 
+    -- CONSTRAINT PK_RECHERCHES PRIMARY KEY("ID_Recherche") ,
