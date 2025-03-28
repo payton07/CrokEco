@@ -1,7 +1,9 @@
 import hmac from 'crypto-js/hmac-sha256';
 import { getIngredients, getPlats, getPlats_Ingredients, getSous_Groupes } from "./bdd";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {SECRET_KEY} from '@env'; // C'EST NORMAL QU'IL SIGNALE UNE ERREUR (IGNOREZ) !!!
+import Constants from 'expo-constants';
+const SECRET_KEY = Constants.expoConfig?.extra?.secret_key ?? "default_secret_key";
+// console.log(SECRET_KEY); 
 
 export type info_t =  {Nom : string, Score : string , Unite : string,id:number};
 export async function change(ide : number  ) {

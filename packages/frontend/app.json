@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Co2Score-frontend",
-    "slug": "Co2Score-frontend",
+    "name": "ecocrock",
+    "slug": "ecocrock",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -15,14 +15,14 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.Co2Scorefrontend"
+      "bundleIdentifier": "com.anonymous.ecocrock"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.Co2Scorefrontend"
+      "package": "com.anonymous.ecocrock"
     },
     "web": {
       "bundler": "metro",
@@ -39,3 +39,4 @@
     }
   }
 }
+
