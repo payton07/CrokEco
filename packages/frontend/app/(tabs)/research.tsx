@@ -3,45 +3,18 @@ import React, { createContext, useEffect, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { addPlats, getLastElementPlats, getPlats,} from "@/utils/bdd";
+import { addPlats, addPlats_Ingredients, getLastElementPlats, getPlats, initDB,} from "@/utils/bdd";
 import Searcher from "@/components/Searcher";
 import Favoris from "@/components/Favoris";
 import Suggestion from "@/components/Suggestion";
 import { change, getDataWithCacheExpiration, updateRequest} from "@/utils/other";
-
+const DO_MAJ_CODE = 3333;
+type Plat = {"Certified": number, "ID_plat": string, "Nom_plat": string, "Vote":number};
 const ele = { info: { Nom: "Pomme", categorie: "Fruit", Score: "0.5", Unite: "kg CO2 eq/kg de produit", id: 1 }, back: "Green" };
 export const DataContext = createContext({ data: [ele], isLoaded: false });
 
-async function clearAllCache() {
-  console.log("Vide le cache");
-  
-  try {
-    await AsyncStorage.clear();
-    console.log("Tout le cache a été supprimé !");
-  } catch (error) {
-    console.error("Erreur lors de la suppression de tout le cache :", error);
-  }
-}
 
-async function DoMAj(data : string){
-  const laMaj1 = JSON.parse(data);
-  for(const ele in laMaj1){
-    await addPlats(ele);
-  }
-}
 
-async function MaJPlat(){
-  console.log("Demande de maj");
-  const ele = await getLastElementPlats();
-  if(ele != null){
-    const data = {'ID_plat':ele?.ID_plat};
-    const laMaj = await updateRequest(data);
-    if(laMaj) await DoMAj(laMaj);
-  }
-  else{
-    console.log("Y a pas de plats dans ta BD !");
-  }
-}
 
 async function setup1() {
   const loa1 = await getPlats(false, true, false);
@@ -70,20 +43,83 @@ export default function Research() {
   const [loading, setLoading] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  useEffect(() => {
-    async function loadData() {
-      if (!isLoaded) {
-        const donne = await getDataWithCacheExpiration("21", setup1, 30);
-        if (donne) {
-          setData(donne);
-          setLoads1(donne.loads1);
-          setLoads2(donne.loads2);
-          setIsLoaded(true);
-        }
-        setLoading(false);
-      }
+
+  async function clearAllCache() {  
+    try {
+      await AsyncStorage.clear();
+      console.log("Tout le cache a été supprimé !");
+      setIsLoaded(false);
+      setLoading(true);
+      await loadData();
+    } catch (error) {
+      console.error("Erreur lors de la suppression de tout le cache :", error);
     }
+  }
+
+  async function init(){
+    console.log("je reset !");
+    await initDB(true);
+    await clearAllCache();
+  }
+
+  async function DoUpdates(data : {message:string,code:number,last:string}){
+    console.log("Lance la MAJ");
+    if(data.code===DO_MAJ_CODE){
+      const objet = JSON.parse(data.message);
+      const plats : any[]= objet.plats;
+      const plats_ingredients : any[]= objet.plats_ingredients;
+  
+      // Inserer les plats dans la bd de l'appli
+      for(const plat of plats){
+        await addPlats(plat);
+      }
+
+      // Inserer les associations plat - ingredients
+      for(const plat_ingredient of plats_ingredients){
+        await addPlats_Ingredients(plat_ingredient);
+      }
+
+      const last_plat = await getLastElementPlats();
+      if(last_plat.ID_plat != data.last){console.log("Pb: Maj pas complete");}
+      await clearAllCache();
+      console.log("Mise à jour terminée !!!");
+    }
+    else{
+      console.log(data.message);
+    }
+  }
+  
+  async function CheckForUpdates(){
+    console.log("Demande de maj");
+    const el = await getPlats(false,true,false);
+    const ele = await getLastElementPlats();
+    if(ele != null){
+      const data = {'ID_plat':ele?.ID_plat};
+      const laMaj = await updateRequest(data);
+      if(laMaj) await DoUpdates(laMaj);
+    }
+    else{
+      // TODO : Voir les cas de merde 
+      console.log("Y a pas de plats dans ta BD !");
+    }
+  }
+
+  async function loadData() {
+    if (!isLoaded) {
+      const donne = await getDataWithCacheExpiration("21", setup1, 30);
+      if (donne) {
+        setData(donne);
+        setLoads1(donne.loads1);
+        setLoads2(donne.loads2);
+        setIsLoaded(true);
+      }
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
     loadData();
+    // CheckForUpdates();
   }, [isLoaded]);
 
   return (
@@ -102,8 +138,10 @@ export default function Research() {
                 <View style={styles.menu}>
                   <Text style={styles.menuText}>Menu</Text>
                   <Text style={styles.menuText}>Option 1</Text>
-                  <Text style={styles.menuText}>Option 2</Text>
-                  <TouchableOpacity style={styles.MaJButton} onPress={MaJPlat}>
+                  <TouchableOpacity style={styles.ResetButton} onPress={init}>
+                    <Text style={styles.clearButtonText}>Reset BD</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.MaJButton} onPress={CheckForUpdates}>
                     <Text style={styles.clearButtonText}>Demande MàJ</Text>
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.clearButton} onPress={clearAllCache}>
@@ -177,6 +215,13 @@ const styles = StyleSheet.create({
     marginTop: 20,
     padding: 10,
     backgroundColor: "green",
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  ResetButton: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: "blue",
     borderRadius: 5,
     alignItems: "center",
   },

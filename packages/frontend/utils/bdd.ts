@@ -12,11 +12,13 @@ let db: SQLite.SQLiteDatabase;
  *  Ouvrir la base de données SQLite
  */
 
-async function openDatabase(): Promise<SQLite.SQLiteDatabase> {
+async function openDatabase(reload = false): Promise<SQLite.SQLiteDatabase> {
     console.log("📂 Base de données introuvable dans documentDirectory, copie depuis le bundle...");
-    // const dbExists = await FileSystem.getInfoAsync(dbPath);
+    const dbExists = await FileSystem.getInfoAsync(dbPath);
   
-    // if (!dbExists.exists) {
+    if (!dbExists.exists || (dbExists.exists && reload==true)) {
+      console.log("je relance ");
+      
     try {
       // Charger l'asset via expo-asset
       const asset = Asset.fromModule(require('../assets/ingredient_carbon_score.db'));
@@ -39,18 +41,21 @@ async function openDatabase(): Promise<SQLite.SQLiteDatabase> {
       console.error("Erreur lors de la copie de la base de données :", error);
       throw error;
     }
-  // } else {
-  //   console.log("Base de données déjà existante.");
-  // }
+  } else {
+    console.log("Base de données déjà existante.");
+  }
 
   // Ouvre et retourne la base de données
   return SQLite.openDatabaseAsync(dbName);
 }
 
 // Initialise la base de données une seule fois
-async function initDB(): Promise<void> {
+export async function initDB(reload = false): Promise<void> {
+  if(db && reload==true){
+    db = await openDatabase(reload);
+  }
   if (!db) {
-    db = await openDatabase();
+    db = await openDatabase(reload);
   }
 }
 
@@ -68,17 +73,20 @@ export async function addSmt(table: string, data : any): Promise<number> {
   await initDB();
   const res: number[]| PromiseLike<number> = [];
   await db.withTransactionAsync(async () => {
-    const statement = await db.prepareAsync(
-      `
-      INSERT INTO ${table} (${Object.keys(data).join(", ")})
-      VALUES (${Object.values(data)
-          .map(a => `'${a}'`)
-          .join(", ")})
-  `,
-    );
+    const query =  `
+    INSERT INTO ${table} (${Object.keys(data).join(", ")})
+    VALUES (${Object.values(data)
+        .map(a => `'${a}'`)
+        .join(", ")})
+`;
+    const statement = await db.prepareAsync(query);
     try {
       const result = await statement.executeAsync();
-      res.push(result.changes);
+      res.push(result.changes);      
+    }
+    catch(error){
+      console.log(error);
+      
     } finally {
       await statement.finalizeAsync();
     }
@@ -216,6 +224,27 @@ export async function deleteSmt(table: string, query: string): Promise<number> {
  */
 export async function getIngredients(data : boolean | any =false,all=false,str=false,limit: boolean | number=10): Promise<any[] | undefined> {
   const res:any[] = await getSmt("Ingredients",data,all,limit,str);
+  if(!res || res.length ==0){ return all? [] : undefined}
+  else {
+    return res ;
+  }
+}
+export async function getMenus_Historique(data : boolean | any =false,all=false,str=false,limit: boolean | number=10): Promise<any[] | undefined> {
+  const res:any[] = await getSmt("Menus_Historique",data,all,limit,str);
+  if(!res || res.length ==0){ return all? [] : undefined}
+  else {
+    return res ;
+  }
+}
+export async function getRestaurants_Historique(data : boolean | any =false,all=false,str=false,limit: boolean | number=10): Promise<any[] | undefined> {
+  const res:any[] = await getSmt("Restaurants_Historique",data,all,limit,str);
+  if(!res || res.length ==0){ return all? [] : undefined}
+  else {
+    return res ;
+  }
+}
+export async function getRecherches_Historique(data : boolean | any =false,all=false,str=false,limit: boolean | number=10): Promise<any[] | undefined> {
+  const res:any[] = await getSmt("Recherches_Historique",data,all,limit,str);
   if(!res || res.length ==0){ return all? [] : undefined}
   else {
     return res ;

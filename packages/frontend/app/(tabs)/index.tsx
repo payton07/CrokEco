@@ -125,8 +125,8 @@ async function FormatDataPlatReconnu(data : string[]){
   return lines;
 }
 
-async function LoadLocAndInsertClient_SendDataToServeur(){
-  // SEND RESTO AU SERVEUR ET IL FAUT DONC LA LOC
+async function LoadLocAndInsertClient_SendDataToServeur(lines : any[]){
+  // TODO SEND RESTO AU SERVEUR ET IL FAUT DONC LA LOC
   let Longitude = null ;
   let Latitude = null ;
   if(!loc){
@@ -140,11 +140,12 @@ async function LoadLocAndInsertClient_SendDataToServeur(){
   const r1 = await ajouterResto(data1);
 
   // TODO : FAUT GERER LE NOM DU MENU
-  const data2 = {'NomMenu':'menu','ID_restaurant':r1};
+  const data2 = {'NomMenu':'menu','ID_restaurant':r1.code};
   const mH = await addMenus_Historique(data2);
   const r2 = await ajouterMenu(data2);
 
-  const data3 = {'Text_request':data,'ID_menu':r2,'Date':new Date().toLocaleDateString("fr-FR")};
+  const textReconnu = JSON.stringify(lines);
+  const data3 = {'Text_request':textReconnu,'ID_menu':r2.code,'Date':new Date().toLocaleDateString("fr-FR")};
   const recH = await addRecherches_Historique(data3);
   await ajouterRecherche(data3);
   setNomResto('');
@@ -164,7 +165,7 @@ async function setRecoData(){
       setDone(true);
       
       // SEND RESTO AU SERVEUR ET IL FAUT DONC LA LOC
-      await LoadLocAndInsertClient_SendDataToServeur();
+      await LoadLocAndInsertClient_SendDataToServeur(lines);
     }
     else{
       setData([]);

@@ -40,7 +40,7 @@ CREATE TABLE "Ingredients" (
 
 
 CREATE TABLE "Plats" (
-  "ID_plat" VARCHAR(10),
+  "ID_plat" INTEGER,
   "Nom_plat" VARCHAR(50),
   "Certified" INTEGER,
   "Vote" INTEGER,
@@ -49,7 +49,7 @@ CREATE TABLE "Plats" (
 
 
 CREATE TABLE "Restaurants" (
-  "ID_restaurant" INT(6),
+  "ID_restaurant" INTEGER,
   "NomResto" VARCHAR(20),
   "Longitude" DECIMAL(10,8),
   "Latitude" DECIMAL(10,8),
@@ -58,9 +58,9 @@ CREATE TABLE "Restaurants" (
 
 
 CREATE TABLE "Menus" (
-  "ID_menu" INT(6),
+  "ID_menu" INTEGER,
   "NomMenu" VARCHAR(20),
-  "ID_restaurant" INT(6),
+  "ID_restaurant" INTEGER,
   CONSTRAINT PK_MENUS PRIMARY KEY("ID_menu"),
   CONSTRAINT FK_MENUS_RESTAURANTS FOREIGN KEY ("ID_restaurant") REFERENCES Restaurants("ID_restaurant")
 );
@@ -77,8 +77,8 @@ CREATE TABLE "Plats_Ingredients" (
 
 
 CREATE TABLE "Menus_Plats" (
-  "ID_menu" INT(6),
-  "ID_plat" INT(6),
+  "ID_menu" INTEGER,
+  "ID_plat" INTEGER,
   CONSTRAINT PK_MENUS_PLATS PRIMARY KEY("ID_menu", "ID_plat"),
   CONSTRAINT FK_MENUS_PLATS_MENUS FOREIGN KEY ("ID_menu") REFERENCES Menus("ID_menu"),
   CONSTRAINT FK_MENUS_PLATS_PLATS FOREIGN KEY ("ID_plat") REFERENCES Plats("ID_plat")

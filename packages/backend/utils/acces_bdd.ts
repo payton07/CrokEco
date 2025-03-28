@@ -199,6 +199,13 @@ export async function getPlats(data : boolean | any =false,all=false,str=false,l
     return res ;
   }
 }
+export async function getPlats_Ingredients(data : boolean | any =false,all=false,str=false,limit:number | boolean=10): Promise<any[] | undefined> {
+  const res:any[]| undefined = await getSmt("Plats_Ingredients",data,all,limit,str);
+  if(!res || res.length ==0 || res[0]==null){ return all? [] : undefined}
+  else {
+    return res ;
+  }
+}
 export async function getSous_Groupes(data : boolean | any =false,all=false): Promise<any[] | undefined> {
   const res:any[]| undefined =  await getSmt("Sous_Groupes",data,all,10);
   if(!res || res.length ==0){ return all? [] : undefined}
@@ -268,7 +275,7 @@ export async function getLastElementPlats(): Promise<any[] | undefined> {
     });
   });
 }
-export async function getElementsPlatsAfter(data : any , after = true): Promise<any[] | undefined> {
+export async function getElementsPlatsAfter(data : any , after = true): Promise<any[]> {
   await initDB();
   return new Promise((resolve, reject) => {
     if (!db) {

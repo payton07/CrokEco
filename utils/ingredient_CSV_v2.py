@@ -141,6 +141,28 @@ if __name__ == '__main__':
     cur = con.cursor()
     cur.execute("SELECT * FROM Ingredients;")
     res = cur.fetchall()
+    d = ["1","pate",0,0]
+    cur.execute(""" INSERT INTO Plats(ID_plat,Nom_plat,Certified,Vote) VALUES(?,?,?,?)""",d)
     print(res)
+    con.commit()
     con.close()
 
+    con = sqlite3.connect(OUTPUT_DB_BACKEND)
+    cur = con.cursor()
+    d1 = [1,"pate",0,0]
+    d2 = [2,"riz",0,0]
+    d3 = [1,"11084",320]
+    d4 = [1,"20998",320]
+    cur.execute(""" INSERT INTO Plats(ID_plat,Nom_plat,Certified,Vote) VALUES(?,?,?,?)""",d1)
+    cur.execute(""" INSERT INTO Plats(ID_plat,Nom_plat,Certified,Vote) VALUES(?,?,?,?)""",d2)
+    cur.execute(""" INSERT INTO Plats_Ingredients(ID_plat,ID_ingredient,Quantite) VALUES(?,?,?)""",d3)
+    cur.execute(""" INSERT INTO Plats_Ingredients(ID_plat,ID_ingredient,Quantite) VALUES(?,?,?)""",d4)
+    d3[0]= 2
+    d4[0]= 2
+    cur.execute(""" INSERT INTO Plats_Ingredients(ID_plat,ID_ingredient,Quantite) VALUES(?,?,?)""",d3)
+    cur.execute(""" INSERT INTO Plats_Ingredients(ID_plat,ID_ingredient,Quantite) VALUES(?,?,?)""",d4)
+    con.commit()
+    con.close()
+
+
+# Plats_Ingredients

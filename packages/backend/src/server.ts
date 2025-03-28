@@ -1,6 +1,6 @@
 import Fastify from 'fastify';
 import type { FastifyRequest, FastifyReply } from 'fastify';
-import { addMenus_Client, addPlats_Client, addPlats_Ingredients_Client, addRecherches_Client, addRestaurant_Client, getElementsPlatsAfter, getIngredients, getLastElementPlats, getMenus_Client, getPlats, getPlats_Client, getRecherches_Client, getRestaurant_Client } from '../utils/acces_bdd.ts';
+import { addMenus_Client, addPlats_Client, addPlats_Ingredients_Client, addRecherches_Client, addRestaurant_Client, getElementsPlatsAfter, getIngredients, getLastElementPlats, getMenus_Client, getPlats, getPlats_Client, getPlats_Ingredients, getRecherches_Client, getRestaurant_Client } from '../utils/acces_bdd.ts';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
 
@@ -15,6 +15,7 @@ export type Ingredient = {
   name: string;
   weight: string;
 };
+const DO_MAJ_CODE = 3333;
   
 // Charger les variables d'environnement depuis le fichier .env
 dotenv.config(); 
@@ -271,8 +272,17 @@ fastify.post('/api/updates', async (request, reply) => {
     
     if(lastPlat.ID_plat > ID_plat){
       const platsAfter = await getElementsPlatsAfter({ ID_plat: ID_plat});
-
-      return reply.status(201).send(JSON.stringify(platsAfter));
+      
+      let plat_ingredient = [];
+      for(const ele of platsAfter){
+        const id = {'ID_plat':ele.ID_plat} ;
+        const res = await getPlats_Ingredients(id,true,false,false);
+        if(res != undefined){
+          plat_ingredient.push(...res);
+        }
+      }
+      const data = {'plats':platsAfter,'plats_ingredients':plat_ingredient};
+      return reply.status(201).send({message:JSON.stringify(data),code:DO_MAJ_CODE,last:lastPlat.ID_plat});
     }
 
     return reply.status(400).send({ error: "Échec de la mise à jour y a une incoherence des BDs!" });

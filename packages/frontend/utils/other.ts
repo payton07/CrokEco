@@ -154,7 +154,7 @@ export async function getPlat(id: string | boolean) {
  */
 type resto = {'NomResto':string,'Latitude':number,'Longitude':number};
 type menu = {'NomMenu':string,'ID_restaurant':number};
-type recherche = {'Text_request':string[],'ID_menu':number,'Date':string};
+type recherche = {'Text_request':string,'ID_menu':number,'Date':string};
 
 export async function ajouterResto(data: resto) {
   console.log("appel à ajoutResto");
@@ -180,6 +180,5 @@ export async function ajouterRecherche(data: recherche) {
 export async function updateRequest(data:{ ID_plat: any}){
   console.log("Update request");
   const res = await POST("updates",data);
-  console.log("Mise à jour :",res);
   return res;
 }
