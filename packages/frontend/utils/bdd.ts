@@ -244,8 +244,6 @@ export async function getRestaurants_Historique(data : boolean | any =false,all=
   }
 }
 export async function getRecherches_Historique(data : boolean | any =false,all=false,str=false,limit: boolean | number=10): Promise<any[] | undefined> {
-  console.log('Dans get recherche hiistorique');
-  
   const res:any[] = await getSmt("Recherches_Historique",data,all,limit,str);
   if(!res || res.length ==0){ return all? [] : undefined}
   else {

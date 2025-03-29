@@ -2,7 +2,6 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { StyleSheet, View,TouchableOpacity,Text} from "react-native";
-import { set } from 'zod';
 
 function switchToDetails(ide : number){
   router.push({ pathname: `/(hidden)/details/[id]`, params: { id: ide}});

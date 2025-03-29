@@ -16,10 +16,12 @@ export default function History() {
   const [isloaded,setIsloaded] = useState(false);
   
   async function getloadsMenus(){
-    const MENUS = await getMenus_Historique();
+    const MENUS = await getMenus_Historique(false,true,false,false);
     console.log("Menus :",MENUS);
     
-    if(MENUS !=undefined) {setMenus(MENUS); setIsloaded(true);}
+    if(MENUS !=undefined) {
+      if(MENUS.length > 0) {setMenus(MENUS); setIsloaded(true);}
+    }
   }
   
   useFocusEffect(
@@ -40,7 +42,7 @@ export default function History() {
                 return <MenuHistory key={i} ligne={ligne} />
               })
               : 
-              <Text style={styles.text}>Aucun Menu </Text>
+              <Text style={styles.textcenterize}>Aucun Menu </Text>
             }
           </View>
       </View>
@@ -97,5 +99,11 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     color: "black",
+  },
+  textcenterize: {
+    fontSize: 16,
+    color: "black",
+    alignSelf : "center",
+    top : 100
   },
 });

@@ -6,25 +6,28 @@ const SECRET_KEY = Constants.expoConfig?.extra?.SECRET_KEY ?? "default_secret_ke
 // console.log(SECRET_KEY); 
 
 export type info_t =  {Nom : string, Score : string , Unite : string,id:number};
-export async function change(ide : number  ) {
-  if(ide != undefined){
-    //const ras = await getPlats({ID_plat : ide},false,true);
-    const ras = await getPlats_Ingredients({ID_plat : ide},true, false, 10);
+export async function change(idplat : number  ) {
+  if(idplat != undefined){
+    //const ras = await getPlats({ID_plat : idplat},false,true);
+    const plat_ingredients = await getPlats_Ingredients({ID_plat : idplat},true, false, 10);
     let score : number = 0;
-    if(ras !=undefined) {
-      for (const ele of ras) {
-        const res = await getIngredients({Code_AGB : ele.ID_ingredient},false,false);
+    let ingredients_data = [];
+    if(plat_ingredients !=undefined) {
+      for (const ligne of plat_ingredients) {
+        const res = await getIngredients({Code_AGB : ligne.ID_ingredient},false,false,1);
+        ingredients_data.push(res?.at(0));
         score += res?.at(0).Score_unique_EF;
       }
-      const plat = await getPlats({ID_plat : ide},false,false);
-      const info :info_t = {Nom: plat?.at(0).Nom_plat, Score: score.toPrecision(3), Unite:"mPt / kg de produit",id:ide};
-      const out = {info : info, back : Qualite(score)};
+      const plat = await getPlats({ID_plat : idplat},false,false);
+      const info :info_t = {Nom: plat?.at(0).Nom_plat, Score: score.toPrecision(3), Unite:"mPt / kg de produit",id:idplat};
+      const out = {info : info, back : Qualite(score),ingredients : ingredients_data};
       return out;
     }
     else {
-      return {info : undefined, back : undefined};
+      return {info : undefined, back : undefined,ingredients :[]};
     }
-}
+  }
+  return {info : undefined, back : undefined,ingredients :[]};
 }
 
 export function Qualite(score : number) {

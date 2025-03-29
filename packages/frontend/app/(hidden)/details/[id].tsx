@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {StyleSheet, View,Text, ScrollView} from "react-native";
+import {StyleSheet, View,Text, ScrollView, Alert} from "react-native";
 import { Image} from 'expo-image';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Link, router, Stack, useLocalSearchParams } from "expo-router";
@@ -9,69 +9,20 @@ import * as FileSystem from 'expo-file-system';
 import { set } from "zod";
 import ProgressBar from "@/components/progressBar";
 import Info from '../../(tabs)/vote';
-type info_t =  {Nom : string ,categorie : string , Score : string , Unite : string};
+import { change, Qualite } from "@/utils/other";
+import { info_t } from '../../../utils/other';
+// type info_t =  {Nom : string ,categorie : string , Score : string , Unite : string};
 // const imagePath = FileSystem.documentDirectory;
 // const end = ".png";
-
-function Qualite(score : number) {
-  if (score <= 1) {
-    return "Green";
-  }
-  if (score >1 && score <=5) {
-    return "Orange";
-  }
-  return "Red";
-}
 // boeuf
-export default function details() {
-  const [img, setImg] = useState<string|null>("@/assets/ingImage.image.png");
-  const [info, setInfo] = useState<info_t>();
-  const [ing,setIng] = useState([]);
-  const [back, setBack] = useState("black");
-  // {}
-  const params = useLocalSearchParams(); 
-  function retour() {
-    router.push({ pathname: `/(tabs)/research`});
-  }
-  useEffect(() => {
-    // console.log("sur details id : ",params.id);
-    
-    /**
-     * TODO Faire un gros import des images pour aleger le chargement 
-     * EXEMPLE : 
-     */
-    async function change(){
-      const ras = await getPlats({Ciqual_AGB : params.id},false,true);
-      const res = await getIngredients({Ciqual_AGB : ras?.at(0)?.Ciqual_AGB},true);
-      const sous_groupe = await getSous_Groupes({ID_sous_groupe : ras?.at(0)?.ID_sous_groupe});
-      
-      // console.log("Ingredient : ", res?.at(0));
-      
-      if(res !=undefined){
-        // Nom 
-        // categorie Sous-groupe d'aliment
-        // Score Score unique EF
-        // Unite ???
-        let score : number = 0;
-        let obj : any = [];
-        for (const ele of res) {
-          score += ele.Changement_climatique;
-        }
-        for (const ele of res) {
-          obj.push([ele.Ingredient,[((ele.Changement_climatique / score )*100).toPrecision(3),Qualite(ele.Changement_climatique)]]);
-        }
-        // console.log("l'objet est : ",obj);
-        
-        setIng(obj);
-        
-        const info :info_t = {Nom: ras?.at(0).Nom_Francais, categorie: sous_groupe?.at(0).Sous_groupe_d_aliment, Score: score.toPrecision(3), Unite:"kg CO2 eq/kg de produit"};
-        const as = res?.at(0).Ingredient;
-        setInfo(info);
-        // console.log("je set info ",info);
-        setBack(Qualite(score));
-        
 
-        // const name = images.ele; 
+/**
+ * 
+ * Pour la partie image : 25+ h de taff 
+ * 
+ * 
+ * 
+ *         // const name = images.ele; 
         
         // const n = "Carotte";
         // console.log(as);
@@ -104,13 +55,43 @@ export default function details() {
         // } catch (error) {
         //   console.error("Erreur lors du téléchargement :", error);
         // }
-      }
-      else{
-        console.log("Erreur : pas de score");
-      }
-    }
+ */
 
-    change();
+export default function details() {
+  const [img, setImg] = useState<string|null>("@/assets/ingImage.image.png");
+  const [info, setInfo] = useState<info_t>();
+  const [ing,setIng] = useState<any[]>([]);
+  const [back, setBack] = useState("black");
+  // {}
+  const params = useLocalSearchParams(); 
+
+  function retour() {
+      router.push({ pathname: `/(tabs)/research`});
+  }
+  useEffect(() => {
+    /**
+     * TODO Faire un gros import des images pour aleger le chargement 
+     * EXEMPLE : 
+     * 
+     */ 
+  async function load(){
+    if (typeof params.id === "string") {
+      const ID_plat = parseInt(params.id);
+        const obj = await change(ID_plat);
+        if(obj.back != undefined && obj.info !=undefined ){
+          setIng(obj.ingredients);
+          setInfo(obj.info);
+          setBack(obj.back);
+        }
+        else{
+          Alert.alert('Aucune info de ce plat !');
+        }
+    }
+    else{
+      console.log("Pas de bon id de plat route : (Details/[id])");
+    }
+  }
+  load();
   },[]);
   return (
       <View style={styles.container}>
@@ -125,7 +106,7 @@ export default function details() {
         {img != null ? <></>: <Image style={styles.image} source={img}/>}
         <View style={{ backgroundColor: back === "Green" ? "#4CAF50" : back === "Orange" ? "orange" :"red", ...styles.Info}}>
         <Text style={styles.title}>{info?.Nom}</Text>
-        <Text style={styles.text}>{info?.categorie}</Text>
+        {/* <Text style={styles.text}>{info?.categorie}</Text> */}
         <Text style={{...styles.title}}>{info?.Score}</Text>
         <Text style={styles.text}>{info?.Unite}</Text>
         </View>

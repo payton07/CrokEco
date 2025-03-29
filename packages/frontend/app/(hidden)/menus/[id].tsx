@@ -15,9 +15,11 @@ export default function menus() {
   const [plats , setPlats] = useState<any[]>([]);
   // {}
   const params = useLocalSearchParams(); 
+
   function retour() {
-    router.push({ pathname: `/(tabs)`});
+      router.push({ pathname: `/(tabs)/historique`});
   }
+  
   async function FormatDataPlatReconnu(data : string[]){
     const lines = [];
     for (const ligne of data) {
@@ -49,12 +51,14 @@ export default function menus() {
       const resto = await getRestaurants_Historique({'ID_restaurant':ID_restaurant},true,false,1);
       
       const recherche = await getRecherches_Historique({'ID_menu':ID_menu});
-
+      
       const textrequested : any[]= JSON.parse(recherche?.at(0).Text_request);
+      console.log("call loadsplats");
       const texts = [];
       for(const obj of textrequested){texts.push(obj.text);}
       const lines = await FormatDataPlatReconnu(texts);
-
+      console.log("les lines go set (menus/[id])");
+      
       setPlats(lines);
       setIsloaded(true);
       
@@ -64,14 +68,9 @@ export default function menus() {
     }
   }
 
-  // useEffect(()=>{
-  //   loadsplats();
-  // },[]);
-  useFocusEffect(
-    useCallback(()=>{
-      loadsplats();
-    },[])
-  );
+  useEffect(()=>{
+    loadsplats();
+  },[]);
 
   return (
       <View style={styles.container}>
