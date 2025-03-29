@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View,TouchableOpacity,Text} from "react-native";
 
 function switchToMenu(objet : any[]){
-  router.push({ pathname: `/(hidden)/menus/[id]`, params: { ID_menu: objet.at(0),ID_restaurant : objet.at(1)}});
+  router.push({ pathname: `/(hidden)/menus/[id]`, params: { id: objet.at(0), ID_menu: objet.at(0), ID_restaurant: objet.at(1)}});
 }
 
 export default function MenuHistory({ligne} : {ligne: {ID_menu: number, ID_restaurant : number, NomMenu : string}}){

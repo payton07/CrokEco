@@ -17,22 +17,22 @@ export const DataContext = createContext({ data: [ele], isLoaded: false });
 
 
 async function setup1() {
-  const loa1 = await getPlats(false, true, false);
-  const loa2 = await getPlats(false, true, false, 200);
-  if (loa1 && loa2) {
-    let lod1 = [], lodInter = [] ,lod2 = [];
-    for (const a of loa1) {
-      if (a.ID_plat) lod1.push(await change(a.ID_plat));
+  const plats_favs = await getPlats(false, true, false);
+  const plats_suggested = await getPlats(false, true, false, 200);
+  if (plats_favs && plats_suggested) {
+    let plats_favs_data = [], plats_Inter = [] ,plats_suggested_data = [];
+    for (const a of plats_favs) {
+      if (a.ID_plat) plats_favs_data.push(await change(a.ID_plat));
     }
-    for (const a of loa2) {
-      if (a.ID_plat) lodInter.push(await change(a.ID_plat));
+    for (const a of plats_suggested) {
+      if (a.ID_plat) plats_Inter.push(await change(a.ID_plat));
     }
-    for (const a of lodInter){
-      if(a?.back =="green") lod2.push(a)
+    for (const a of plats_Inter){
+      if(a?.back =="green") plats_suggested_data.push(a)
     }
-    return { loads1: lod1, loads2: lod2 };
+    return { plats_favoris: plats_favs_data, plats_suggest: plats_suggested_data };
   }
-  return { loads1: undefined, loads2: undefined };
+  return { plats_favoris: undefined, plats_suggest: undefined };
 }
 
 export default function Research() {
@@ -109,8 +109,8 @@ export default function Research() {
       const donne = await getDataWithCacheExpiration("21", setup1, 30);
       if (donne) {
         setData(donne);
-        setLoads1(donne.loads1);
-        setLoads2(donne.loads2);
+        setLoads1(donne.plats_favoris);
+        setLoads2(donne.plats_suggest);
         setIsLoaded(true);
       }
       setLoading(false);

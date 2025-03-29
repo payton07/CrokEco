@@ -63,6 +63,8 @@ export default function Index(){
 
   async function getLocation(){
     // Demande de permission
+    console.log("Call getLocation");
+    
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
       console.log("Permission de localisation refusée");
@@ -74,6 +76,8 @@ export default function Index(){
     let loc = await Location.getCurrentPositionAsync({});
     setLocation(loc);
     setLoc(true);
+    console.log("Setted location");
+    
   };
 
   useEffect(() => {
@@ -108,9 +112,9 @@ async function FormatDataPlatReconnu(data : string[]){
   for (const ligne of data) {
     const query = `${ligne}`;
     try {
-      const res = await getPlats({Nom_plat: query},false,true,1);
-      if(res != undefined && res.length > 0 && res != null){
-        const id = res[0].ID_plat;
+      const plats = await getPlats({Nom_plat: query},false,true,1);
+      if(plats != undefined && plats.length > 0 && plats != null){
+        const id = plats[0].ID_plat;
         const color = await change(id);
         lines.push({"text":ligne,color:color?.back,"id":id});
       }
@@ -135,19 +139,19 @@ async function LoadLocAndInsertClient_SendDataToServeur(lines : any[]){
   if(location){
     Longitude = location.coords.longitude;
     Latitude = location.coords.latitude;
-  const data1 = {'NomResto':nomResto,'Latitude':Latitude,'Longitude':Longitude,'Adresse':Adresse};
-  const resH = await addRestaurants_Historique(data1);
-  const r1 = await ajouterResto(data1);
+  const resto = {'NomResto':nomResto,'Latitude':Latitude,'Longitude':Longitude,'Adresse':Adresse};
+  await addRestaurants_Historique(resto);
+  const res1 = await ajouterResto(resto);
 
   // TODO : FAUT GERER LE NOM DU MENU
-  const data2 = {'NomMenu':'menu','ID_restaurant':r1.code};
-  const mH = await addMenus_Historique(data2);
-  const r2 = await ajouterMenu(data2);
+  const menu = {'NomMenu':'menu','ID_restaurant':res1.code};
+  await addMenus_Historique(menu);
+  const res2 = await ajouterMenu(menu);
 
   const textReconnu = JSON.stringify(lines);
-  const data3 = {'Text_request':textReconnu,'ID_menu':r2.code,'Date':new Date().toLocaleDateString("fr-FR")};
-  const recH = await addRecherches_Historique(data3);
-  await ajouterRecherche(data3);
+  const recherche = {'Text_request':textReconnu,'ID_menu':res2.code,'Date':new Date().toLocaleDateString("fr-FR")};
+  await addRecherches_Historique(recherche);
+  await ajouterRecherche(recherche);
   setNomResto('');
   }
   else{
@@ -157,9 +161,9 @@ async function LoadLocAndInsertClient_SendDataToServeur(lines : any[]){
   
 async function setRecoData(){
   if(!filled && imageUri){
-    const data = await recognizeText();
-    if(data != undefined){    
-      const lines = await FormatDataPlatReconnu(data);
+    const recognizedTexts = await recognizeText();
+    if(recognizedTexts != undefined){    
+      const lines = await FormatDataPlatReconnu(recognizedTexts);
       setData(lines);
       setFilled(true);
       setDone(true);
@@ -206,14 +210,14 @@ function inter(ingredient: string){
 }
   async function Alter_RestosFromBdd(text:string){
     const query = `%${text}%`;
-    const data = await getRestaurants({'NomResto':query},true,true,30); 
-    console.log("J'ai eu la data resto", data?.length);
-    if(data !== undefined){
-      const Ing : string[]= [];
-      for (const ele of data) {
-        if(!Ing.includes(ele.Nom_Resto)) Ing.push(ele.Nom_Resto);
+    const restos = await getRestaurants({'NomResto':query},true,true,30); 
+    console.log("J'ai eu les restos ", restos?.length);
+    if(restos !== undefined){
+      const restoData : string[]= [];
+      for (const ele of restos) {
+        if(!restoData.includes(ele.Nom_Resto)) restoData.push(ele.Nom_Resto);
       }
-      setRestosData(Ing);
+      setRestosData(restoData);
     }
     
   }

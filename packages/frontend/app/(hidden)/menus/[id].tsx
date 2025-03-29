@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {StyleSheet, View,Text, ScrollView} from "react-native";
 import { Image} from 'expo-image';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -6,6 +6,7 @@ import { Link, router, Stack, useLocalSearchParams } from "expo-router";
 import Textshow from "@/components/Textshow";
 import { change} from "@/utils/other";
 import { getPlats, getRecherches_Historique, getRestaurants_Historique } from "@/utils/bdd";
+import { useFocusEffect } from "@react-navigation/native";
 type info_t =  {Nom : string ,categorie : string , Score : string , Unite : string};
 
 export default function menus() {
@@ -15,7 +16,7 @@ export default function menus() {
   // {}
   const params = useLocalSearchParams(); 
   function retour() {
-    router.push({ pathname: `/(tabs)/research`});
+    router.push({ pathname: `/(tabs)`});
   }
   async function FormatDataPlatReconnu(data : string[]){
     const lines = [];
@@ -40,28 +41,22 @@ export default function menus() {
   }
 
   async function loadsplats(){
-    console.log("CALL LoadsPlat");
     
     if (typeof params.ID_menu === "string" && typeof params.ID_restaurant === "string") {
-      console.log("TYPE CORRECT");
       
       const ID_menu = parseInt(params.ID_menu);
       const ID_restaurant = parseInt(params.ID_restaurant);
       const resto = await getRestaurants_Historique({'ID_restaurant':ID_restaurant},true,false,1);
-      console.log("GETTED RESTO");
       
-      const recherche = await getRecherches_Historique({'ID_restaurant':ID_restaurant,'ID_menu':ID_menu});
+      const recherche = await getRecherches_Historique({'ID_menu':ID_menu});
 
-      console.log("GETTED recherche");
-      const textrequested = recherche?.at(0).Text_request;
-      console.log("GO analyse");
-      
-      const lines = await FormatDataPlatReconnu(textrequested);
+      const textrequested : any[]= JSON.parse(recherche?.at(0).Text_request);
+      const texts = [];
+      for(const obj of textrequested){texts.push(obj.text);}
+      const lines = await FormatDataPlatReconnu(texts);
 
-      console.log("LE SETT");
-      
       setPlats(lines);
-      console.log("SET");
+      setIsloaded(true);
       
     }
     else{
@@ -72,6 +67,11 @@ export default function menus() {
   // useEffect(()=>{
   //   loadsplats();
   // },[]);
+  useFocusEffect(
+    useCallback(()=>{
+      loadsplats();
+    },[])
+  );
 
   return (
       <View style={styles.container}>
@@ -79,7 +79,7 @@ export default function menus() {
           <View style={styles.link}>
             <AntDesign name="arrowleft" size={24} color="black" onPress={retour} />
           </View>
-          <Text style={styles.headerText}> Menu {params.id}</Text>
+          <Text style={styles.headerText}> Menu {params.ID_menu}</Text>
         </View>
 
         {isloaded ?
