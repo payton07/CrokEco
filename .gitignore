@@ -8,7 +8,7 @@ packages/frontend/*
 !packages/frontend/.prettierrc
 !packages/frontend/tsconfig.json
 !packages/frontend/app
-!packages/frontend/app.json
+# !packages/frontend/app.json
 !packages/frontend/components
 !packages/frontend/constants
 !packages/frontend/eslint.config.mjs

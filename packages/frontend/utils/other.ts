@@ -2,7 +2,7 @@ import hmac from 'crypto-js/hmac-sha256';
 import { getIngredients, getPlats, getPlats_Ingredients, getSous_Groupes } from "./bdd";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
-const SECRET_KEY = Constants.expoConfig?.extra?.secret_key ?? "default_secret_key";
+const SECRET_KEY = Constants.expoConfig?.extra?.SECRET_KEY ?? "default_secret_key";
 // console.log(SECRET_KEY); 
 
 export type info_t =  {Nom : string, Score : string , Unite : string,id:number};
