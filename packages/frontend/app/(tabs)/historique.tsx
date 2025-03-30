@@ -21,6 +21,7 @@ export default function History() {
     
     if(MENUS !=undefined) {
       if(MENUS.length > 0) {setMenus(MENUS); setIsloaded(true);}
+      else{setMenus([]);setIsloaded(false);}
     }
   }
   

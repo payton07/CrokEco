@@ -43,7 +43,8 @@ CREATE TABLE "Plats" (
   "ID_plat" INTEGER,
   "Nom_plat" VARCHAR(50),
   "Certified" INTEGER,
-  "Vote" INTEGER,
+  "Like" INTEGER,
+  "DisLike" INTEGER,
   CONSTRAINT PK_PLATS PRIMARY KEY("ID_plat")
 );
 

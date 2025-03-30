@@ -167,32 +167,39 @@ export async function getSmt(
  * @param query 
  * @param set 
  * @returns 
- */
-export async function updateSmt(table: string, query: string, set:any): Promise<number> {
+*/
+
+export async function updateSmt(
+  table: string,
+  query: string,
+  set: Record<string, any>
+): Promise<number> {
   await initDB();
-  const res: number[] | PromiseLike<number> = [];
+  
+  let changes = 0; 
+
   await db.withTransactionAsync(async () => {
-    const statement = await db.prepareAsync(
-      `
+    const updateQuery = `
       UPDATE ${table}
-      SET ${Object.entries(set)
-          .map(b => {
-              return `${b[0]} = '${b[1]}'`;
-          })
-          .join(", ")}
+      SET ${Object.keys(set).map(key => `${key} = ?`).join(", ")}
       WHERE ${query};
-  `
-    );
+    `;
+
+    const values = Object.values(set);
+
+    const statement = await db.prepareAsync(updateQuery);
     try {
-      const result = await statement.executeAsync();
-      res.push(result.changes);
-      
+      const result = await statement.executeAsync(values);
+      changes = result.changes; 
     } finally {
       await statement.finalizeAsync();
     }
   });
-  return res[0];
+
+  return changes; 
 }
+
+
 /**
  * 
  * @param table 
@@ -336,48 +343,39 @@ export async function getLastElementPlats(): Promise<any | undefined> {
 /**
  * UPDATES PAR TABLE
  */
-export async function updateIngredients(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_ingredient}'`;
+export async function updateIngredients(data : any,query : string): Promise<number> {
   const res:number = await updateSmt("Ingredients",query,data);
   return res ;
 }
-export async function updatePlats(data : any): Promise<number> {
-  const query = `idCD = '${data.Ciqual_AGB}'`;
+export async function updatePlats(data : any,query : string): Promise<number> {
   const res:number = await updateSmt("Plats",query,data);
   return res ;
 }
-export async function updateSous_Groupes(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_sous_groupe}'`;
+export async function updateSous_Groupes(data : any,query : string): Promise<number> {
   const res:number = await updateSmt("Sous_Groupes",query,data);
   return res ;
 }
-export async function updateGroupes(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_groupe}'`;
+export async function updateGroupes(data : any,query : string): Promise<number> {
   const res:number = await updateSmt("Groupes",query,data);
   return res ;
 }
-export async function updateRecherches(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_recherche}'`;
+export async function updateRecherches(data : any,query : string): Promise<number> {
   const res:number = await updateSmt("Recherches",query,data);
   return res ;
 }
-export async function updateMenus(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_menu}'`;
+export async function updateMenus(data : any,query : string): Promise<number> {
   const res:number = await updateSmt("Menus",query,data);
   return res ;
 }
-export async function updateRestaurants(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_menu}'`;
+export async function updateRestaurants(data : any,query : string): Promise<number> {
   const res:number = await updateSmt("Restaurants",query,data);
   return res ;
 }
-export async function updatePlats_Ingredients(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_menu}'`;
+export async function updatePlats_Ingredients(data : any,query : string): Promise<number> {
   const res:number = await updateSmt("Plats_Ingredients",query,data);
   return res ;
 }
-export async function updateMenus_Plats(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_menu}'`;
+export async function updateMenus_Plats(data : any,query : string): Promise<number> {
   const res:number = await updateSmt("Menus_Plats",query,data);
   return res ;
 }

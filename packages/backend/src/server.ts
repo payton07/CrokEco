@@ -1,6 +1,6 @@
 import Fastify from 'fastify';
 import type { FastifyRequest, FastifyReply } from 'fastify';
-import { addMenus_Client, addPlats_Client, addPlats_Ingredients_Client, addRecherches_Client, addRestaurant_Client, getElementsPlatsAfter, getIngredients, getLastElementPlats, getMenus_Client, getPlats, getPlats_Client, getPlats_Ingredients, getRecherches_Client, getRestaurant_Client } from '../utils/acces_bdd.ts';
+import { addMenus_Client, addPlats_Client, addPlats_Ingredients_Client, addRecherches_Client, addRestaurant_Client, getElementsPlatsAfter, getIngredients, getLastElementPlats, getMenus_Client, getPlats, getPlats_Client, getPlats_Ingredients, getRecherches_Client, getRestaurant_Client, updatePlats_Client } from '../utils/acces_bdd.ts';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
 
@@ -53,9 +53,23 @@ fastify.get('/api/plats', async (request, reply) => {
     const data = await getPlats(false, true, false);
     console.log("la data",data);
     
-    return reply.send(data);
+    return reply.send(JSON.stringify(data));
   } catch (err) {
     console.error("Erreur lors de la récupération des plats:", err);
+    return reply.status(500).send({ error: 'Erreur interne du serveur' });
+  }
+});
+
+fastify.get('/api/plats_client', async (request, reply) => {
+  
+  console.log("get plats_client");
+  try {
+    const data = await getPlats_Client(false, true, false);
+    console.log("la data",data?.length);
+    
+    return reply.send(JSON.stringify(data));
+  } catch (err) {
+    console.error("Erreur lors de la récupération des plats clients:", err);
     return reply.status(500).send({ error: 'Erreur interne du serveur' });
   }
 });
@@ -72,7 +86,7 @@ fastify.get('/api/plats/:id', async (request: FastifyRequest<{ Params: { id: str
     if (!data) {
       return reply.status(404).send({ error: 'Plat non trouvé' });
     }
-    return reply.send(data);
+    return reply.send(JSON.stringify(data));
   } catch (err) {
     console.error("Erreur lors de la récupération du plat:", err);
     return reply.status(500).send({ error: 'Erreur interne du serveur' });
@@ -85,7 +99,7 @@ fastify.get('/api/ingredients', async (request, reply) => {
   try {
     const data = await getIngredients(false, true, false);
     
-    return reply.send(data);
+    return reply.send(JSON.stringify(data));
   } catch (err) {
     console.error("Erreur lors de la récupération des ingredients:", err);
     return reply.status(500).send({ error: 'Erreur interne du serveur' });
@@ -104,7 +118,7 @@ fastify.get('/api/ingredients/:id', async (request: FastifyRequest<{ Params: { i
     if (!data) {
       return reply.status(404).send({ error: 'Ingredient non trouvé' });
     }
-    return reply.send(data);
+    return reply.send(JSON.stringify(data));
   } catch (err) {
     console.error("Erreur lors de la récupération de l'ingredient:", err);
     return reply.status(500).send({ error: 'Erreur interne du serveur' });
@@ -125,7 +139,7 @@ fastify.post('/api/plats', async (request, reply) => {
   }
 
   try {
-    const plat = {'Nom_plat' : name ,'Certified' : 0,'Vote' : 0};
+    const plat = {'Nom_plat' : name ,'Certified' : 0,'Like':0,'DisLike':0};
     const result = await addPlats_Client(plat);
     const leplat = await getPlats_Client({'ID_plat':result},true,false,1);
     const platres = leplat != undefined ? leplat[0] : {};
@@ -292,7 +306,52 @@ fastify.post('/api/updates', async (request, reply) => {
     return reply.status(500).send({ error: 'Erreur interne du serveur' });
   }
 });
+fastify.post('/api/updates/plats', async (request, reply) => {
+  const data = request.body as {query:any, set:any};
+  const {query, set} = data;
+  
+  console.log(`Tentative de mise à jour du plat :${query} le set : ${set}`);
 
+  const clientSignature = request.headers['x-signature'] as string;
+  const timestamp = request.headers['x-timestamp'] as string;
+
+  if (!verifyHMACSignature('POST', 'updates/plats', data, timestamp, clientSignature)) {
+    console.log('signature');
+    
+    return reply.status(400).send({ status: 'error', message: 'Signature invalide' });
+  }
+
+  try {
+    const platUpdate : any[] | undefined = await getPlats_Client(query,true,true,1);
+    console.log('Plat get pour update :',platUpdate);
+    
+
+    if(platUpdate !=undefined && platUpdate.length >0 ){
+      const plat = platUpdate.at(0);
+      const query2 = `ID_plat = ${parseInt(plat.ID_plat)}`;
+
+      Object.entries(set).map((a)=>{plat[a[0]] = a[1];});
+      delete plat['ID_plat'];
+      console.log('plat res :',plat);
+      
+      const id_plat = await updatePlats_Client(plat,query2);
+      if(id_plat){
+        console.log("Plat mise à jour ");
+        
+        return reply.status(201).send({ message: 'Plat mise à jour ', code : id_plat});
+      }
+      console.log("l'id plat res pb");
+      
+    }
+    console.log("pb man");
+
+    return reply.status(400).send({ error: `Échec de la mise à jour du plat ${query}` });
+    
+  } catch (err) {
+    console.error("Erreur lors de la mise à jour :", err);
+    return reply.status(500).send({ error: 'Erreur interne du serveur' });
+  }
+});
 // Démarrer le serveur
 fastify.listen(port, (err, address) => {
   if (err) {

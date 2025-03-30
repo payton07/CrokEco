@@ -101,31 +101,38 @@ export async function getSmt(table: string, data: any, all = false, limit: boole
 }
 
 
-export async function updateSmt(table: string, query: string, set: any): Promise<number> {
+export async function updateSmt(
+  table: string,
+  query: string,
+  set: Record<string, any>
+): Promise<number> {
   await initDB();
-  return new Promise((resolve, reject) => {
 
+  return new Promise((resolve, reject) => {
     if (!db) {
       return reject(new Error("La base de données n'est pas ouverte."));
     }
 
+    // Création de la requête sécurisée
     const updateQuery = `
       UPDATE ${table}
-      SET ${Object.entries(set)
-        .map(b => `${b[0]} = '${b[1]}'`)
-        .join(", ")}
+      SET ${Object.keys(set).map(key => `${key} = ?`).join(", ")}
       WHERE ${query};
     `;
 
+    console.log("update query :", updateQuery);
+    
     const stmt = db.prepare(updateQuery);
 
-    stmt.run(Object.values(set), function (this: sqlite3.RunResult, err: Error | null) {
+    stmt.run([...Object.values(set)], function (this: sqlite3.RunResult, err: Error | null) {
       if (err) {
         reject(new Error("Erreur lors de la mise à jour: " + err.message));
       } else {
         resolve(this.changes); 
       }
     });
+
+    stmt.finalize(); 
   });
 }
 
@@ -314,49 +321,44 @@ export async function getElementsPlatsAfter(data : any , after = true): Promise<
 /**
  * UPDATES PAR TABLE
  */
-export async function updateIngredients(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_ingredient}'`;
-  const res:number =  await updateSmt("Ingredients",query,data);
+export async function updateIngredients(data : any,query : string): Promise<number> {
+  const res:number = await updateSmt("Ingredients",query,data);
   return res ;
 }
-export async function updatePlats(data : any): Promise<number> {
-  const query = `idCD = '${data.Ciqual_AGB}'`;
-  const res:number =  await updateSmt("Plats",query,data);
+export async function updatePlats(data : any,query : string): Promise<number> {
+  const res:number = await updateSmt("Plats",query,data);
   return res ;
 }
-export async function updateSous_Groupes(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_sous_groupe}'`;
-  const res:number =  await updateSmt("Sous_Groupes",query,data);
+export async function updateSous_Groupes(data : any,query : string): Promise<number> {
+  const res:number = await updateSmt("Sous_Groupes",query,data);
   return res ;
 }
-export async function updateGroupes(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_groupe}'`;
-  const res:number =  await updateSmt("Groupes",query,data);
+export async function updateGroupes(data : any,query : string): Promise<number> {
+  const res:number = await updateSmt("Groupes",query,data);
   return res ;
 }
-export async function updateTags(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_tags}'`;
-  const res:number =  await updateSmt("Tags",query,data);
+export async function updateRecherches(data : any,query : string): Promise<number> {
+  const res:number = await updateSmt("Recherches",query,data);
   return res ;
 }
-export async function updateRecherche(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_recherche}'`;
-  const res:number =  await updateSmt("Recherche",query,data);
+export async function updateMenus(data : any,query : string): Promise<number> {
+  const res:number = await updateSmt("Menus",query,data);
   return res ;
 }
-export async function updateHistorique(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_historique}'`;
-  const res:number =  await updateSmt("Historique",query,data);
+export async function updateRestaurants(data : any,query : string): Promise<number> {
+  const res:number = await updateSmt("Restaurants",query,data);
   return res ;
 }
-export async function updateMenu(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_menu}'`;
-  const res:number =  await updateSmt("Menu",query,data);
+export async function updatePlats_Ingredients(data : any,query : string): Promise<number> {
+  const res:number = await updateSmt("Plats_Ingredients",query,data);
   return res ;
 }
-export async function updateDesigne_Tags(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_tags}'`;
-  const res:number =  await updateSmt("Designe_Tags",query,data);
+export async function updateMenus_Plats(data : any,query : string): Promise<number> {
+  const res:number = await updateSmt("Menus_Plats",query,data);
+  return res ;
+}
+export async function updatePlats_Client(data : any,query : string): Promise<number> {
+  const res:number = await updateSmt("Plats_Client",query,data);
   return res ;
 }
 /**

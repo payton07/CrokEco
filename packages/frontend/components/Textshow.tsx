@@ -1,7 +1,7 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { StyleSheet, View,TouchableOpacity,Text} from "react-native";
+import { StyleSheet, View,TouchableOpacity,Text, Alert} from "react-native";
 
 function switchToDetails(ide : number){
   router.push({ pathname: `/(hidden)/details/[id]`, params: { id: ide}});
@@ -10,7 +10,7 @@ function switchToDetails(ide : number){
 export default function Textshow({ligne} : {ligne: {text: string, color: string,id : number | null}}){
 
   function call(){
-    if(ligne.id === null) return;
+    if(ligne.id === null) {Alert.alert("Ce plat n'existe pas dans nos données"); return;}
     switchToDetails(ligne.id);
   }
   

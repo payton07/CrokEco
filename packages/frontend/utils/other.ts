@@ -185,3 +185,15 @@ export async function updateRequest(data:{ ID_plat: any}){
   const res = await POST("updates",data);
   return res;
 }
+export async function updatePlatsRequest(data:{query:any, set:any}){
+  console.log("Update request");
+  const res = await POST("updates/plats",data);
+  return res;
+}
+
+
+export async function getPlat_a_Vote(id: string | boolean) {
+  const res = await GET('plats_client',id);
+  console.log("Plat client récupéré:", res);
+  return res;
+}
