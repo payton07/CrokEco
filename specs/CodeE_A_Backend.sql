@@ -40,12 +40,11 @@ CREATE TABLE "Ingredients" (
 
 
 CREATE TABLE "Plats" (
-  "ID_plat" INTEGER,
+  "ID_plat" INTEGER PRIMARY KEY AUTOINCREMENT,
   "Nom_plat" VARCHAR(50),
   "Certified" INTEGER,
   "Like" INTEGER,
-  "DisLike" INTEGER,
-  CONSTRAINT PK_PLATS PRIMARY KEY("ID_plat")
+  "DisLike" INTEGER
 );
 
 
@@ -128,6 +127,11 @@ CREATE TABLE "Recherches_Client" (
   CONSTRAINT FK_RECHERCHES_MENUS FOREIGN KEY ("ID_menu") REFERENCES Menus_Client("ID_menu")
 );
 
+CREATE TABLE "Users"(
+  "Nom" VARCHAR(30),
+  "Mdp" VARCHAR(60),
+  CONSTRAINT PK_NOM PRIMARY KEY ("Nom")
+);
   
   -- CONSTRAINT PK_RESTAURANTS_CLIENT PRIMARY KEY("ID_restaurant") 
     -- CONSTRAINT PK_MENUS PRIMARY KEY("ID_menu") 

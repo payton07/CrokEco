@@ -6,7 +6,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
 import TextRecognition from "@react-native-ml-kit/text-recognition";
 import { addMenus_Historique, addRecherches_Historique, addRestaurants_Historique, getPlats, getRestaurants } from "@/utils/bdd";
-import { ajouterMenu, ajouterRecherche, ajouterResto, change } from "@/utils/other";
+import { PostMenu, PostRecherche, PostResto, change } from "@/utils/other";
 import Textshow from "@/components/Textshow";
 
 import {useEffect } from "react";
@@ -141,17 +141,19 @@ async function LoadLocAndInsertClient_SendDataToServeur(lines : any[]){
     Latitude = location.coords.latitude;
   const resto = {'NomResto':nomResto,'Latitude':Latitude,'Longitude':Longitude,'Adresse':Adresse};
   await addRestaurants_Historique(resto);
-  const res1 = await ajouterResto(resto);
+  const res1 = await PostResto(resto);
 
   // TODO : FAUT GERER LE NOM DU MENU
   const menu = {'NomMenu':'menu','ID_restaurant':res1.code};
-  await addMenus_Historique(menu);
-  const res2 = await ajouterMenu(menu);
+  const res = await addMenus_Historique(menu);
+  console.log("res add menu histo",res);
+  
+  const res2 = await PostMenu(menu);
 
   const textReconnu = JSON.stringify(lines);
   const recherche = {'Text_request':textReconnu,'ID_menu':res2.code,'Date':new Date().toLocaleDateString("fr-FR")};
   await addRecherches_Historique(recherche);
-  await ajouterRecherche(recherche);
+  await PostRecherche(recherche);
   setNomResto('');
   }
   else{

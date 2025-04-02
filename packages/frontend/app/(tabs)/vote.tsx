@@ -6,7 +6,7 @@ import React, { useCallback, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Vote_display from "@/components/vote_display";
 import { useFocusEffect } from "expo-router";
-import { getPlat_a_Vote } from "@/utils/other";
+import { GetPlat_a_Vote } from "@/utils/other";
 
 export default function Votes() {
   const [plats, setPlats] = useState<any[]>([]);
@@ -14,7 +14,7 @@ export default function Votes() {
 
   async function loads(){
     // console.log("Call loads de votes");
-    const data = await getPlat_a_Vote(false);
+    const data = await GetPlat_a_Vote(false);
     console.log(data.message);
     
     // console.log("la data depuis la page votes :",data);

@@ -1,8 +1,13 @@
 import Fastify from 'fastify';
 import type { FastifyRequest, FastifyReply } from 'fastify';
-import { addMenus_Client, addPlats_Client, addPlats_Ingredients_Client, addRecherches_Client, addRestaurant_Client, getElementsPlatsAfter, getIngredients, getLastElementPlats, getMenus_Client, getPlats, getPlats_Client, getPlats_Ingredients, getRecherches_Client, getRestaurant_Client, updatePlats_Client } from '../utils/acces_bdd.ts';
+import { addMenus_Client, addPlats, addPlats_Client, addPlats_Ingredients, addPlats_Ingredients_Client, addRecherches_Client, addRestaurant_Client, addUsers, getElementsPlatsAfter, getIngredients, getLastElementPlats, getMenus_Client, getPlats, getPlats_Client, getPlats_Ingredients, getPlats_Ingredients_Client, getRecherches_Client, getRestaurant_Client, getUsers, updatePlats_Client } from '../utils/acces_bdd.ts';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import fastifyStatic from '@fastify/static';
+import bcrypt from 'bcrypt';
+import { HOST, PORT } from '../utils/other.ts';
 
 type resto = {'NomResto':string,'Latitude':number,'Longitude':number};
 type menu = {'NomMenu':string,'ID_restaurant':number};
@@ -31,18 +36,80 @@ function verifyHMACSignature(method : string, table: string, data : any, timesta
   
   return computedSignature === clientSignature;
 }
-const IP = '192.168.1.129';
-// const IP = '172.24.23.198';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const fastify = Fastify();
-const port = {port :3000,host: IP};
+const port = {port :PORT,host: HOST};
 
 
 
-// Route de base Entre 
+fastify.register(fastifyStatic, {
+  root: path.join(__dirname),
+  prefix: '/', // Accès direct aux fichiers
+});
+
+
+// Route pour la page d'accueil
 fastify.get('/', async (request, reply) => {
   console.log("Le hello world");
-  return { message: 'Hello, World!' };
+  return reply.send({message : "hello world !"});
 });
+
+fastify.get('/accueil', async (request, reply) => {
+  console.log("Dans accueil");
+  
+  
+  return reply.sendFile('accueil.html');
+
+});
+
+fastify.post('/login', async (request, reply) => {
+  // const name = "Chefadmin";
+  // const mdpadmin = "Co2score20252!";
+  // bcrypt.hash(mdpadmin, 10, async (err, hash) => {
+  //   if (err) {
+  //         console.error("Erreur de hachage :", err);
+  //         return;
+  //     }
+  //     const user = {'Nom':name,'Mdp':hash};
+  //     const res =await addUsers(user);
+  //     console.log("user inserer : id ", res);
+    
+  // });
+  const { nom, mdp } = request.body as { nom: string, mdp: string };
+
+  console.log("le nv mdp ,", mdp);
+
+  try {
+    // Récupère les utilisateurs (supposons que getUsers() retourne une liste d'objets utilisateurs)
+    const res1 = await getUsers(false, true, true, false);
+
+    // Si l'utilisateur est trouvé et que le nom correspond
+    if (res1 !== undefined && nom === res1.at(0).Nom) {
+
+      // Utilisation de la version asynchrone de bcrypt.compare avec await
+      const isMatch = await bcrypt.compare(mdp, res1.at(0).Mdp);
+
+      if (isMatch) {
+        console.log("Le mot de passe est correct !");
+        return reply.code(201).send({ message: "Connexion réussie !", code: 201 });
+      } else {
+        console.log("Le mot de passe est incorrect.");
+        return reply.code(404).send({ message: "Nom utilisateur ou mot de passe incorrect !", code: 404 });
+      }
+
+    } else {
+      console.log("Utilisateur non trouvé.");
+      return reply.code(404).send({ message: "Nom utilisateur ou mot de passe incorrect !", code: 404 });
+    }
+    
+  } catch (err) {
+    console.error("Erreur lors de la récupération des utilisateurs :", err);
+    return reply.code(500).send({ message: "Erreur interne du serveur", code: 500 });
+  }
+});
+    
 
 
 // Récupérer tous les plats
@@ -60,12 +127,12 @@ fastify.get('/api/plats', async (request, reply) => {
   }
 });
 
-fastify.get('/api/plats_client', async (request, reply) => {
+fastify.get('/api/platsClient', async (request, reply) => {
   
-  console.log("get plats_client");
+  console.log("get platsClient");
   try {
     const data = await getPlats_Client(false, true, false);
-    console.log("la data",data?.length);
+    console.log("la data",data?.length,data);
     
     return reply.send(JSON.stringify(data));
   } catch (err) {
@@ -124,9 +191,12 @@ fastify.get('/api/ingredients/:id', async (request: FastifyRequest<{ Params: { i
     return reply.status(500).send({ error: 'Erreur interne du serveur' });
   }
 });
-
+/**
+ * Requetes d'ajout
+ *  
+ */
 // Ajouter un Plats
-fastify.post('/api/plats', async (request, reply) => {
+fastify.post('/api/platsClient', async (request, reply) => {
   const data = request.body as FormsDatas;
   const {name,ingredients} = data;
   console.log(`Tentative d'ajout d'un nouveau plat avec Nom_plat: ${name}`);
@@ -134,7 +204,7 @@ fastify.post('/api/plats', async (request, reply) => {
   const clientSignature = request.headers['x-signature'] as string;
   const timestamp = request.headers['x-timestamp'] as string;
 
-  if (!verifyHMACSignature('POST', 'plats', data, timestamp, clientSignature)) {
+  if (!verifyHMACSignature('POST', 'platsClient', data, timestamp, clientSignature)) {
     return reply.status(400).send({ status: 'error', message: 'Signature invalide' });
   }
 
@@ -160,6 +230,38 @@ fastify.post('/api/plats', async (request, reply) => {
       }
     }
     return reply.status(201).send({ message: 'Plat ajouté avec succès', code : result });
+  } catch (err) {
+    console.error("Erreur lors de l'ajout du Plat:", err);
+    return reply.status(500).send({ error: 'Erreur interne du serveur' });
+  }
+});
+
+fastify.post('/api/platsInsert', async (request, reply) => {
+  const obj = request.body as {'ID_plat':number};
+  // const {name,ingredients} = data;
+  console.log(`Tentative d'ajout d'un nouveau plat avec Nom_plat: ${name}`);
+
+  // const clientSignature = request.headers['x-signature'] as string;
+  // const timestamp = request.headers['x-timestamp'] as string;
+
+  // if (!verifyHMACSignature('POST', 'plats', data, timestamp, clientSignature)) {
+  //   return reply.status(400).send({ status: 'error', message: 'Signature invalide' });
+  // }
+
+  try {
+    const plats = await getPlats_Client(obj,true,true,1);
+    const assoc = await getPlats_Ingredients_Client(obj,true,true,false);
+    const plat = plats?.at(0);
+    delete plat.ID_plat;
+    const res = addPlats(plat);
+    if(res && assoc !=undefined && assoc.length >0){
+        assoc.map(async (a)=> {
+            a.ID_plat = res;
+            await addPlats_Ingredients(a);
+        });
+        return reply.status(201).send({ message: 'Plat ajouté avec succès', code : 201});
+      }
+      return reply.status(201).send({ message: 'Failed ', code : 404});
   } catch (err) {
     console.error("Erreur lors de l'ajout du Plat:", err);
     return reply.status(500).send({ error: 'Erreur interne du serveur' });
@@ -261,7 +363,10 @@ fastify.post('/api/recherches', async (request, reply) => {
   }
 });
 
-// UpdateRequest 
+/**
+ * UpdateRequests
+ */
+
 fastify.post('/api/updates', async (request, reply) => {
   const data = request.body as { ID_plat: any};
   const {ID_plat} = data;

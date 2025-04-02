@@ -81,6 +81,7 @@ export type FormData = {
 const port = 3000;
 const IP = '192.168.1.129';
 // const IP = '172.24.23.198';
+// const IP = '127.0.0.1';
 const url = `http://${IP}:${port}/api/`;
 
 function genereHMACSignature(method: string, table: string, data: any) {
@@ -139,15 +140,15 @@ async function POST(table: string, data: any) {
  *  OPE suf PLAT 
  * @param data 
  */
-export async function ajouterPlat(data: FormData) {
+export async function PostPlatClient(data: FormData) {
   console.log("appel à ajoutPlat");
-  const res = await POST("plats", data);
+  const res = await POST("platsClient", data);
   console.log("res :",res);
   return res;
 }
 
-export async function getPlat(id: string | boolean) {
-  const res = await GET('plats',id);
+export async function GetPlatClient(id: string | boolean) {
+  const res = await GET('platsClient',id);
   console.log("Plat récupéré:", res);
 }
 
@@ -159,41 +160,41 @@ type resto = {'NomResto':string,'Latitude':number,'Longitude':number};
 type menu = {'NomMenu':string,'ID_restaurant':number};
 type recherche = {'Text_request':string,'ID_menu':number,'Date':string};
 
-export async function ajouterResto(data: resto) {
+export async function PostResto(data: resto) {
   console.log("appel à ajoutResto");
   const res = await POST("restaurants", data);
   console.log("res resto :",res);
   return res;
 }
 
-export async function ajouterMenu(data: menu) {
-  console.log("appel à ajoutResto");
+export async function PostMenu(data: menu) {
+  console.log("appel à ajoutMenu");
   const res = await POST("menus", data);
   console.log("res resto :",res);
   return res;
 }
 
-export async function ajouterRecherche(data: recherche) {
-  console.log("appel à ajoutResto");
+export async function PostRecherche(data: recherche) {
+  console.log("appel à ajoutRecherche");
   const res = await POST("recherches", data);
   console.log("res resto :",res);
 }
 
 
-export async function updateRequest(data:{ ID_plat: any}){
+export async function PostUpdateRequest(data:{ ID_plat: any}){
   console.log("Update request");
   const res = await POST("updates",data);
   return res;
 }
-export async function updatePlatsRequest(data:{query:any, set:any}){
+export async function PostUpdatePlatsRequest(data:{query:any, set:any}){
   console.log("Update request");
   const res = await POST("updates/plats",data);
   return res;
 }
 
 
-export async function getPlat_a_Vote(id: string | boolean) {
-  const res = await GET('plats_client',id);
+export async function GetPlat_a_Vote(id: string | boolean) {
+  const res = await GET('platsClient',id);
   console.log("Plat client récupéré:", res);
   return res;
 }

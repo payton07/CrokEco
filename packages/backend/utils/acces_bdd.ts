@@ -171,6 +171,13 @@ export async function getIngredients(data : boolean | any =false,all=false,str=f
     return res ;
   }
 }
+export async function getPlats_Ingredients_Client(data : boolean | any =false,all=false,str=false,limit: boolean | number=10): Promise<any[] | undefined> {
+  const res:any[] =  await getSmt("Plats_Ingredients_Client",data,all,limit,str);
+  if(!res || res.length ==0){ return all? [] : undefined}
+  else {
+    return res ;
+  }
+}
 export async function getPlats_Client(data : boolean | any =false,all=false,str=false,limit: boolean | number=10): Promise<any[] | undefined> {
   const res:any[] =  await getSmt("Plats_Client",data,all,limit,str);
   if(!res || res.length ==0){ return all? [] : undefined}
@@ -257,6 +264,13 @@ export async function getMenu(data : boolean | any =false,all=false): Promise<an
 }
 export async function getDesigne_Tags(data : boolean | any =false,all=false): Promise<any[] | undefined> {
   const res:any[]| undefined =  await getSmt("Designe_Tags",data,all,10);
+  if(!res || res.length ==0){ return all? [] : undefined}
+  else {
+    return res ;
+  }
+}
+export async function getUsers(data : boolean | any =false,all=false,str=false,limit:number | boolean=10): Promise<any[] | undefined> {
+  const res:any[]| undefined =  await getSmt("Users",data,all,limit,str);
   if(!res || res.length ==0){ return all? [] : undefined}
   else {
     return res ;
@@ -376,6 +390,10 @@ export  async function addPlats_Client(data : boolean | any =false): Promise<num
   const res:number =  await addSmt("Plats_Client",data);
   return res ;
 }
+export  async function addPlats_Ingredients(data : boolean | any =false): Promise<number> {
+  const res:number =  await addSmt("Plats_Ingredients",data);
+  return res ;
+}
 export  async function addPlats_Ingredients_Client(data : boolean | any =false): Promise<number> {
   const res:number =  await addSmt("Plats_Ingredients_Client",data);
   return res ;
@@ -419,6 +437,10 @@ export  async function addMenu(data : boolean | any =false): Promise<number> {
 }
 export  async function addDesigne_Tags(data : boolean | any =false): Promise<number> {
   const res:number =  await addSmt("Designe_Tags",data);
+  return res ;
+}
+export  async function addUsers(data : boolean | any =false): Promise<number> {
+  const res:number =  await addSmt("Users",data);
   return res ;
 }
 /**

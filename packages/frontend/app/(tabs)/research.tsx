@@ -7,7 +7,7 @@ import { addPlats, addPlats_Ingredients, getLastElementPlats, getPlats, initDB,}
 import Searcher from "@/components/Searcher";
 import Favoris from "@/components/Favoris";
 import Suggestion from "@/components/Suggestion";
-import { change, getDataWithCacheExpiration, updateRequest} from "@/utils/other";
+import { change, getDataWithCacheExpiration, PostUpdateRequest} from "@/utils/other";
 const DO_MAJ_CODE = 3333;
 type Plat = {"Certified": number, "ID_plat": string, "Nom_plat": string, "Vote":number};
 const ele = { info: { Nom: "Pomme", categorie: "Fruit", Score: "0.5", Unite: "kg CO2 eq/kg de produit", id: 1 }, back: "Green" };
@@ -95,7 +95,7 @@ export default function Research() {
     const ele = await getLastElementPlats();
     if(ele != null){
       const data = {'ID_plat':ele?.ID_plat};
-      const laMaj = await updateRequest(data);
+      const laMaj = await PostUpdateRequest(data);
       if(laMaj) await DoUpdates(laMaj);
     }
     else{

@@ -1,4 +1,4 @@
-import { updatePlatsRequest } from '@/utils/other';
+import { PostUpdatePlatsRequest } from '@/utils/other';
 import { AntDesign } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { StyleSheet, View,TouchableOpacity,Text} from "react-native";
@@ -14,12 +14,12 @@ export default function Vote_display({ligne} : {ligne: {ID_plat: number,Certifie
   async function dislike(){
     call();
     const set = {'DisLike':ligne.DisLike+1};
-    await updatePlatsRequest({query:query,set : set});
+    await PostUpdatePlatsRequest({query:query,set : set});
   }
   async function like(){
     call();
     const set = {'Like':ligne.Like+1};
-    await updatePlatsRequest({query:query,set : set});
+    await PostUpdatePlatsRequest({query:query,set : set});
   }
   
   return (<View style={styles.reco}>
