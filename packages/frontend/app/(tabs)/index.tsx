@@ -108,7 +108,7 @@ export default function Index(){
   };
 
 async function FormatDataPlatReconnu(data : string[]){
-  const lines = [];
+  const lines : any[] = [];
   for (const ligne of data) {
     const query = `${ligne}`;
     try {
@@ -131,8 +131,8 @@ async function FormatDataPlatReconnu(data : string[]){
 
 async function LoadLocAndInsertClient_SendDataToServeur(lines : any[]){
   // TODO SEND RESTO AU SERVEUR ET IL FAUT DONC LA LOC
-  let Longitude = null ;
-  let Latitude = null ;
+  let Longitude = 0 ;
+  let Latitude = 0 ;
   if(!loc){
     getLocation();
   }
@@ -192,7 +192,7 @@ async function setRecoData(){
       const result = await TextRecognition.recognize(imageUri);
       const inter : TextBlock[] = result.blocks;
       const sortedText = sortRecognizedText(inter || []); 
-      const lines = []
+      const lines : string[]= []
       for (const ligne of sortedText.split("\n")) {
         const v = ligne.split("*");
         lines.push(v[0]);

@@ -9,12 +9,12 @@ export type info_t =  {Nom : string, Score : string , Unite : string,id:number};
 export async function change(idplat : number  ) {
   if(idplat != undefined){
     //const ras = await getPlats({ID_plat : idplat},false,true);
-    const plat_ingredients = await getPlats_Ingredients({ID_plat : idplat},true, false, 10);
+    const plat_ingredients = await getPlats_Ingredients({'ID_plat' : idplat},true, false, 10);
     let score : number = 0;
-    let ingredients_data = [];
+    let ingredients_data : any[] = [];
     if(plat_ingredients !=undefined) {
       for (const ligne of plat_ingredients) {
-        const res = await getIngredients({Code_AGB : ligne.ID_ingredient},false,false,1);
+        const res = await getIngredients({'Code_AGB' : ligne.ID_ingredient},false,true,1);
         ingredients_data.push(res?.at(0));
         score += res?.at(0).Score_unique_EF;
       }
@@ -80,7 +80,7 @@ export type FormData = {
 };
 const port = 3000;
 const IP = '192.168.1.129';
-// const IP = '172.24.23.198';
+// const IP = '172.30.22.24';
 // const IP = '127.0.0.1';
 const url = `http://${IP}:${port}/api/`;
 
