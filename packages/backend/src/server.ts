@@ -64,9 +64,18 @@ fastify.get('/accueil', async (request, reply) => {
 
 });
 
+fastify.get('/ajout', async (request, reply) => {
+  console.log("Dans accueil");
+  
+  // Verif connexion avant sinon return ;
+  
+  return reply.sendFile('ajout.html');
+
+});
+
 fastify.post('/login', async (request, reply) => {
-  // const name = "Chefadmin";
-  // const mdpadmin = "Co2score20252!";
+  // const name = "admin";
+  // const mdpadmin = "123";
   // bcrypt.hash(mdpadmin, 10, async (err, hash) => {
   //   if (err) {
   //         console.error("Erreur de hachage :", err);
@@ -239,7 +248,7 @@ fastify.post('/api/platsClient', async (request, reply) => {
 fastify.post('/api/platsInsert', async (request, reply) => {
   const obj = request.body as {'ID_plat':number};
   // const {name,ingredients} = data;
-  console.log(`Tentative d'ajout d'un nouveau plat avec Nom_plat: ${name}`);
+  console.log(`Tentative d'ajout d'un nouveau plat avec Nom_plat: ${obj}`);
 
   // const clientSignature = request.headers['x-signature'] as string;
   // const timestamp = request.headers['x-timestamp'] as string;
@@ -253,6 +262,8 @@ fastify.post('/api/platsInsert', async (request, reply) => {
     const assoc = await getPlats_Ingredients_Client(obj,true,true,false);
     const plat = plats?.at(0);
     delete plat.ID_plat;
+    console.log(plat);
+    
     const res = addPlats(plat);
     if(res && assoc !=undefined && assoc.length >0){
         assoc.map(async (a)=> {

@@ -2,6 +2,7 @@
 // import {addPlats, addPlats_Ingredients, getPlats_Ingredients_Client} from "../utils/acces_bdd.ts"
 // import { HOST, PORT } from '../utils/other.js';
 const HOST = '192.168.1.129';
+// const HOST = '172.30.22.24';
 const PORT = 3000;
 
 const IP = HOST;
@@ -32,14 +33,25 @@ async function fetchPlats() {
 
 async function ajouterPlat(id) {
     const url1 = `http://${IP}:${port}/api/platsInsert`;
+    console.log(url1);
+    
     // /api/platsInsert
-    const response = await fetch(url1, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 'ID_plat':id})
-    });
-    const result = await response.json();
-    alert(result.message);
+    try {
+        const data = { 'ID_plat':id};
+        const response = await fetch(url1, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        });
+        const result = await response.json();
+        // console.log("message d'erreur: ",result);
+        
+        // alert(result.message);
+    }
+    catch(error){
+        console.log(error);
+        
+    }
 
 }
 
