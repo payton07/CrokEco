@@ -264,8 +264,8 @@ export async function getPlats(data : boolean | any =false,all=false,str=false,l
     return res ;
   }
 }
-export async function getSous_Groupes(data : boolean | any =false,all=false): Promise<any[] | undefined> {
-  const res:any[]| undefined = await getSmt("Sous_Groupes",data,all,10);
+export async function getSous_Groupes(data : boolean | any =false,all=false,str=false,limit:number | boolean=10): Promise<any[] | undefined> {
+  const res:any[]| undefined = await getSmt("Sous_Groupes",data,all,limit,str);
   if(!res || res.length ==0){ return all? [] : undefined}
   else {
     return res ;

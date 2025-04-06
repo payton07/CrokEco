@@ -4,11 +4,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
 const SECRET_KEY = Constants.expoConfig?.extra?.SECRET_KEY ?? "default_secret_key";
 // console.log(SECRET_KEY); 
-
+export const good = "#4CAF50";
+export const bad = "red";
+export const ok = "orange";
+export const blue = "blue";
 export type info_t =  {Nom : string, Score : string , Unite : string,id:number};
 export async function change(idplat : number  ) {
   if(idplat != undefined){
-    //const ras = await getPlats({ID_plat : idplat},false,true);
     const plat_ingredients = await getPlats_Ingredients({'ID_plat' : idplat},true, false, 10);
     let score : number = 0;
     let ingredients_data : any[] = [];
@@ -18,29 +20,34 @@ export async function change(idplat : number  ) {
         ingredients_data.push(res?.at(0));
         score += res?.at(0).Score_unique_EF;
       }
+      const obj_ingredient_out = [];
+      for (const ingredient of ingredients_data) {
+        const obj = [ingredient.Nom_Francais,[((ingredient.Score_unique_EF / score)*100).toPrecision(3),Qualite(ingredient.Score_unique_EF)]];
+        obj_ingredient_out.push(obj);
+      }
       const plat = await getPlats({ID_plat : idplat},false,false);
       const info :info_t = {Nom: plat?.at(0).Nom_plat, Score: score.toPrecision(3), Unite:"mPt / kg de produit",id:idplat};
-      const out = {info : info, back : Qualite(score),ingredients : ingredients_data};
+      const out = {info : info, color : Qualite(score),ingredients : obj_ingredient_out};
       return out;
     }
     else {
-      return {info : undefined, back : undefined,ingredients :[]};
+      return {info : undefined, color : undefined,ingredients :[]};
     }
   }
-  return {info : undefined, back : undefined,ingredients :[]};
+  return {info : undefined, color : undefined,ingredients :[]};
 }
 
 export function Qualite(score : number) {
   if (score == 0) {
-    return "blue";
+    return blue;
   }
   if (score <= 1) {
-    return "green";
+    return good;
   }
   if (score >1 && score <=5) {
-    return "orange";
+    return ok;
   }
-  return "red";
+  return bad;
 }
 
 export async function getDataWithCacheExpiration(key:string, CallFunction : ()=>{}, expirationTimeInMinutes = 30) {
@@ -197,4 +204,23 @@ export async function GetPlat_a_Vote(id: string | boolean) {
   const res = await GET('platsClient',id);
   console.log("Plat client récupéré:", res);
   return res;
+}
+
+export async function Ping() {
+  const urll = `http://${IP}:${port}/ping`;
+  try {
+    const response = await fetch(urll, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" }
+    });
+
+    if (!response.ok) {
+      return response.status;
+    }
+    const data = await response.json();
+    return data.code ;
+  } catch (error) {
+    console.error("Erreur lors du ping:", error);
+    return null ;
+  }
 }

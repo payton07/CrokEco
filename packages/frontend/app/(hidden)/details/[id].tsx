@@ -2,86 +2,32 @@ import React, { useEffect, useState } from "react";
 import {StyleSheet, View,Text, ScrollView, Alert} from "react-native";
 import { Image} from 'expo-image';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { Link, router, Stack, useLocalSearchParams } from "expo-router";
-import { getIngredients, getPlats, getSous_Groupes } from "@/utils/bdd";
+import { router,useLocalSearchParams } from "expo-router";
 import { images } from "@/utils/picture";
 import * as FileSystem from 'expo-file-system';
-import { set } from "zod";
 import ProgressBar from "@/components/progressBar";
-import Info from '../../(tabs)/vote';
-import { change, Qualite } from "@/utils/other";
+import { change} from "@/utils/other";
 import { info_t } from '../../../utils/other';
-// type info_t =  {Nom : string ,categorie : string , Score : string , Unite : string};
-// const imagePath = FileSystem.documentDirectory;
-// const end = ".png";
-// boeuf
-
-/**
- * 
- * Pour la partie image : 25+ h de taff 
- * 
- * 
- * 
- *         // const name = images.ele; 
-        
-        // const n = "Carotte";
-        // console.log(as);
-        // const fin = `${imagePath}${as}${end}`;
-        // // const imageUrl = "@/assets/ingImages/"+as;
-        // const imageUrl = "http://localhost:8888/"+as;
-        // // const fin = require(imageUrl);
-        // // setImg(fin);
-
-        // const fileInfo = await FileSystem.getInfoAsync(fin);
-        // // TODO : ligne de delete à enlever potentielement
-        // await FileSystem.deleteAsync(fin, { idempotent: true }); 
-        // // await reloadImage(fin,imageUrl)
-        // if (fileInfo.exists) {
-        //   console.log("l'image exists",fileInfo.size);
-        //   setImg(fin);
-        //   return ;
-        // }
-
-        // console.log("Suppression de l'ancienne image...");
-        // await FileSystem.deleteAsync(fin, { idempotent: true });
-  
-        // console.log("Téléchargement de l'image...");
-        // const downloadResumable = FileSystem.createDownloadResumable(imageUrl, fin);
-  
-        // try {
-        //   const { uri } = await downloadResumable.downloadAsync();
-        //   console.log("Téléchargement terminé :", uri);
-        //   setImg(uri);
-        // } catch (error) {
-        //   console.error("Erreur lors du téléchargement :", error);
-        // }
- */
 
 export default function details() {
   const [img, setImg] = useState<string|null>("@/assets/ingImage.image.png");
   const [info, setInfo] = useState<info_t>();
-  const [ing,setIng] = useState<any[]>([]);
-  const [back, setBack] = useState("black");
-  // {}
+  const [ingredients_info,setIngredients_info] = useState<any[]>([]);
+  const [color, setColor] = useState("black");
   const params = useLocalSearchParams(); 
 
   function retour() {
       router.push({ pathname: `/(tabs)/research`});
   }
-  useEffect(() => {
-    /**
-     * TODO Faire un gros import des images pour aleger le chargement 
-     * EXEMPLE : 
-     * 
-     */ 
   async function load(){
     if (typeof params.id === "string") {
       const ID_plat = parseInt(params.id);
         const obj = await change(ID_plat);
-        if(obj.back != undefined && obj.info !=undefined ){
-          setIng(obj.ingredients);
+        
+        if(obj!=undefined && obj.color != undefined && obj.info !=undefined ){
+          setIngredients_info(obj.ingredients);
           setInfo(obj.info);
-          setBack(obj.back);
+          setColor(obj.color);
         }
         else{
           Alert.alert('Aucune info de ce plat !');
@@ -91,6 +37,13 @@ export default function details() {
       console.log("Pas de bon id de plat route : (Details/[id])");
     }
   }
+
+  useEffect(() => {
+    /**
+     * TODO Faire un gros import des images pour aleger le chargement 
+     * EXEMPLE : 
+     * 
+     */ 
   load();
   },[]);
   return (
@@ -103,8 +56,8 @@ export default function details() {
       </View>
    
         <View style={styles.container1}>
-        {img != null ? <></>: <Image style={styles.image} source={img}/>}
-        <View style={{ backgroundColor: back === "Green" ? "#4CAF50" : back === "Orange" ? "orange" :"red", ...styles.Info}}>
+        {/* {img != null ? <></>: <Image style={styles.image} source={img}/>} */}
+        <View style={{ backgroundColor: color, ...styles.Info}}>
         <Text style={styles.title}>{info?.Nom}</Text>
         {/* <Text style={styles.text}>{info?.categorie}</Text> */}
         <Text style={{...styles.title}}>{info?.Score}</Text>
@@ -113,9 +66,9 @@ export default function details() {
         <View style={styles.Ingres}>
           <Text style={styles.text1}>Impact Score par Ingredient :</Text>
           <ScrollView horizontal={false} contentContainerStyle={styles.containerElement} showsVerticalScrollIndicator={true}>
-            {ing.map((a,i) =>(
+            {ingredients_info.map((a,i) =>(
               <View key={i}><Text style={styles.ing}key={i}>{a[0]} :</Text> 
-              <Text key={i+1} style={styles.ing}><ProgressBar progress={a[1]} /></Text></View>
+              <ProgressBar progress={a[1]} /></View>
             ))}
           </ScrollView>
         </View>
@@ -156,7 +109,7 @@ const styles = StyleSheet.create({
     height: "50%",
     borderRadius: 10,
     marginHorizontal: 5,
-    backgroundColor : 'white',
+    backgroundColor : 'grey',
     margin : 5,
     marginBottom : 10,
     paddingBottom : "8%",
@@ -170,9 +123,9 @@ const styles = StyleSheet.create({
   containerElement: {
     paddingVertical: 10,
     flexGrow: 1,
-    alignItems: "center",
+    // alignItems: "center",
     backgroundColor : "white",
-    flexDirection : "column",
+    // flexDirection : "column",
     // alignItems: "center",
   },
     container1: {
@@ -219,9 +172,10 @@ const styles = StyleSheet.create({
       marginBottom: 10,
     },
     ing : {
-      display: "flex",
-      flexDirection : "row",
-      alignItems : "center",
+      // display: "flex",
+      // flexDirection : "row",
+      width: "100%",
+      // alignItems : "center",
       fontSize : 15,
       fontWeight : "bold",
       marginLeft : "5%",
