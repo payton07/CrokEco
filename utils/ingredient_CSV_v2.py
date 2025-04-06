@@ -141,8 +141,13 @@ if __name__ == '__main__':
     cur = con.cursor()
     cur.execute("SELECT * FROM Ingredients;")
     res = cur.fetchall()
-    d = [1,"pate",0,0,0]
-    cur.execute(""" INSERT INTO Plats(ID_plat,Nom_plat,Certified,Like,DisLike) VALUES(?,?,?,?,?)""",d)
+    d = ["pate",0,0,0]
+    d3 = [1,"11084",320]
+    d4 = [1,"20998",320]
+
+    cur.execute(""" INSERT INTO Plats(Nom_plat,Certified,Like,DisLike) VALUES(?,?,?,?)""",d)
+    cur.execute(""" INSERT INTO Plats_Ingredients(ID_plat,ID_ingredient,Quantite) VALUES(?,?,?)""",d3)
+    cur.execute(""" INSERT INTO Plats_Ingredients(ID_plat,ID_ingredient,Quantite) VALUES(?,?,?)""",d4)
     print(res)
     con.commit()
     con.close()
@@ -155,6 +160,7 @@ if __name__ == '__main__':
     d4 = [1,"20998",320]
     cur.execute(""" INSERT INTO Plats(ID_plat,Nom_plat,Certified,Like,DisLike) VALUES(?,?,?,?,?)""",d1)
     cur.execute(""" INSERT INTO Plats(ID_plat,Nom_plat,Certified,Like,DisLike) VALUES(?,?,?,?,?)""",d2)
+    
     cur.execute(""" INSERT INTO Plats_Ingredients(ID_plat,ID_ingredient,Quantite) VALUES(?,?,?)""",d3)
     cur.execute(""" INSERT INTO Plats_Ingredients(ID_plat,ID_ingredient,Quantite) VALUES(?,?,?)""",d4)
     d3[0]= 2

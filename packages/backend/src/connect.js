@@ -52,7 +52,7 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
         if (res.code === 201) {
             console.log("Connexion réussie !");
             // Ici tu peux faire une redirection ou afficher un message de succès
-            window.location.href = "/ajout";  // Redirection vers une autre page
+            window.location.href = "/ajout.html";  // Redirection vers une autre page
         } else {
             alert(res.message);  // Affiche le message d'erreur du serveur
         }

@@ -82,7 +82,7 @@ export async function addSmt(table: string, data : any): Promise<number> {
     const statement = await db.prepareAsync(query);
     try {
       const result = await statement.executeAsync();
-      res.push(result.changes);      
+      res.push(result.lastInsertRowId);      
     }
     catch(error){
       console.log(error);

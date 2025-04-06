@@ -50,6 +50,8 @@ export async function addSmt(table: string, data: any): Promise<number> {
             .join(",")})
     `;
     const stmt = db.prepare(insertQuery);
+    console.log("la query : ", insertQuery);
+    
 
     stmt.run(function (this: sqlite3.RunResult, err: Error | null) {
       if (err) {
@@ -112,8 +114,6 @@ export async function updateSmt(
     if (!db) {
       return reject(new Error("La base de données n'est pas ouverte."));
     }
-
-    // Création de la requête sécurisée
     const updateQuery = `
       UPDATE ${table}
       SET ${Object.keys(set).map(key => `${key} = ?`).join(", ")}
@@ -136,21 +136,27 @@ export async function updateSmt(
   });
 }
 
-export async function deleteSmt(table: string, query: string): Promise<number> {
+export async function deleteSmt(table: string, conditions: Record<string, any>): Promise<number> {
   await initDB();
   return new Promise((resolve, reject) => {
-    // Vérifier si la base de données est ouverte
     if (!db) {
       return reject(new Error("La base de données n'est pas ouverte."));
     }
 
-    const deleteQuery = `
-      DELETE FROM ${table} WHERE ${query};
-    `;
+    const conditionKeys = Object.keys(conditions);
+    if (conditionKeys.length === 0) {
+      return reject(new Error("Aucune condition spécifiée pour la suppression."));
+    }
+
+    const whereClause = conditionKeys.map(key => `${key} = ?`).join(' AND ');
+    const params = conditionKeys.map(key => conditions[key]);
+
+    
+    const deleteQuery = `DELETE FROM ${table} WHERE ${whereClause}`;
 
     const stmt = db.prepare(deleteQuery);
 
-    stmt.run(function (this: sqlite3.RunResult, err: Error | null) {
+    stmt.run(...params, function (this: sqlite3.RunResult, err: Error | null) {
       if (err) {
         reject(new Error("Erreur lors de la suppression: " + err.message));
       } else {
@@ -159,6 +165,7 @@ export async function deleteSmt(table: string, query: string): Promise<number> {
     });
   });
 }
+
 
 
 /**
@@ -446,48 +453,47 @@ export  async function addUsers(data : boolean | any =false): Promise<number> {
 /**
  * DELETE PAR TABLE
  */
-export  async function deleteIngredients(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_ingredient}'`;
+export  async function deleteIngredients(query : Record<string, any>): Promise<number> {
   const res:number =  await deleteSmt("Ingredients",query);
   return res ;
 }
-export  async function deletePlats(data : any): Promise<number> {
-  const query = `idCD = '${data.Ciqual_AGB}'`;
+export  async function deletePlats_Ingredients_Client(query : Record<string, any>): Promise<number> {
+  const res:number =  await deleteSmt("Plats_Ingredients_Client",query);
+  return res ;
+}
+export  async function deletePlats_Client(query : Record<string, any>): Promise<number> {
+  const res:number =  await deleteSmt("Plats_Client",query);
+  return res ;
+}
+export  async function deletePlats(query : Record<string, any>): Promise<number> {
   const res:number =  await deleteSmt("Plats",query);
   return res ;
 }
-export  async function deleteSous_Groupes(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_sous_groupe}'`;
+export  async function deleteSous_Groupes(query : Record<string, any>): Promise<number> {
   const res:number =  await deleteSmt("Sous_Groupes",query);
   return res ;
 }
-export  async function deleteGroupes(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_groupe}'`;
+export  async function deleteGroupes(query : Record<string, any>): Promise<number> {
   const res:number =  await deleteSmt("Groupes",query);
   return res ;
 }
-export  async function deleteTags(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_tags}'`;
+export  async function deleteTags(query : Record<string, any>): Promise<number> {
   const res:number =  await deleteSmt("Tags",query);
   return res ;
 }
-export  async function deleteRecherche(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_recherche}'`;
+export  async function deleteRecherche(query : Record<string, any>): Promise<number> {
   const res:number =  await deleteSmt("Recherche",query);
   return res ;
 }
-export  async function deleteHistorique(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_historique}'`;
+export  async function deleteHistorique(query : Record<string, any>): Promise<number> {
   const res:number =  await deleteSmt("Historique",query);
   return res ;
 }
-export  async function deleteMenu(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_menu}'`;
+export  async function deleteMenu(query : Record<string, any>): Promise<number> {
   const res:number =  await deleteSmt("Menu",query);
   return res ;
 }
-export  async function deleteDesigne_Tags(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_tags}'`;
+export  async function deleteDesigne_Tags(query : Record<string, any>): Promise<number> {
   const res:number =  await deleteSmt("Designe_Tags",query);
   return res ;
 }

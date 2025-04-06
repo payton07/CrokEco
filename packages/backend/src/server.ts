@@ -1,6 +1,6 @@
 import Fastify from 'fastify';
 import type { FastifyRequest, FastifyReply } from 'fastify';
-import { addMenus_Client, addPlats, addPlats_Client, addPlats_Ingredients, addPlats_Ingredients_Client, addRecherches_Client, addRestaurant_Client, addUsers, getElementsPlatsAfter, getIngredients, getLastElementPlats, getMenus_Client, getPlats, getPlats_Client, getPlats_Ingredients, getPlats_Ingredients_Client, getRecherches_Client, getRestaurant_Client, getUsers, updatePlats_Client } from '../utils/acces_bdd.ts';
+import { addMenus_Client, addPlats, addPlats_Client, addPlats_Ingredients, addPlats_Ingredients_Client, addRecherches_Client, addRestaurant_Client, addUsers, deletePlats_Client, deletePlats_Ingredients_Client, getElementsPlatsAfter, getIngredients, getLastElementPlats, getMenus_Client, getPlats, getPlats_Client, getPlats_Ingredients, getPlats_Ingredients_Client, getRecherches_Client, getRestaurant_Client, getUsers, updatePlats_Client } from '../utils/acces_bdd.ts';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
 import path, { dirname } from 'path';
@@ -64,14 +64,14 @@ fastify.get('/accueil', async (request, reply) => {
 
 });
 
-fastify.get('/ajout', async (request, reply) => {
-  console.log("Dans accueil");
+// fastify.get('/ajout', async (request, reply) => {
+//   console.log("Dans accueil");
   
-  // Verif connexion avant sinon return ;
+//   // Verif connexion avant sinon return ;
   
-  return reply.sendFile('ajout.html');
+//   return reply.sendFile('ajout.html');
 
-});
+// });
 
 fastify.post('/login', async (request, reply) => {
   // const name = "admin";
@@ -229,12 +229,16 @@ fastify.post('/api/platsClient', async (request, reply) => {
     }
     for (const obj of ingredients){
       const ingredient = await getIngredients({Nom_Francais:obj.name},false,true,1);
-      if(!ingredient){
+      if(ingredient ==undefined || ingredient.length == 0){
+        console.log("Échec de l'ajout de l'association Plat_ingrédient, Ingredient inconnu");
+        
         return reply.status(400).send({ error: "Échec de l'ajout de l'association Plat_ingrédient, Ingredient inconnu" });
       }
       const data = {ID_plat: result,ID_ingredient: ingredient?.[0].Code_AGB,Quantite : obj.weight};
       const plat_ingredient = await addPlats_Ingredients_Client(data);
-      if(!plat_ingredient){
+      if(plat_ingredient == undefined || !plat_ingredient){
+        console.log("Échec de l'ajout de l'association Plat_ingrédient");
+        
         return reply.status(400).send({ error: "Échec de l'ajout de l'association Plat_ingrédient" });  
       }
     }
@@ -262,17 +266,22 @@ fastify.post('/api/platsInsert', async (request, reply) => {
     const assoc = await getPlats_Ingredients_Client(obj,true,true,false);
     const plat = plats?.at(0);
     delete plat.ID_plat;
-    console.log(plat);
     
-    const res = addPlats(plat);
+    const res = await addPlats(plat);
     if(res && assoc !=undefined && assoc.length >0){
-        assoc.map(async (a)=> {
-            a.ID_plat = res;
-            await addPlats_Ingredients(a);
-        });
-        return reply.status(201).send({ message: 'Plat ajouté avec succès', code : 201});
+      
+      for (const a of assoc){
+        const asso = a ;
+        asso.ID_plat = res;
+        await addPlats_Ingredients(asso);
       }
-      return reply.status(201).send({ message: 'Failed ', code : 404});
+      const query = {'ID_plat' : 1};
+      await deletePlats_Ingredients_Client(query);
+      await deletePlats_Client(query);
+      
+      return reply.status(201).send({ message: 'Plat ajouté avec succès', code : 201});
+    }
+    return reply.status(201).send({ message: 'Failed ', code : 404});
   } catch (err) {
     console.error("Erreur lors de l'ajout du Plat:", err);
     return reply.status(500).send({ error: 'Erreur interne du serveur' });
@@ -405,8 +414,11 @@ fastify.post('/api/updates', async (request, reply) => {
       
       let plat_ingredient = [];
       for(const ele of platsAfter){
+        console.log("plat : ",ele);
+        
         const id = {'ID_plat':ele.ID_plat} ;
         const res = await getPlats_Ingredients(id,true,false,false);
+        console.log("plat_ingredient : ",res);
         if(res != undefined){
           plat_ingredient.push(...res);
         }

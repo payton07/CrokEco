@@ -69,6 +69,9 @@ export default function Research() {
       const plats : any[]= objet.plats;
       const plats_ingredients : any[]= objet.plats_ingredients;
   
+      console.log("Les plats : ", plats);
+      console.log("Les plats ingredients : ", plats_ingredients);
+      
       // Inserer les plats dans la bd de l'appli
       for(const plat of plats){
         await addPlats(plat);
@@ -76,7 +79,8 @@ export default function Research() {
 
       // Inserer les associations plat - ingredients
       for(const plat_ingredient of plats_ingredients){
-        await addPlats_Ingredients(plat_ingredient);
+        const id = await addPlats_Ingredients(plat_ingredient);
+        console.log("Ajout de l'association plat - ingredient avec id : ", id, plat_ingredient.ID_plat, plat_ingredient.ID_ingredient);
       }
 
       const last_plat = await getLastElementPlats();

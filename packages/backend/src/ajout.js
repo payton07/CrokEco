@@ -46,7 +46,7 @@ async function ajouterPlat(id) {
         const result = await response.json();
         // console.log("message d'erreur: ",result);
         
-        // alert(result.message);
+        alert(result.message);
     }
     catch(error){
         console.log(error);

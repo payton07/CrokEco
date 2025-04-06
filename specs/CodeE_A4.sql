@@ -40,12 +40,11 @@ CREATE TABLE "Ingredients" (
 
 
 CREATE TABLE "Plats" (
-  "ID_plat" INTEGER,
+  "ID_plat" INTEGER PRIMARY KEY AUTOINCREMENT,
   "Nom_plat" VARCHAR(50),
   "Certified" INTEGER,
   "Like" INTEGER,
-  "DisLike" INTEGER,
-  CONSTRAINT PK_PLATS PRIMARY KEY("ID_plat")
+  "DisLike" INTEGER
 );
 
 

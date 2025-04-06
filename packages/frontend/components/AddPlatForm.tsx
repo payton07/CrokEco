@@ -94,7 +94,7 @@ export default function AddDishForm() {
 
       const re = await PostPlatClient(data);
       //
-      Alert.alert("Plat ajouté !", `Nom: ${data.name}\nNombre : ${data.ingredients.length} ingrédients`);
+      Alert.alert(re.message, `Nom: ${data.name}\nNombre : ${data.ingredients.length} ingrédients`);
       reset();
       setLoading(false);
       setIngredient('');
