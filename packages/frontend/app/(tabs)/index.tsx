@@ -1,18 +1,37 @@
-import { StyleSheet , Alert, Image as RNImage, TouchableOpacity, TextInput, TouchableWithoutFeedback, FlatList} from "react-native";
+import {
+  StyleSheet,
+  Alert,
+  Image as RNImage,
+  TouchableOpacity,
+  TextInput,
+  TouchableWithoutFeedback,
+  FlatList,
+  ScrollView,
+  KeyboardAvoidingView,
+  Keyboard,
+  Platform,
+} from "react-native";
 import { Text, View } from "@/components/Themed";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-// import Tesseract from "tesseract.js";
 import * as ImagePicker from "expo-image-picker";
 import TextRecognition from "@react-native-ml-kit/text-recognition";
-import { addMenus_Historique, addRecherches_Historique, addRestaurants_Historique, getPlats, getRestaurants } from "@/utils/bdd";
-import { Ping, PostMenu, PostRecherche, PostResto, change } from "@/utils/other";
+import {
+  addMenus_Historique,
+  addRecherches_Historique,
+  addRestaurants_Historique,
+  getPlats,
+  getRestaurants,
+} from "@/utils/bdd";
+import {
+  Ping,
+  PostMenu,
+  PostRecherche,
+  PostResto,
+  change,
+} from "@/utils/other";
 import Textshow from "@/components/Textshow";
-
-import {useEffect } from "react";
-import {  Button } from "react-native";
 import * as Location from "expo-location";
-
 
 interface BoundingBox {
   x: number;
@@ -23,62 +42,53 @@ interface BoundingBox {
 
 interface TextBlock {
   text: string;
-  frame?: BoundingBox; 
+  frame?: BoundingBox;
 }
 
-function sortRecognizedText(blocks: TextBlock[]): string{
+function sortRecognizedText(blocks: TextBlock[]): string {
   return blocks
-    .filter((block) => block.frame) // Filtrer les blocs sans frame
+    .filter((block) => block.frame)
     .sort((a, b) => {
       if (!a.frame || !b.frame) return 0;
-
-      // Trier d'abord par position verticale (Y)
       if (Math.abs(a.frame.y - b.frame.y) > 20) {
         return a.frame.y - b.frame.y;
       }
-
-      // Si les lignes sont proches, trier par position horizontale (X)
       return a.frame.x - b.frame.x;
     })
     .map((block) => block.text)
-    .join("\n"); // Ajouter des sauts de ligne entre les blocs
-};
+    .join("\n");
+}
 
-
-export default function Index(){
-  const [data ,setData] = useState<any[]>([]);
-  const imagePath = require('../../assets/ingImages/image11.png'); 
-  const [filled,setFilled] = useState(false);
+export default function Index() {
+  const [data, setData] = useState<any[]>([]);
+  const imagePath = require("../../assets/ingImages/image11.png");
+  const [filled, setFilled] = useState(false);
   const [done, setDone] = useState(false);
-  const [imageUri , setImageUri] = useState(RNImage.resolveAssetSource(imagePath).uri);
-  const [nomResto , setNomResto] = useState("");
-  const [Adresse , setAdresse] = useState("");
-  const [RestosList , setRestosList] = useState([]);
-  const [filteredRestos , setfilteredRestos] = useState<any[]>([]);
-  const [RestosData , setRestosData] = useState<string[]>([]);
-  // RNImage.resolveAssetSource(imagePath).uri
-  const [location, setLocation] = useState<Location.LocationObject | null>(null);
+  const [imageUri, setImageUri] = useState(
+    RNImage.resolveAssetSource(imagePath).uri
+  );
+  const [nomResto, setNomResto] = useState("");
+  const [Adresse, setAdresse] = useState("");
+  const [RestosList, setRestosList] = useState([]);
+  const [filteredRestos, setfilteredRestos] = useState<any[]>([]);
+  const [RestosData, setRestosData] = useState<string[]>([]);
+  const [location, setLocation] = useState<Location.LocationObject | null>(
+    null
+  );
   const [loc, setLoc] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  async function getLocation(){
-    // Demande de permission
-    console.log("Call getLocation");
-    
+  async function getLocation() {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
-      console.log("Permission de localisation refusée");
       Alert.alert("Erreur", "Autorisez la localisation pour continuer");
       return;
     }
 
-    // Récupération de la position
     let loc = await Location.getCurrentPositionAsync({});
     setLocation(loc);
     setLoc(true);
-    console.log("Setted location");
-    
-  };
+  }
 
   useEffect(() => {
     getLocation();
@@ -86,14 +96,13 @@ export default function Index(){
 
   async function pickImage() {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-  
     if (status !== "granted") {
       alert("Permission refusée !");
       return;
     }
 
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
+      mediaTypes: ["images"],
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
@@ -101,407 +110,336 @@ export default function Index(){
 
     if (!result.canceled) {
       setImageUri(result.assets[0].uri);
-      console.log("Image URI :", imageUri);
     } else {
       alert("Vous n'avez selectionner aucune image.");
     }
-  };
+  }
 
-async function FormatDataPlatReconnu(data : string[]){
-  const lines : any[] = [];
-  for (const ligne of data) {
-    const query = `${ligne}`;
-    try {
-      const plats = await getPlats({Nom_plat: query},false,true,1);
-      if(plats != undefined && plats.length > 0 && plats != null){
-        const id = plats[0].ID_plat;
-        const obj = await change(id);
-        lines.push({"text":ligne,color:obj?.color,"id":id});
+  async function FormatDataPlatReconnu(data: string[]) {
+    const lines: any[] = [];
+    for (const ligne of data) {
+      const query = `${ligne}`;
+      try {
+        const plats = await getPlats({ Nom_plat: query }, false, true, 1);
+        if (plats && plats.length > 0) {
+          const id = plats[0].ID_plat;
+          const obj = await change(id);
+          lines.push({ text: ligne, color: obj?.color, id: id });
+        } else {
+          lines.push({ text: ligne, color: "black", id: null });
+        }
+      } catch (error) {
+        console.error("Erreur lors de la récupération des plats:", error);
       }
-      else{
-        lines.push({"text":ligne,color:"black","id":null});
+    }
+    return lines;
+  }
+
+  async function LoadLocAndInsertClient_SendDataToServeur(lines: any[]) {
+    let Longitude = 0;
+    let Latitude = 0;
+    if (!loc) {
+      await getLocation();
+    }
+    if (location) {
+      Longitude = location.coords.longitude;
+      Latitude = location.coords.latitude;
+
+      const resto = {
+        NomResto: nomResto,
+        Latitude,
+        Longitude,
+        Adresse,
+      };
+      const idresto = await addRestaurants_Historique(resto);
+
+      const menu = { NomMenu: "menu", ID_restaurant: idresto };
+      const res = await addMenus_Historique(menu);
+
+      const textReconnu = JSON.stringify(lines);
+      const recherche = {
+        Text_request: textReconnu,
+        ID_menu: res,
+        Date: new Date().toLocaleDateString("fr-FR"),
+      };
+      await addRecherches_Historique(recherche);
+
+      setNomResto("");
+      const resultat = await Ping();
+      if (resultat == 201) {
+        const res1 = await PostResto(resto);
+        const menuPost = { NomMenu: "menu", ID_restaurant: res1.code };
+        const res2 = await PostMenu(menuPost);
+        const recherchePost = {
+          Text_request: textReconnu,
+          ID_menu: res2.code,
+          Date: new Date().toLocaleDateString("fr-FR"),
+        };
+        await PostRecherche(recherchePost);
+      } else {
+        Alert.alert("Veuillez vous connecter à internet");
       }
     }
-    catch (error) {
-      console.error("Erreur lors de la récupération des plats:", error);
-    }
   }
-  return lines;
-}
 
-async function LoadLocAndInsertClient_SendDataToServeur(lines : any[]){
-  // TODO SEND RESTO AU SERVEUR ET IL FAUT DONC LA LOC
-  let Longitude = 0 ;
-  let Latitude = 0 ;
-  if(!loc){
-    getLocation();
-  }
-  if(location){
-    Longitude = location.coords.longitude;
-    Latitude = location.coords.latitude;
-  // Local 
-  // Restaurant
-  const resto = {'NomResto':nomResto,'Latitude':Latitude,'Longitude':Longitude,'Adresse':Adresse};
-  const idresto = await addRestaurants_Historique(resto);
-  
-  // Menu
-  const menu = {'NomMenu':'menu','ID_restaurant':idresto};
-  const res = await addMenus_Historique(menu);
-  console.log("res add menu histo",res);
-
-  // Recherches
-  const textReconnu = JSON.stringify(lines);
-  const recherche = {'Text_request':textReconnu,'ID_menu':res,'Date':new Date().toLocaleDateString("fr-FR")};
-  await addRecherches_Historique(recherche);
-  
-  setNomResto('');
-  const resultat = await Ping();
-  if(resultat==201){
-    console.log("On est connecté à internet");
-    // Restaurant API 
-    const res1 = await PostResto(resto);
-
-    // Menu API
-    // TODO : FAUT GERER LE NOM DU MENU
-    const menuPost = {'NomMenu':'menu','ID_restaurant':res1.code};
-    const res2 = await PostMenu(menuPost);
-
-    // Recherche API
-    const recherchePost = {'Text_request':textReconnu,'ID_menu':res2.code,'Date':new Date().toLocaleDateString("fr-FR")};
-    await PostRecherche(recherchePost);
-  }
-  else {
-    Alert.alert("Veuillez vous connecter à internet");
-  }
-  }
-  else{
-    console.log("y a pas de loc on fait quoi ?");
-  }
-}
-  
-async function setRecoData(){
-  if(!filled && imageUri){
-    const recognizedTexts = await recognizeText();
-    if(recognizedTexts != undefined){    
-      const lines = await FormatDataPlatReconnu(recognizedTexts);
-      setData(lines);
-      setFilled(true);
-      setDone(true);
-      
-      // SEND RESTO AU SERVEUR ET IL FAUT DONC LA LOC
-      await LoadLocAndInsertClient_SendDataToServeur(lines);
-    }
-    else{
+  async function setRecoData() {
+    if (!filled && imageUri) {
+      const recognizedTexts = await recognizeText();
+      if (recognizedTexts != undefined) {
+        const lines = await FormatDataPlatReconnu(recognizedTexts);
+        setData(lines);
+        setFilled(true);
+        setDone(true);
+        await LoadLocAndInsertClient_SendDataToServeur(lines);
+      } else {
+        setData([]);
+        setFilled(false);
+        setDone(false);
+      }
+    } else {
       setData([]);
       setFilled(false);
       setDone(false);
     }
-
   }
-  else{
-    setData([]);
-    setFilled(false);
-    setDone(false);
-  }
-}
 
-  async function recognizeText(): Promise<string[]|undefined> {
+  async function recognizeText(): Promise<string[] | undefined> {
     try {
       const result = await TextRecognition.recognize(imageUri);
-      const inter : TextBlock[] = result.blocks;
-      const sortedText = sortRecognizedText(inter || []); 
-      const lines : string[]= []
+      const inter: TextBlock[] = result.blocks;
+      const sortedText = sortRecognizedText(inter || []);
+      const lines: string[] = [];
       for (const ligne of sortedText.split("\n")) {
         const v = ligne.split("*");
         lines.push(v[0]);
       }
-      return lines ;
+      return lines;
     } catch (error) {
-      Alert.alert('Erreur', 'Échec de la reconnaissance de texte');
+      Alert.alert("Erreur", "Échec de la reconnaissance de texte");
       console.error("Erreur OCR :", error);
     }
-}
-
-function inter(ingredient: string){
-  if (ingredient.trim()) {
-    setNomResto(ingredient.trim());
-    setfilteredRestos([]); 
   }
-}
-  async function Alter_RestosFromBdd(text:string){
+
+  function inter(ingredient: string) {
+    if (ingredient.trim()) {
+      setNomResto(ingredient.trim());
+      setfilteredRestos([]);
+    }
+  }
+
+  async function Alter_RestosFromBdd(text: string) {
     const query = `%${text}%`;
-    const restos = await getRestaurants({'NomResto':query},true,true,30); 
-    console.log("J'ai eu les restos ", restos?.length);
-    if(restos !== undefined){
-      const restoData : string[]= [];
+    const restos = await getRestaurants({ NomResto: query }, true, true, 30);
+    if (restos !== undefined) {
+      const restoData: string[] = [];
       for (const ele of restos) {
-        if(!restoData.includes(ele.Nom_Resto)) restoData.push(ele.Nom_Resto);
+        if (!restoData.includes(ele.Nom_Resto)) restoData.push(ele.Nom_Resto);
       }
       setRestosData(restoData);
     }
-    
   }
 
-async function filterRestos(text:string){
-  setNomResto(text);
-  await Alter_RestosFromBdd(text);
-  if (text.trim() === '') {
+  async function filterRestos(text: string) {
+    setNomResto(text);
+    await Alter_RestosFromBdd(text);
+    if (text.trim() === "") {
       setfilteredRestos([]);
     } else {
-        const filtered = RestosData.filter(Element =>
-            Element.toLowerCase().startsWith(text.toLowerCase())
-        );
-        setfilteredRestos(filtered);
+      const filtered = RestosData.filter((Element) =>
+        Element.toLowerCase().startsWith(text.toLowerCase())
+      );
+      setfilteredRestos(filtered);
     }
-}
+  }
 
-
-    return (
-      <SafeAreaProvider>
-        <Text style={styles.title}> Scanner page </Text>
-      <View style={styles.container}>
-        <View style={styles.inputContainer}>
-        {!done ? 
-          <View>
-            <Text style={styles.label}>Restaurants :</Text>
-            <TextInput
-              style={styles.input2}
-              placeholder="Taper le nom du resto"
-              value={nomResto}
-              onChangeText={filterRestos}
-            />
-            {filteredRestos.length > 0 && (
-              <View style={styles.suggestionsBox}>
-                <FlatList
-                  data={filteredRestos}
-                  keyExtractor={(item, index) => index.toString()}
-                  renderItem={({ item }) => (
-                    <TouchableWithoutFeedback onPress={() => inter(item)}>
-                      <View style={styles.suggestionItem}>
-                        <Text style={styles.suggestionText}>{item}</Text>
+  return (
+    <SafeAreaProvider>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+          <ScrollView contentContainerStyle={styles.scrollContainer}>
+            <Text style={styles.title}>Scanner page</Text>
+            <View style={styles.container}>
+              <View style={styles.inputContainer}>
+                {!done ? (
+                  <>
+                    <Text style={styles.label}>Restaurants :</Text>
+                    <TextInput
+                      style={styles.input2}
+                      placeholder="Taper le nom du resto"
+                      value={nomResto}
+                      onChangeText={filterRestos}
+                    />
+                    {filteredRestos.length > 0 && (
+                      <View style={styles.suggestionsBox}>
+                        <FlatList
+                          data={filteredRestos}
+                          keyExtractor={(item, index) => index.toString()}
+                          renderItem={({ item }) => (
+                            <TouchableWithoutFeedback
+                              onPress={() => inter(item)}
+                            >
+                              <View style={styles.suggestionItem}>
+                                <Text style={styles.suggestionText}>
+                                  {item}
+                                </Text>
+                              </View>
+                            </TouchableWithoutFeedback>
+                          )}
+                        />
                       </View>
-                    </TouchableWithoutFeedback>
-                  )}
-                />
-              </View>
-            )}
-            <Text style={styles.label}>Adresse :</Text>
-            <TextInput
-              style={styles.input2}
-              placeholder="Taper l'adresse du resto "
-              value={Adresse}
-              onChangeText={setAdresse}
-            />
-          </View>
-          : 
-          <></>
-        }
-        {done ?
-            <View style={styles.RecongnitionContainer}>
-              <Text style={styles.title1}>Text Reconnu : </Text>
+                    )}
+                    <Text style={styles.label}>Adresse :</Text>
+                    <TextInput
+                      style={styles.input2}
+                      placeholder="Taper l'adresse du resto"
+                      value={Adresse}
+                      onChangeText={setAdresse}
+                    />
+                  </>
+                ) : null}
 
-              {data ? 
-                data.map((ligne,i)=>{
-                  return <Textshow key={i} ligne={ligne} />
-                })
-                : 
-                <Text style={styles.text}>Aucun texte reconnu</Text>
-              }
+                {done ? (
+                  <View style={styles.RecongnitionContainer}>
+                    <Text style={styles.title1}>Text Reconnu :</Text>
+                    {data ? (
+                      data.map((ligne, i) => (
+                        <Textshow key={i} ligne={ligne} />
+                      ))
+                    ) : (
+                      <Text style={styles.text}>Aucun texte reconnu</Text>
+                    )}
+                  </View>
+                ) : null}
+
+                {imageUri && !done && (
+                  <RNImage source={{ uri: imageUri }} style={styles.image} />
+                )}
+
+                {!done ? (
+                  <>
+                    <TouchableOpacity
+                      style={styles.imageButton}
+                      onPress={pickImage}
+                    >
+                      <Text style={styles.imageButtonText}>
+                        Choisir une image
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={{ ...styles.imageButton, top: 10 }}
+                      onPress={setRecoData}
+                    >
+                      <Text style={styles.imageButtonText}>Analyser</Text>
+                    </TouchableOpacity>
+                  </>
+                ) : (
+                  <TouchableOpacity
+                    style={styles.imageButton}
+                    onPress={setRecoData}
+                  >
+                    <Text style={styles.imageButtonText}>Retour</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
             </View>
-          : 
-            <Text style={styles.text}></Text>
-        }
-        {imageUri && !done? (
-          <RNImage source={{ uri: imageUri }} style={styles.image} />
-        ) : (
-          <></>
-        )}
-        {!done ?
-          <>
-            <TouchableOpacity style={styles.imageButton} onPress={pickImage}>
-              <Text style={styles.imageButtonText}>📷 Choisir une image</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={{...styles.imageButton,top:10}} onPress={setRecoData}>
-              <Text style={styles.imageButtonText} onPress={setRecoData}> Analyser </Text>
-            </TouchableOpacity>
-          </>
-          :
-          <TouchableOpacity style={styles.imageButton} onPress={setRecoData}>
-            <Text style={styles.imageButtonText} onPress={setRecoData} > retour </Text>
-          </TouchableOpacity>
-        }
-      </View>
-      </View>
-      </SafeAreaProvider>
-    );
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
+    </SafeAreaProvider>
+  );
 }
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flexGrow: 1,
+    paddingBottom: 40,
+  },
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#FAFAFA", // Fond plus doux
+    justifyContent: "flex-start",
+    backgroundColor: "white",
   },
   title: {
-    top: 20,
+    marginTop: 20,
     alignSelf: "center",
     fontSize: 24,
     fontWeight: "bold",
-    color: "#222",
-    marginBottom: 10,
+    color: "black",
   },
   title1: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#222",
+    color: "black",
     alignSelf: "center",
-    marginBottom: 10,
+    marginBottom: 12,
   },
   RecongnitionContainer: {
     padding: 16,
-    backgroundColor: "#FFF",
+    backgroundColor: "#fff",
     borderRadius: 12,
+    borderColor: "#ccc",
     borderWidth: 1,
-    borderColor: "#DDD",
-    width: "100%",
-    height: "60%",
-    overflow: "scroll",
+    marginVertical: 12,
   },
   text: {
-    fontSize: 18,
-    lineHeight: 26,
-    color: "#333",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
-    backgroundColor: "#EEE",
-  },
-  star: {
-    right: 40,
-  },
-  reco: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "100%",
-  },
-  imageContainer: {
-    alignItems: "center",
-    marginVertical: 15,
+    fontSize: 16,
+    color: "black",
   },
   image: {
     width: "100%",
-    height: "60%",
-    borderRadius: 12,
+    height: 200,
+    borderRadius: 10,
     marginBottom: 10,
+    resizeMode: "cover",
   },
   imageButton: {
     backgroundColor: "#007BFF",
     padding: 12,
-    borderRadius: 10,
-    marginVertical: 8,
+    borderRadius: 8,
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 3,
+    marginVertical: 6,
   },
   imageButtonText: {
     color: "white",
     fontWeight: "bold",
-    fontSize: 16,
   },
   inputContainer: {
-    backgroundColor: "#F7F7F7",
+    width: "85%",
     padding: 16,
+    backgroundColor: "#f9f9f9",
     borderRadius: 10,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: "#DDD",
-    width: "90%",
-    height: "95%",
+    marginTop: 20,
   },
   label: {
     color: "#666",
-    marginBottom: 6,
-    fontSize: 16,
-    fontWeight: "500",
-  },
-  input: {
-    backgroundColor: "white",
-    padding: 12,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#DDD",
-    fontSize: 16,
-    marginBottom: 10,
+    marginTop: 12,
+    marginBottom: 4,
   },
   input2: {
     backgroundColor: "white",
     padding: 12,
-    borderRadius: 10,
+    borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#CCC",
-    fontSize: 16,
-    marginBottom: 10,
-  },
-  errorText: {
-    color: "#e74c3c",
-    fontSize: 14,
-    marginBottom: 12,
-  },
-  button: {
-    backgroundColor: "#3498db",
-    padding: 12,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  addButton: {
-    backgroundColor: "#2ecc71",
-    padding: 10,
-    borderRadius: 10,
-    marginTop: 10,
-    alignItems: "center",
-  },
-  addButtonText: {
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  ingredientItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginVertical: 6,
-  },
-  ingredientText: {
-    fontSize: 16,
-    color: "#333",
+    borderColor: "#ddd",
   },
   suggestionsBox: {
-    backgroundColor: "#FAFAFA",
-    borderRadius: 10,
+    backgroundColor: "#f7f7f7",
+    borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#DDD",
+    borderColor: "#ddd",
     marginTop: 8,
     maxHeight: 200,
   },
   suggestionItem: {
-    padding: 10,
+    padding: 8,
     borderBottomWidth: 1,
-    borderBottomColor: "#EEE",
+    borderBottomColor: "#ddd",
   },
   suggestionText: {
     color: "#333",
-    fontSize: 16,
   },
 });

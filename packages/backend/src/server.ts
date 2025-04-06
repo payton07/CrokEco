@@ -268,6 +268,7 @@ fastify.post('/api/platsInsert', async (request, reply) => {
     const plats = await getPlats_Client(obj,true,true,1);
     const assoc = await getPlats_Ingredients_Client(obj,true,true,false);
     const plat = plats?.at(0);
+    const id = plats?.at(0).ID_plat;
     delete plat.ID_plat;
     
     const res = await addPlats(plat);
@@ -278,7 +279,9 @@ fastify.post('/api/platsInsert', async (request, reply) => {
         asso.ID_plat = res;
         await addPlats_Ingredients(asso);
       }
-      const query = {'ID_plat' : 1};
+      const query = {'ID_plat' : id};
+      console.log("l'id plat : ",id);
+      
       await deletePlats_Ingredients_Client(query);
       await deletePlats_Client(query);
       

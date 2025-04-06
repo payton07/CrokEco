@@ -8,14 +8,13 @@ export default function Fav({ out }: { out: any }) {
   const [img, setImg] = useState(images.github);
   const info = out?.info;
   const ide = info?.id;
-  const back = out?.back;
+  const color = out?.color;
   return (
     <Link href={`/(hidden)/details/${ide}`} style={styles.image}>
       <View style={styles.container}>
       {img != null ? <></>: <Image style={styles.image} source={img}/>}
-      <View style={{ backgroundColor: back === "green" ? "#4CAF50" : back === "orange" ? "orange" :"red", ...styles.Info}}>
+      <View style={{ backgroundColor: color , ...styles.Info}}>
       <Text style={styles.title}>{info?.Nom}</Text>
-      {/* <Text style={styles.text}>{info?.categorie}</Text> */}
       <Text style={{...styles.title}}>{info?.Score}</Text>
       <Text style={styles.text}>{info?.Unite}</Text>
       </View>

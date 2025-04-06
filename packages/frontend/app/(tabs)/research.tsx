@@ -7,7 +7,7 @@ import { addPlats, addPlats_Ingredients, getLastElementPlats, getPlats, initDB,}
 import Searcher from "@/components/Searcher";
 import Favoris from "@/components/Favoris";
 import Suggestion from "@/components/Suggestion";
-import { change, getDataWithCacheExpiration, PostUpdateRequest} from "@/utils/other";
+import { change, getDataWithCacheExpiration, good, PostUpdateRequest} from "@/utils/other";
 const DO_MAJ_CODE = 3333;
 type Plat = {"Certified": number, "ID_plat": string, "Nom_plat": string, "Vote":number};
 const ele = { info: { Nom: "Pomme", categorie: "Fruit", Score: "0.5", Unite: "kg CO2 eq/kg de produit", id: 1 }, back: "Green" };
@@ -28,7 +28,7 @@ async function setup1() {
       if (a.ID_plat) plats_Inter.push(await change(a.ID_plat));
     }
     for (const a of plats_Inter){
-      if(a?.back =="green") plats_suggested_data.push(a)
+      if(a?.color == good) plats_suggested_data.push(a)
     }
     return { plats_favoris: plats_favs_data, plats_suggest: plats_suggested_data };
   }
