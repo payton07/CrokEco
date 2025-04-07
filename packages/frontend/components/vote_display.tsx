@@ -1,4 +1,4 @@
-import { PostUpdatePlatsRequest } from '@/utils/other';
+import { PostUpdatePlatsRequest } from '@/utils/routes';
 import { AntDesign } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { StyleSheet, View,TouchableOpacity,Text} from "react-native";
@@ -43,11 +43,29 @@ star : {
     right : 40,
     },
 reco : {
-    flexDirection : "row",
-    justifyContent : "space-between",
-    alignItems : "center",
-    width : "100%",
-    },
+  bottom : 10, 
+  flexDirection : "row",
+  justifyContent : "space-between",
+  alignItems : "center",
+  width : "100%",
+  padding: 16,
+  backgroundColor: "#fff",
+  shadowColor: "#000",
+  shadowOffset: {
+  width: 0,
+  height: 2,
+  },
+  shadowOpacity: 0.25,
+  shadowRadius: 3.84,
+  elevation: 5,
+  height: 60,
+  borderStyle: "solid",
+  borderBlockColor: "black",
+  borderRadius: 12,
+  borderColor: "#ccc",
+  borderWidth: 1,
+  marginVertical: 12,
+  },
 reco1 : {
     flexDirection : "row",
     justifyContent : "space-between",

@@ -52,12 +52,13 @@ export default function menus() {
           <View style={styles.link}>
             <AntDesign name="arrowleft" size={24} color="black" onPress={retour} />
           </View>
-          <Text style={styles.headerText}> Menu {params.ID_menu}</Text>
+          <Text style={styles.headerText}> Menu </Text>
+          {/* <Text style={styles.headerText}> Menu {params.ID_menu}</Text> */}
         </View>
 
         {isloaded ?
             <View style={styles.RecongnitionContainer}>
-              <Text style={styles.title1}>Text Reconnu : </Text>
+              <Text style={styles.title1}>Plats : </Text>
 
               {plats ? 
                 plats.map((ligne,i)=>{
@@ -77,8 +78,9 @@ export default function menus() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    height: "100%",
+    width: "100%",
     alignItems: "center",
-    justifyContent: "center",
     backgroundColor: "white",
   },
   title: {
@@ -101,24 +103,14 @@ const styles = StyleSheet.create({
     alignSelf : "center",
   },
   RecongnitionContainer: {
-    alignSelf : 'center',
-    alignContent : 'center',
     padding: 16,
-    backgroundColor: 'white',
+    backgroundColor: "#fff",
     borderRadius: 12,
-    borderBlockColor: 'black',
-    // borderColor: 'black',
-    // shadowColor: '#000',
-    // shadowOffset: { width: 0, height: 2 },
-    // shadowOpacity: 0.25,
-    // shadowRadius: 4,
-    width: "100%",
-    height: "60%",
-    // elevation: 5,
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "black",
-    // bottom: 20,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    marginVertical: 12,
+    width: "80%",
+    height: "auto",
   },
   text: {
     fontSize: 16,
@@ -180,23 +172,17 @@ const styles = StyleSheet.create({
       height: "100%",
       // padding: 20,
     },
-    // title: {
-    //   fontSize: 20,
-    //   fontWeight: "bold",
-    //   // marginTop: 10,
-    //   margin : "3%",
-    //   alignContent: "center",
-    // },
     link: {
       left : 0,
       right : "100%",
-      top : 5,
+      top : 0,
       marginTop: 15,
       margin : 20,
+      flexDirection: "row",
       paddingVertical: 15,
     },
     headerText : {
-      top : 29,
+      top : 24,
       fontSize: 22,
       fontWeight: "bold",
       margin : 2,

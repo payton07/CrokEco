@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import { Text, View } from "@/components/Themed";
 import React, { useCallback, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -28,9 +28,10 @@ export default function Votes() {
     <SafeAreaProvider>
       <View style={styles.container}>
         <Text style={styles.title}> Page des Votes </Text>
-          <View style={styles.RecongnitionContainer}>
-            <Text style={styles.title1}> Les plats à voter : </Text>
-
+          <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={true}
+        >
             {plats.length>0 && isloaded? 
               plats.map((ligne,i)=>{
                 return <Vote_display key={i} ligne={ligne} />
@@ -38,18 +39,22 @@ export default function Votes() {
               : 
               <Text style={styles.textcenterize}>Aucun Plats</Text>
             }
-          </View>
+        </ScrollView>
       </View>
     </SafeAreaProvider>
   );
 }
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
     backgroundColor: "white",
+    paddingHorizontal: 16,
+  },
+  scrollContent: {
+    paddingBottom: 20,
   },
   title: {
     top : 20,

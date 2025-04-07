@@ -4,13 +4,16 @@ import {View } from "./Themed";
 import Fav from './Fav';
 
 export default function Suggestion({ loads }: { loads : any[] }) {
+  // console.log("Suggestion loads",loads);
+  
   return (
     <View style={styles.wrapper}>
       <Text style={styles.title}>
         <Text style={styles.title2}>   Suggestion</Text>
         </Text>
         {/* contentContainerStyle={styles.container}  */}
-      <ScrollView contentContainerStyle={styles.container} horizontal={false} scrollEnabled={true} showsVerticalScrollIndicator={true}>
+        <ScrollView contentContainerStyle={styles.container} style={{ maxHeight:500 }} horizontal={false} scrollEnabled={true} showsVerticalScrollIndicator={true}>
+
         <View style={styles.grid}>
           {loads.map((a,i) => (
             <Fav key={i} out={a}/>
@@ -44,7 +47,7 @@ const styles = StyleSheet.create({
       },
     container: {
       paddingVertical: 10,
-      flexGrow: 1,
+      // flexGrow: 1,
       alignItems: "center",
       backgroundColor : "white",
       // minHeight: "50%",

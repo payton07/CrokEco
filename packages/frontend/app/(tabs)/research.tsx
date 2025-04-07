@@ -28,8 +28,11 @@ async function setup1() {
       if (a.ID_plat) plats_Inter.push(await change(a.ID_plat));
     }
     for (const a of plats_Inter){
-      if(a?.color == good) plats_suggested_data.push(a)
+      // TODO remettre la condition
+      // if(a?.color == good) 
+      plats_suggested_data.push(a)
     }
+    plats_suggested_data.push(...plats_suggested_data);
     return { plats_favoris: plats_favs_data, plats_suggest: plats_suggested_data };
   }
   return { plats_favoris: undefined, plats_suggest: undefined };

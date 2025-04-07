@@ -63,7 +63,7 @@ export default function details() {
         </View>
         <View style={styles.Ingres}>
           <Text style={styles.text1}>Impact Score par Ingredient :</Text>
-          <ScrollView horizontal={false} contentContainerStyle={styles.containerElement} showsVerticalScrollIndicator={true}>
+          <ScrollView horizontal={false} scrollEnabled={true} contentContainerStyle={styles.containerElement} showsVerticalScrollIndicator={true}>
             {ingredients_info.map((a,i) =>(
               <View key={i}><Text style={styles.ing}key={i}>{a[0]} :</Text> 
               <ProgressBar progress={a[1]} /></View>

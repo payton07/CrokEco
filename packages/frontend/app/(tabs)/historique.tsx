@@ -1,55 +1,101 @@
-import { StyleSheet } from "react-native";
+import { ActivityIndicator, ScrollView, StyleSheet } from "react-native";
 import { Text, View } from "@/components/Themed";
-import React, { useCallback,useState } from "react";
+import React, { useCallback, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { getMenus_Historique, getRecherches_Historique } from "@/utils/bdd";
+import { getMenus_Historique, getPlats, getRecherches_Historique } from "@/utils/bdd";
 import MenuHistory from "@/components/MenuHistory";
 import { useFocusEffect } from '@react-navigation/native';
+import { TouchableOpacity } from 'react-native';
+import { Form } from "react-hook-form";
+import { FormatDataPlatReconnu } from "@/utils/other";
+import { MostOccurent } from '../../utils/other';
 
 export default function History() {
-  const [menus ,setMenus] = useState<any[]>([]);
-  const [isloaded,setIsloaded] = useState(false);
-  
-  // Fonction pour récupérer les menus
-  // et les recherches associées
-  async function getloadsMenus(){
-    const MENUS = await getMenus_Historique(false,true,false,false);
+  const [menus, setMenus] = useState<any[]>([]);
+  const [isloaded, setIsloaded] = useState(false);
+  const [sortAsc, setSortAsc] = useState(true);
+
+  async function getloadsMenus() {
+    const MENUS = await getMenus_Historique(false, true, false, false);
     const Menus_update = [];
-    if(MENUS != undefined){
-      for(const menu of MENUS){
-        const recherche = await getRecherches_Historique({'ID_menu':menu.ID_menu},true,false,false);
-        const date = recherche?.at(0).Date;
-        const m = {...menu,'Date':date};
+    if (MENUS !== undefined) {
+      for (const menu of MENUS) {
+        const recherche = await getRecherches_Historique({ ID_menu: menu.ID_menu }, true, false, false);
+        const date = recherche?.at(0)?.Date;
+        const textrequested = JSON.parse(recherche?.at(0)?.Text_request);
+        const formatData = await FormatDataPlatReconnu(textrequested);
+        const colors = formatData.map((item) => item.color);
+        const mostOccurent = MostOccurent(colors);
+
+        let lacolor = "";
+        if(mostOccurent !== null ) {
+          lacolor = mostOccurent;
+        }
+        else {
+          lacolor = "black";
+        }
+        const m = { ...menu, Date: date ,color:lacolor};
         Menus_update.push(m);
-        
       }
     }
-    console.log("Menus :",MENUS);
-    
-    if(Menus_update.length > 0) {setMenus(Menus_update); setIsloaded(true);}
-    else{setMenus([]);setIsloaded(false);}
+
+    if (Menus_update.length > 0) {
+
+      // Tri des menus par date
+      // const sortAsc = true; // true pour trier par date croissante, false pour décroissante
+      Menus_update.sort((a, b) => {
+        const parseDate = (str: string) => {
+          const [day, month, year] = str.split('/');
+          return new Date(`${year}-${month}-${day}`);
+        };
+      
+        const dateA = parseDate(a.Date);
+        const dateB = parseDate(b.Date);
+      
+        return sortAsc ? dateA.getTime() - dateB.getTime() : dateB.getTime() - dateA.getTime();
+      });
+
+      setMenus(Menus_update);
+      setIsloaded(true);
+    } else {
+      setMenus([]);
+      setIsloaded(false);
+    }
   }
-  
+
   useFocusEffect(
-    useCallback(()=>{
+    useCallback(() => {
       getloadsMenus();
-    },[])
+    }, [])
   );
 
   return (
     <SafeAreaProvider>
       <View style={styles.container}>
-        <Text style={styles.title}>Historiques </Text>
-          <View style={styles.RecongnitionContainer}>
-
-            {menus && isloaded? 
-              menus.map((ligne,i)=>{
-                return <MenuHistory key={i} ligne={ligne} />
-              })
-              : 
-              <Text style={styles.textcenterize}>Aucun Menu </Text>
-            }
-          </View>
+        <Text style={styles.title}>Historiques</Text>
+        <TouchableOpacity
+          style={styles.filterButton}
+          onPress={() => {
+            setSortAsc(!sortAsc);
+            getloadsMenus();
+          }}
+        >
+          <Text style={styles.filterButtonText}>
+            Trier par date : {sortAsc ? "Plus anciens" : "Plus récents"}
+          </Text>
+        </TouchableOpacity>
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={true}
+        >
+          {isloaded && menus.length >0 ? (
+            menus.map((ligne, i) => <MenuHistory key={i} ligne={ligne} />)
+          ) : isloaded && menus.length === 0 ? (
+            <Text style={styles.textcenterize}>Aucun Menu</Text>
+          ) : (
+            <ActivityIndicator size="large" color="#0000ff" />
+          )}
+        </ScrollView>
       </View>
     </SafeAreaProvider>
   );
@@ -57,60 +103,42 @@ export default function History() {
 
 const styles = StyleSheet.create({
   container: {
-    height: "100%",
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
     backgroundColor: "white",
+    paddingHorizontal: 16,
+    // paddingTop: 20,
   },
   title: {
-    top : 0,
-    bottom: "90%",
-    alignSelf: "center",
-    height: "10%",
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: "bold",
     color: "black",
+    margin:20,
+    marginBottom: 30,
+
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
-  },
-  title1: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "black",
-    alignSelf : "center",
-  },
-  RecongnitionContainer: {
-    alignSelf : 'center',
-    alignContent : 'center',
-    padding: 16,
-    backgroundColor: 'white',
-    borderRadius: 12,
-    borderBlockColor: 'black',
-    // borderColor: 'black',
-    // shadowColor: '#000',
-    // shadowOffset: { width: 0, height: 2 },
-    // shadowOpacity: 0.25,
-    // shadowRadius: 4,
-    width: "100%",
-    height: "60%",
-    // elevation: 5,
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "black",
-    // bottom: 20,
-  },
-  text: {
-    fontSize: 16,
-    color: "black",
+  scrollContent: {
+    paddingBottom: 20,
   },
   textcenterize: {
     fontSize: 16,
     color: "black",
-    alignSelf : "center",
-    top : 100
+    alignSelf: "center",
+    marginTop: 100,
   },
+  filterButton: {
+    alignSelf: "center",
+    marginBottom: 10,
+    backgroundColor: "#f0f0f0",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    width: "60%",
+    right: "-20%",
+  },
+  
+  filterButtonText: {
+    color: "black",
+    fontWeight: "bold",
+    fontSize: 12,
+  },  
 });

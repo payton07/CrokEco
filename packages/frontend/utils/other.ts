@@ -78,11 +78,32 @@ export async function FormatDataPlatReconnu(data: string[]) {
         const obj = await change(id);
         lines.push({ text: ligne, color: obj?.color, id: id });
       } else {
-        lines.push({ text: ligne, color: "black", id: null });
+        lines.push({ text: ligne, color: "black", id: null});
       }
     } catch (error) {
       console.error("Erreur lors de la récupération des plats:", error);
     }
   }
   return lines;
+}
+
+export function MostOccurent(strings: string[]): string | null {
+  if (strings.length === 0) return null;
+
+  const countMap: Record<string, number> = {};
+
+  for (const str of strings) {
+    countMap[str] = (countMap[str] || 0) + 1;
+  }
+
+  let maxCount = 0;
+  let mostFrequent: string | null = null;
+
+  for (const str in countMap) {
+    if (countMap[str] > maxCount) {
+      maxCount = countMap[str];
+      mostFrequent = str;
+    }
+  }
+  return mostFrequent;
 }
