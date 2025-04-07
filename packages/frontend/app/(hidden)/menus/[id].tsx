@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderWidth: 1,
     marginVertical: 12,
-    width: "80%",
+    width: "98%",
     height: "auto",
   },
   text: {

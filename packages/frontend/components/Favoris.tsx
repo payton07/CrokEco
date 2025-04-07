@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
-import {ScrollView, StyleSheet, TextInput,Text, ActivityIndicator} from "react-native";
+import React, { useState } from "react";
+import {ScrollView, StyleSheet,Text, ActivityIndicator} from "react-native";
 import {View } from "./Themed";
 import Fav from './Fav';
-import { getIngredients, getPlats, getSous_Groupes } from "@/utils/bdd";
 
 export default function Favoris({ loads }: { loads: any[] }) {
   const [loading, setLoading] = useState(false);
@@ -28,10 +27,7 @@ const styles = StyleSheet.create({
   title: {
     backgroundColor : "white",
     paddingVertical : 10,
-    borderBlockColor : "black",
     margin : 0,
-    marginVertical : 10
-    // marginLeft : 16
   },
   title2: {
     fontSize: 18,
@@ -40,7 +36,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     textAlign : "left",
     marginLeft : 50,
-    backgroundColor : "white"
+    // backgroundColor : "white"
   },
   container: {
     paddingVertical: 10,

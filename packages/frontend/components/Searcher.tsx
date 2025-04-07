@@ -28,23 +28,25 @@ export default function Searcher() {
         if(Element.Nom_plat.toLowerCase().startsWith(text.toLowerCase())) return Element;
       }
       );
+      console.log("filtered taille","query :",s, filtered.length);
+      
       setFilteredPlats(filtered);
     }
     
   return (
-      <View>
+      <View style={styles.container}>
           <View style={styles.getStartedContainer}>
-            <TextInput style={styles1.homeScreenFilename} onChangeText={setSres} placeholder="  Search..."></TextInput>
+            <TextInput style={styles.homeScreenFilename} onChangeText={setSres} placeholder="  Search..."></TextInput>
           </View>
             {filteredPlats.length > 0 && (
-              <View style={styles1.suggestionsBox}>
+              <View style={styles.suggestionsBox}>
                 <FlatList
                   data={filteredPlats}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({ item }) => (
                     <TouchableWithoutFeedback onPress={() => inter(item)}>
-                      <View style={styles1.suggestionItem}>
-                        <Text style={styles1.suggestionText}>{item.Nom_plat}</Text>
+                      <View style={styles.suggestionItem}>
+                        <Text style={styles.suggestionText}>{item.Nom_plat}</Text>
                       </View>
                     </TouchableWithoutFeedback>
                   )}
@@ -56,12 +58,13 @@ export default function Searcher() {
 }
 
 const styles = StyleSheet.create({
+  container : {
+    backgroundColor: 'white',
+  },
   getStartedContainer: {
     alignItems: 'center',
     backgroundColor: '#fff',
-  }
-});
-const styles1 = StyleSheet.create({
+  },
   homeScreenFilename:{
       marginTop: 10,
       marginBottom: 10,
@@ -79,18 +82,22 @@ const styles1 = StyleSheet.create({
       backgroundColor : "white",
   },
   suggestionsBox: {
-    backgroundColor: '#f7f7f7',
-    borderRadius: 8,
+    backgroundColor: 'white',
+    borderRadius: 9,
     borderWidth: 1,
     borderColor: '#ddd',
     marginTop: 8,
     maxHeight: 200,
-    // width: '45%',
+    zIndex: 1,
+    width: '90%',
+    alignSelf: 'center',
   },
   suggestionItem: {
     padding: 8,
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
+    backgroundColor: 'white',
+    borderRadius: 9,
   },
   suggestionText: {
     color: '#333',

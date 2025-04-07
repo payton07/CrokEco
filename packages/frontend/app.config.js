@@ -2,8 +2,8 @@ import 'dotenv/config';  // Charger les variables depuis le fichier .env
 
 export default {
   expo: {
-    name: "ecocrock",
-    slug: "ecocrock",
+    name: "Ecocrock",
+    slug: "Ecocrock",
     version: "1.0.0",
     orientation: "portrait",
     icon: "./assets/images/icon.png",
@@ -17,14 +17,14 @@ export default {
     },
     ios: {
       supportsTablet: true,
-      bundleIdentifier: "com.anonymous.ecocrock",
+      bundleIdentifier: "com.anonymous.Ecocrock",
     },
     android: {
       adaptiveIcon: {
         foregroundImage: "./assets/images/adaptive-icon.png",
         backgroundColor: "#ffffff",
       },
-      package: "com.anonymous.ecocrock",
+      package: "com.anonymous.Ecocrock",
     },
     web: {
       bundler: "metro",

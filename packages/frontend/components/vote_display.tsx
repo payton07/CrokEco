@@ -23,7 +23,7 @@ export default function Vote_display({ligne} : {ligne: {ID_plat: number,Certifie
   }
   
   return (<View style={styles.reco}>
-            <Text style={styles.text}>{ligne.Nom_plat}{ligne.ID_plat}</Text>
+            <Text style={styles.text}>{ligne.Nom_plat}</Text>
               <TouchableOpacity style={styles.reco1} onPress={like}>
                   <AntDesign name="like2" size={24} color="blue" /><Text>{ligne.Like}</Text>
               </TouchableOpacity>

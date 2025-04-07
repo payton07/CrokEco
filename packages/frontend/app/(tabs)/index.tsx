@@ -30,7 +30,7 @@ function sortRecognizedText(blocks: TextBlock[]): string {
 
 export default function Index() {
   const [data, setData] = useState<any[]>([]);
-  const imagePath = require("../../assets/ingImages/image11.png");
+  const imagePath = require("../../assets/ingImages/image12.jpg");
   const [filled, setFilled] = useState(false);
   const [done, setDone] = useState(false);
   const [imageUri, setImageUri] = useState(RNImage.resolveAssetSource(imagePath).uri);
@@ -170,7 +170,14 @@ export default function Index() {
       const lines: string[] = [];
       for (const ligne of sortedText.split("\n")) {
         const v = ligne.split("*");
-        lines.push(v[0]);
+        const v1 = v.map((item) =>{ 
+          const res = item.trim().split(",")
+          return res[0]});
+        v1.forEach((item) => {
+        if(!parseFloat(item) && isNaN(parseInt(item) )&& item !== "" && item !== " " && isNaN(parseFloat(item))){
+          lines.push(item.trim());
+        }
+      });
       }
       return lines;
     } catch (error) {
@@ -225,10 +232,29 @@ export default function Index() {
           style={{ flex: 1 }}
           behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
-          <ScrollView contentContainerStyle={styles.scrollContainer}>
-            <Text style={styles.title}>Scanner page</Text>
+          {/* <ScrollView contentContainerStyle={styles.scrollContainer}> */}
+            {/* <Text style={styles.title}>Scanner</Text> */}
             <View style={styles.container}>
               <View style={styles.inputContainer}>
+                {done ? (
+                  <View style={styles.RecongnitionContainer}>
+                    <Text style={styles.title1}>Text Reconnu :</Text>
+                    {data ? (
+                      data.map((ligne, i) => (
+                        <Textshow key={i} ligne={ligne} />
+                      ))
+                    ) : (
+                      <Text style={styles.text}>Aucun texte reconnu</Text>
+                    )}
+                  </View>
+                ) : null}
+
+                {imageUri && !done && (
+                  <View style={styles.imageContainer}>
+                    <RNImage source={{ uri: imageUri }}style={styles.image} />
+                  </View>
+                )}
+
                 {!done ? (
                   <>
                     <Text style={styles.label}>Restaurants :</Text>
@@ -267,23 +293,6 @@ export default function Index() {
                   </>
                 ) : null}
 
-                {done ? (
-                  <View style={styles.RecongnitionContainer}>
-                    <Text style={styles.title1}>Text Reconnu :</Text>
-                    {data ? (
-                      data.map((ligne, i) => (
-                        <Textshow key={i} ligne={ligne} />
-                      ))
-                    ) : (
-                      <Text style={styles.text}>Aucun texte reconnu</Text>
-                    )}
-                  </View>
-                ) : null}
-
-                {imageUri && !done && (
-                  <RNImage source={{ uri: imageUri }} style={styles.image} />
-                )}
-
                 {!done ? (
                   <>
                     <TouchableOpacity
@@ -311,7 +320,7 @@ export default function Index() {
                 )}
               </View>
             </View>
-          </ScrollView>
+          {/* </ScrollView> */}
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     </SafeAreaProvider>
@@ -320,14 +329,24 @@ export default function Index() {
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    flexGrow: 1,
-    paddingBottom: 40,
+    // flexGrow: 1,
+    // paddingBottom: 40,
+  },
+  imageContainer: {
+    flex: 1,
   },
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "flex-start",
     backgroundColor: "white",
+  },
+  inputContainer: {
+    width: "90%",
+    height: "90%",
+    padding: 16,
+    backgroundColor: "#f9f9f9",
+    borderRadius: 10,
+    marginTop: 20,
   },
   title: {
     marginTop: 20,
@@ -350,6 +369,7 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderWidth: 1,
     marginVertical: 12,
+    width: "98%",
   },
   text: {
     fontSize: 16,
@@ -357,7 +377,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "100%",
-    height: 200,
+    height: "100%",
     borderRadius: 10,
     marginBottom: 10,
     resizeMode: "cover",
@@ -372,13 +392,6 @@ const styles = StyleSheet.create({
   imageButtonText: {
     color: "white",
     fontWeight: "bold",
-  },
-  inputContainer: {
-    width: "85%",
-    padding: 16,
-    backgroundColor: "#f9f9f9",
-    borderRadius: 10,
-    marginTop: 20,
   },
   label: {
     color: "#666",

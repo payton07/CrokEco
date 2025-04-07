@@ -169,7 +169,7 @@ export default function Research() {
             </View>
           )}
           <Searcher/>
-          {loading ? <ActivityIndicator size="large" color="#0000ff" />: <><Favoris loads={platsfavs} /><Suggestion loads={platsuggested} /></>}
+          {loading ? <ActivityIndicator size="large" color="#0000ff" />:<><Favoris loads={platsfavs} /><Suggestion loads={platsuggested} /></>}
         </View>
       </SafeAreaProvider>
     </DataContext.Provider>
@@ -216,6 +216,7 @@ const styles = StyleSheet.create({
     color: "black",
   },
   text: {
+    top : -4,
     fontSize: 22,
     fontWeight: "bold",
     margin: 2,
