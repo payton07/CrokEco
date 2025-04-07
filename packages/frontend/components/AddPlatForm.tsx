@@ -1,21 +1,10 @@
 import { View, Text, TextInput, TouchableOpacity, Alert, Pressable, StyleSheet, FlatList, TouchableWithoutFeedback } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
-import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useState } from 'react';
 import { getIngredients} from '@/utils/bdd';
-import { FormData , Ingredient, PostPlatClient} from '@/utils/other';
-
-const schema = yup.object({
-  name: yup.string().required("Le nom du plat est obligatoire"),
-  ingredients: yup.array().of(
-    yup.object({
-      name: yup.string().required("Le nom de l'ingrédient est obligatoire"),
-      weight: yup.string().required("Le poids est obligatoire"),
-    })
-  ).min(1, "Veuillez ajouter au moins un ingrédient")
-  .default([]),
-});
+import { PostPlatClient } from '@/utils/routes';
+import { Ingredient,FormData, schema } from '@/utils/type';
   
 
 export default function AddDishForm() {
@@ -37,7 +26,7 @@ export default function AddDishForm() {
   async function Alter_IngredientFromBdd(text:string){
     const query = `%${text}%`;
     const data = await getIngredients({'Nom_Francais':query},true,true,30); 
-    console.log("J'ai eu la data", data?.length);
+
     if(data !== undefined){
       const Ing : string[]= [];
       for (const ele of data) {
@@ -89,9 +78,9 @@ export default function AddDishForm() {
     
   async function onSubmit(data: FormData){
       setLoading(true);
-      console.log("la data du form",data);
+      // console.log("la data du form",data);
+      
       // Insertion dans la bd de la backends
-
       const re = await PostPlatClient(data);
       //
       Alert.alert(re.message, `Nom: ${data.name}\nNombre : ${data.ingredients.length} ingrédients`);
@@ -217,7 +206,6 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderWidth: 1,
     borderColor: '#ddd',
-    // flexDirection: 'row',
   },
   label: {
     color: '#666',

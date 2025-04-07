@@ -7,15 +7,15 @@ import { addPlats, addPlats_Ingredients, getLastElementPlats, getPlats, initDB,}
 import Searcher from "@/components/Searcher";
 import Favoris from "@/components/Favoris";
 import Suggestion from "@/components/Suggestion";
-import { change, getDataWithCacheExpiration, good, PostUpdateRequest} from "@/utils/other";
-const DO_MAJ_CODE = 3333;
-type Plat = {"Certified": number, "ID_plat": string, "Nom_plat": string, "Vote":number};
+import { change, getDataWithCacheExpiration} from "@/utils/other";
+import { DO_MAJ_CODE, good } from "@/utils/constants";
+import { PostUpdateRequest } from "@/utils/routes";
+
+// Variables globales
 const ele = { info: { Nom: "Pomme", categorie: "Fruit", Score: "0.5", Unite: "kg CO2 eq/kg de produit", id: 1 }, back: "Green" };
 export const DataContext = createContext({ data: [ele], isLoaded: false });
 
-
-
-
+// Fonction pour récupérer les plats favoris et suggérés
 async function setup1() {
   const plats_favs = await getPlats(false, true, false);
   const plats_suggested = await getPlats(false, true, false, 200);
@@ -37,13 +37,14 @@ async function setup1() {
 
 export default function Research() {
   const [menuVisible, setMenuVisible] = useState(false);
-  const [loads1, setLoads1] = useState([]);
-  const [loads2, setLoads2] = useState([]);
+  const [platsfavs, setPlatsfavs] = useState([]);
+  const [platsuggested, setPlatsuggested] = useState([]);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
 
 
+  // Fonction pour vider le cache
   async function clearAllCache() {  
     try {
       await AsyncStorage.clear();
@@ -56,12 +57,16 @@ export default function Research() {
     }
   }
 
-  async function init(){
+  // Fonction pour reset la base de données
+  // et vider le cache
+  async function reset(){
     console.log("je reset !");
     await initDB(true);
     await clearAllCache();
   }
 
+  // Fonction qui effectue la mise à jour
+  // des plats et des associations plat - ingredients
   async function DoUpdates(data : {message:string,code:number,last:string}){
     console.log("Lance la MAJ");
     if(data.code===DO_MAJ_CODE){
@@ -93,6 +98,8 @@ export default function Research() {
     }
   }
   
+  // Fonction pour vérifier les mises à jour
+  // et effectuer la mise à jour si nécessaire
   async function CheckForUpdates(){
     console.log("Demande de maj");
     const el = await getPlats(false,true,false);
@@ -108,13 +115,17 @@ export default function Research() {
     }
   }
 
+  // Fonction pour charger les données soit depuis le cache
+  // soit depuis la base de données 
+  // et mettre à jour l'état de l'application
+  // avec les plats favoris et suggérés
   async function loadData() {
     if (!isLoaded) {
       const donne = await getDataWithCacheExpiration("21", setup1, 30);
       if (donne) {
         setData(donne);
-        setLoads1(donne.plats_favoris);
-        setLoads2(donne.plats_suggest);
+        setPlatsfavs(donne.plats_favoris);
+        setPlatsuggested(donne.plats_suggest);
         setIsLoaded(true);
       }
       setLoading(false);
@@ -123,7 +134,6 @@ export default function Research() {
 
   useEffect(() => {
     loadData();
-    // CheckForUpdates();
   }, [isLoaded]);
 
   return (
@@ -142,7 +152,7 @@ export default function Research() {
                 <View style={styles.menu}>
                   <Text style={styles.menuText}>Menu</Text>
                   <Text style={styles.menuText}>Option 1</Text>
-                  <TouchableOpacity style={styles.ResetButton} onPress={init}>
+                  <TouchableOpacity style={styles.ResetButton} onPress={reset}>
                     <Text style={styles.clearButtonText}>Reset BD</Text>
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.MaJButton} onPress={CheckForUpdates}>
@@ -155,8 +165,8 @@ export default function Research() {
               </View>
             </View>
           )}
-          <Searcher path="app/(tabs)/research.tsx" />
-          {loading ? <ActivityIndicator size="large" color="#0000ff" />: <><Favoris loads={loads1} /><Suggestion loads={loads2} /></>}
+          <Searcher/>
+          {loading ? <ActivityIndicator size="large" color="#0000ff" />: <><Favoris loads={platsfavs} /><Suggestion loads={platsuggested} /></>}
         </View>
       </SafeAreaProvider>
     </DataContext.Provider>

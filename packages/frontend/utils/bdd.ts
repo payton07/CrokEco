@@ -13,13 +13,13 @@ let db: SQLite.SQLiteDatabase;
  */
 
 async function openDatabase(reload = false): Promise<SQLite.SQLiteDatabase> {
-    console.log("📂 Base de données introuvable dans documentDirectory, copie depuis le bundle...");
-    const dbExists = await FileSystem.getInfoAsync(dbPath);
+  const dbExists = await FileSystem.getInfoAsync(dbPath);
   
-    if (!dbExists.exists || (dbExists.exists && reload==true)) {
-      console.log("je relance ");
-      
+  if (!dbExists.exists || (dbExists.exists && reload==true)) {
+    console.log("je relance ");
+    
     try {
+      console.log("📂 Base de données introuvable dans documentDirectory, copie depuis le bundle...");
       // Charger l'asset via expo-asset
       const asset = Asset.fromModule(require('../assets/ingredient_carbon_score.db'));
       // Assurer que l'asset est téléchargé

@@ -1,49 +1,24 @@
-import React, { useCallback, useEffect, useState } from "react";
-import {StyleSheet, View,Text, ScrollView} from "react-native";
-import { Image} from 'expo-image';
+import React, {useEffect, useState } from "react";
+import {StyleSheet, View,Text,} from "react-native";
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { Link, router, Stack, useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import Textshow from "@/components/Textshow";
-import { change} from "@/utils/other";
-import { getPlats, getRecherches_Historique, getRestaurants_Historique } from "@/utils/bdd";
-import { useFocusEffect } from "@react-navigation/native";
-type info_t =  {Nom : string ,categorie : string , Score : string , Unite : string};
+import { FormatDataPlatReconnu} from "@/utils/other";
+import {getRecherches_Historique, getRestaurants_Historique } from "@/utils/bdd";
 
 export default function menus() {
-  // const [img, setImg] = useState<string|null>("@/assets/ingImage.image.png");
   const [isloaded, setIsloaded] = useState(false);
   const [plats , setPlats] = useState<any[]>([]);
-  // {}
   const params = useLocalSearchParams(); 
 
+  // Fonction pour retourner à la page précédente
+  // ou à la page d'historique
   function retour() {
       router.push({ pathname: `/(tabs)/historique`});
   }
-  
-  async function FormatDataPlatReconnu(data : string[]){
-    const lines = [];
-    for (const ligne of data) {
-      const query = `${ligne}`;
-      try {
-        const res = await getPlats({Nom_plat: query},false,true,1);
-        if(res != undefined && res.length > 0 && res != null){
-          const id = res[0].ID_plat;
-          const color = await change(id);
-          lines.push({"text":ligne,color:color?.back,"id":id});
-        }
-        else{
-          lines.push({"text":ligne,color:"black","id":null});
-        }
-      }
-      catch (error) {
-        console.error("Erreur lors de la récupération des plats:", error);
-      }
-    }
-    return lines;
-  }
 
+  // Fonction pour charger les plats reconnus dans le menu
   async function loadsplats(){
-    
     if (typeof params.ID_menu === "string" && typeof params.ID_restaurant === "string") {
       
       const ID_menu = parseInt(params.ID_menu);
@@ -53,11 +28,10 @@ export default function menus() {
       const recherche = await getRecherches_Historique({'ID_menu':ID_menu});
       
       const textrequested : any[]= JSON.parse(recherche?.at(0).Text_request);
-      console.log("call loadsplats");
+
       const texts = [];
       for(const obj of textrequested){texts.push(obj.text);}
       const lines = await FormatDataPlatReconnu(texts);
-      console.log("les lines go set (menus/[id])");
       
       setPlats(lines);
       setIsloaded(true);

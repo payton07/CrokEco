@@ -1,14 +1,9 @@
-import hmac from 'crypto-js/hmac-sha256';
-import { getIngredients, getPlats, getPlats_Ingredients, getSous_Groupes } from "./bdd";
+import { getIngredients, getPlats, getPlats_Ingredients} from "./bdd";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Constants from 'expo-constants';
-const SECRET_KEY = Constants.expoConfig?.extra?.SECRET_KEY ?? "default_secret_key";
-// console.log(SECRET_KEY); 
-export const good = "#4CAF50";
-export const bad = "red";
-export const ok = "orange";
-export const blue = "blue";
-export type info_t =  {Nom : string, Score : string , Unite : string,id:number};
+import { info_t } from "../utils/type";
+import { blue, good, ok, bad } from "./constants";
+
+
 export async function change(idplat : number  ) {
   if(idplat != undefined){
     const plat_ingredients = await getPlats_Ingredients({'ID_plat' : idplat},true, false, 10);
@@ -22,12 +17,12 @@ export async function change(idplat : number  ) {
       }
       const obj_ingredient_out = [];
       for (const ingredient of ingredients_data) {
-        const obj = [ingredient.Nom_Francais,[((ingredient.Score_unique_EF / score)*100).toPrecision(3),Qualite(ingredient.Score_unique_EF)]];
+        const obj = [ingredient.Nom_Francais,[((ingredient.Score_unique_EF / score)*100).toPrecision(3),Qualite_color(ingredient.Score_unique_EF)]];
         obj_ingredient_out.push(obj);
       }
       const plat = await getPlats({ID_plat : idplat},false,false);
       const info :info_t = {Nom: plat?.at(0).Nom_plat, Score: score.toPrecision(3), Unite:"mPt / kg de produit",id:idplat};
-      const out = {info : info, color : Qualite(score),ingredients : obj_ingredient_out};
+      const out = {info : info, color : Qualite_color(score),ingredients : obj_ingredient_out};
       return out;
     }
     else {
@@ -37,7 +32,7 @@ export async function change(idplat : number  ) {
   return {info : undefined, color : undefined,ingredients :[]};
 }
 
-export function Qualite(score : number) {
+export function Qualite_color(score : number) {
   if (score == 0) {
     return blue;
   }
@@ -72,155 +67,22 @@ export async function getDataWithCacheExpiration(key:string, CallFunction : ()=>
   }
 }
 
-
-/////////////////////////////////////////////
-//////////////////// API ////////////////////
-/////////////////////////////////////////////
-export type Ingredient = {
-  name: string;
-  weight: string;
-};
-
-export type FormData = {
-  name: string;
-  ingredients: Ingredient[];
-};
-const port = 3000;
-const IP = '192.168.1.129';
-// const IP = '172.30.22.24';
-// const IP = '127.0.0.1';
-const url = `http://${IP}:${port}/api/`;
-
-function genereHMACSignature(method: string, table: string, data: any) {
-  const timestamp = Math.floor(Date.now() / 1000); 
-  
-  const body = JSON.stringify(data);
-  
-  const message = `${method}\n/api/${table}\n${body}\n${timestamp}`;
-  
-  const signature = hmac(message, SECRET_KEY).toString();
-  
-  return { signature, timestamp };
-}
-
-async function GET(table: string ,id:string| boolean){
-  const url1 = id ? `${url}${table}/${id}` : `${url}${table}`;
-  try {
-    const response = await fetch(url1, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" }
-    });
-
-    if (!response.ok) {
-      throw new Error(`Erreur ${response.status}: ${response.statusText}`);
+export async function FormatDataPlatReconnu(data: string[]) {
+  const lines: any[] = [];
+  for (const ligne of data) {
+    const query = `${ligne}`;
+    try {
+      const plats = await getPlats({ Nom_plat: query }, false, true, 1);
+      if (plats && plats.length > 0) {
+        const id = plats[0].ID_plat;
+        const obj = await change(id);
+        lines.push({ text: ligne, color: obj?.color, id: id });
+      } else {
+        lines.push({ text: ligne, color: "black", id: null });
+      }
+    } catch (error) {
+      console.error("Erreur lors de la récupération des plats:", error);
     }
-    const data = await response.json();
-    return data ;
-  } catch (error) {
-    console.error("Erreur lors de la récupération du plat:", error);
-    return null ;
   }
-}
-
-async function POST(table: string, data: any) {
-  const method = "POST";
-  const url1 = `${url}${table}`;
-  
-  const { signature, timestamp } = genereHMACSignature(method, table, data);
-  
-  const headers = {
-    "Content-Type": "application/json",
-    "X-Signature": signature,  
-    "X-Timestamp": timestamp.toString(),
-  };
-  console.log("appel à POST avec url : ",url1);
-  const response = await fetch(url1, {
-    method: method,
-    headers: headers,
-    body: JSON.stringify(data),
-  });
-  const res = await response.json();
-  return res;
-}
-
-/**
- *  OPE suf PLAT 
- * @param data 
- */
-export async function PostPlatClient(data: FormData) {
-  console.log("appel à ajoutPlat");
-  const res = await POST("platsClient", data);
-  console.log("res :",res);
-  return res;
-}
-
-export async function GetPlatClient(id: string | boolean) {
-  const res = await GET('platsClient',id);
-  console.log("Plat récupéré:", res);
-}
-
-/**
- *  ANALYSE 
- * @param data 
- */
-type resto = {'NomResto':string,'Latitude':number,'Longitude':number};
-type menu = {'NomMenu':string,'ID_restaurant':number};
-type recherche = {'Text_request':string,'ID_menu':number,'Date':string};
-
-export async function PostResto(data: resto) {
-  console.log("appel à ajoutResto");
-  const res = await POST("restaurants", data);
-  console.log("res resto :",res);
-  return res;
-}
-
-export async function PostMenu(data: menu) {
-  console.log("appel à ajoutMenu");
-  const res = await POST("menus", data);
-  console.log("res resto :",res);
-  return res;
-}
-
-export async function PostRecherche(data: recherche) {
-  console.log("appel à ajoutRecherche");
-  const res = await POST("recherches", data);
-  console.log("res resto :",res);
-}
-
-
-export async function PostUpdateRequest(data:{ ID_plat: any}){
-  console.log("Update request");
-  const res = await POST("updates",data);
-  return res;
-}
-export async function PostUpdatePlatsRequest(data:{query:any, set:any}){
-  console.log("Update request");
-  const res = await POST("updates/plats",data);
-  return res;
-}
-
-
-export async function GetPlat_a_Vote(id: string | boolean) {
-  const res = await GET('platsClient',id);
-  console.log("Plat client récupéré:", res);
-  return res;
-}
-
-export async function Ping() {
-  const urll = `http://${IP}:${port}/ping`;
-  try {
-    const response = await fetch(urll, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" }
-    });
-
-    if (!response.ok) {
-      return response.status;
-    }
-    const data = await response.json();
-    return data.code ;
-  } catch (error) {
-    console.error("Erreur lors du ping:", error);
-    return null ;
-  }
+  return lines;
 }

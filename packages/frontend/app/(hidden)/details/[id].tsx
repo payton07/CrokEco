@@ -7,7 +7,7 @@ import { images } from "@/utils/picture";
 import * as FileSystem from 'expo-file-system';
 import ProgressBar from "@/components/progressBar";
 import { change} from "@/utils/other";
-import { info_t } from '../../../utils/other';
+import { info_t } from "@/utils/type";
 
 export default function details() {
   const [img, setImg] = useState<string|null>("@/assets/ingImage.image.png");
@@ -16,9 +16,12 @@ export default function details() {
   const [color, setColor] = useState("black");
   const params = useLocalSearchParams(); 
 
+  // Fonction pour retourner  à la page de recherche
   function retour() {
       router.push({ pathname: `/(tabs)/research`});
   }
+
+  // Fonction pour charger les infos du plat
   async function load(){
     if (typeof params.id === "string") {
       const ID_plat = parseInt(params.id);
@@ -38,13 +41,8 @@ export default function details() {
     }
   }
 
-  useEffect(() => {
-    /**
-     * TODO Faire un gros import des images pour aleger le chargement 
-     * EXEMPLE : 
-     * 
-     */ 
-  load();
+  useEffect(() => { 
+    load();
   },[]);
   return (
       <View style={styles.container}>

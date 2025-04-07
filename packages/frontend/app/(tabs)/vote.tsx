@@ -1,28 +1,24 @@
 import { StyleSheet } from "react-native";
-
-import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
 import React, { useCallback, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Vote_display from "@/components/vote_display";
 import { useFocusEffect } from "expo-router";
-import { GetPlat_a_Vote } from "@/utils/other";
+import { GetPlat_a_Vote } from "@/utils/routes";
 
 export default function Votes() {
   const [plats, setPlats] = useState<any[]>([]);
   const [isloaded , setIsloaded] = useState(false);
 
+  // Fonction pour récupérer les plats à voter
   async function loads(){
-    // console.log("Call loads de votes");
     const data = await GetPlat_a_Vote(false);
     console.log(data.message);
-    
-    // console.log("la data depuis la page votes :",data);
     setPlats(data);
     setIsloaded(true);
-    // console.log("Set du votes");
   }
 
+  // useFocusEffect pour charger les données lorsque la page est affichée
   useFocusEffect(
     useCallback(()=>{
       loads();

@@ -1,50 +1,19 @@
-import {
-  StyleSheet,
-  Alert,
-  Image as RNImage,
-  TouchableOpacity,
-  TextInput,
-  TouchableWithoutFeedback,
-  FlatList,
-  ScrollView,
-  KeyboardAvoidingView,
-  Keyboard,
-  Platform,
-} from "react-native";
+import {StyleSheet,Alert,Image as RNImage,TouchableOpacity,TextInput,TouchableWithoutFeedback,FlatList,ScrollView,KeyboardAvoidingView,Keyboard,Platform,} from "react-native";
 import { Text, View } from "@/components/Themed";
 import React, { useState, useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
 import TextRecognition from "@react-native-ml-kit/text-recognition";
-import {
-  addMenus_Historique,
-  addRecherches_Historique,
-  addRestaurants_Historique,
-  getPlats,
-  getRestaurants,
-} from "@/utils/bdd";
-import {
-  Ping,
-  PostMenu,
-  PostRecherche,
-  PostResto,
-  change,
-} from "@/utils/other";
+import {addMenus_Historique,addRecherches_Historique,addRestaurants_Historique,getPlats,getRestaurants,} from "@/utils/bdd";
 import Textshow from "@/components/Textshow";
 import * as Location from "expo-location";
+import { FormatDataPlatReconnu } from "@/utils/other";
+import { Ping, PostResto, PostMenu, PostRecherche } from "@/utils/routes";
+import { TextBlock } from "@/utils/type";
 
-interface BoundingBox {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
-interface TextBlock {
-  text: string;
-  frame?: BoundingBox;
-}
-
+// Permet de trier les blocs de texte reconnus
+// en fonction de leur position sur l'image
+// pour obtenir un texte ordonné
 function sortRecognizedText(blocks: TextBlock[]): string {
   return blocks
     .filter((block) => block.frame)
@@ -64,19 +33,16 @@ export default function Index() {
   const imagePath = require("../../assets/ingImages/image11.png");
   const [filled, setFilled] = useState(false);
   const [done, setDone] = useState(false);
-  const [imageUri, setImageUri] = useState(
-    RNImage.resolveAssetSource(imagePath).uri
-  );
+  const [imageUri, setImageUri] = useState(RNImage.resolveAssetSource(imagePath).uri);
   const [nomResto, setNomResto] = useState("");
   const [Adresse, setAdresse] = useState("");
+  // cette variable est utilisee , au cas où on a les restaurants
   const [RestosList, setRestosList] = useState([]);
+  //
   const [filteredRestos, setfilteredRestos] = useState<any[]>([]);
   const [RestosData, setRestosData] = useState<string[]>([]);
-  const [location, setLocation] = useState<Location.LocationObject | null>(
-    null
-  );
+  const [location, setLocation] = useState<Location.LocationObject | null>(null);
   const [loc, setLoc] = useState(false);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   async function getLocation() {
     let { status } = await Location.requestForegroundPermissionsAsync();
@@ -85,6 +51,7 @@ export default function Index() {
       return;
     }
 
+    // Recuperer la position actuelle de l'utilisateur
     let loc = await Location.getCurrentPositionAsync({});
     setLocation(loc);
     setLoc(true);
@@ -94,6 +61,7 @@ export default function Index() {
     getLocation();
   }, []);
 
+  // Choisir une image depuis la galerie de l'utilisateur
   async function pickImage() {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
@@ -115,26 +83,7 @@ export default function Index() {
     }
   }
 
-  async function FormatDataPlatReconnu(data: string[]) {
-    const lines: any[] = [];
-    for (const ligne of data) {
-      const query = `${ligne}`;
-      try {
-        const plats = await getPlats({ Nom_plat: query }, false, true, 1);
-        if (plats && plats.length > 0) {
-          const id = plats[0].ID_plat;
-          const obj = await change(id);
-          lines.push({ text: ligne, color: obj?.color, id: id });
-        } else {
-          lines.push({ text: ligne, color: "black", id: null });
-        }
-      } catch (error) {
-        console.error("Erreur lors de la récupération des plats:", error);
-      }
-    }
-    return lines;
-  }
-
+// Charger les données de localisation , Insert les données en local ensuite les envoyer au serveur
   async function LoadLocAndInsertClient_SendDataToServeur(lines: any[]) {
     let Longitude = 0;
     let Latitude = 0;
@@ -151,6 +100,8 @@ export default function Index() {
         Longitude,
         Adresse,
       };
+
+      // Insertion des données dans la base de données locale
       const idresto = await addRestaurants_Historique(resto);
 
       const menu = { NomMenu: "menu", ID_restaurant: idresto };
@@ -165,6 +116,10 @@ export default function Index() {
       await addRecherches_Historique(recherche);
 
       setNomResto("");
+
+      // On ping le serveur pour verifier la connexion
+      // Si la connexion est ok , on envoie les données
+      // Sinon on alert l'utilisateur
       const resultat = await Ping();
       if (resultat == 201) {
         const res1 = await PostResto(resto);
@@ -182,6 +137,9 @@ export default function Index() {
     }
   }
 
+  // Reconnaissance du  texte de l'image , formattage des données
+  // et envoi des données au serveur
+  // Si l'image est vide , on remet les données à zéro
   async function setRecoData() {
     if (!filled && imageUri) {
       const recognizedTexts = await recognizeText();
@@ -203,6 +161,7 @@ export default function Index() {
     }
   }
 
+  // Fonction de reconnaissance de texte de
   async function recognizeText(): Promise<string[] | undefined> {
     try {
       const result = await TextRecognition.recognize(imageUri);
@@ -220,13 +179,16 @@ export default function Index() {
     }
   }
 
-  function inter(ingredient: string) {
+  // Fonction appelée pour choisir un ingredient dans la liste des suggestions 
+  function Choose(ingredient: string) {
     if (ingredient.trim()) {
       setNomResto(ingredient.trim());
       setfilteredRestos([]);
     }
   }
 
+  // Fonction pour recuperer les restaurants de la base de données
+  // en fonction du nom du restaurant
   async function Alter_RestosFromBdd(text: string) {
     const query = `%${text}%`;
     const restos = await getRestaurants({ NomResto: query }, true, true, 30);
@@ -239,6 +201,10 @@ export default function Index() {
     }
   }
 
+  // Fonction pour filtrer les restaurants en fonction du texte
+  // tapé par l'utilisateur
+  // Si le texte est vide , on remet les restaurants à zéro
+  // Sinon on filtre les restaurants en fonction du texte
   async function filterRestos(text: string) {
     setNomResto(text);
     await Alter_RestosFromBdd(text);
@@ -279,7 +245,7 @@ export default function Index() {
                           keyExtractor={(item, index) => index.toString()}
                           renderItem={({ item }) => (
                             <TouchableWithoutFeedback
-                              onPress={() => inter(item)}
+                              onPress={() => Choose(item)}
                             >
                               <View style={styles.suggestionItem}>
                                 <Text style={styles.suggestionText}>

@@ -1,13 +1,8 @@
 import { StyleSheet } from "react-native";
-
-import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback,useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import TextRecognition from "@react-native-ml-kit/text-recognition";
-import { getMenus, getMenus_Historique, getPlats, getRecherches_Historique } from "@/utils/bdd";
-import { change } from "@/utils/other";
-import Textshow from "@/components/Textshow";
+import { getMenus_Historique, getRecherches_Historique } from "@/utils/bdd";
 import MenuHistory from "@/components/MenuHistory";
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -15,14 +10,24 @@ export default function History() {
   const [menus ,setMenus] = useState<any[]>([]);
   const [isloaded,setIsloaded] = useState(false);
   
+  // Fonction pour récupérer les menus
+  // et les recherches associées
   async function getloadsMenus(){
     const MENUS = await getMenus_Historique(false,true,false,false);
+    const Menus_update = [];
+    if(MENUS != undefined){
+      for(const menu of MENUS){
+        const recherche = await getRecherches_Historique({'ID_menu':menu.ID_menu},true,false,false);
+        const date = recherche?.at(0).Date;
+        const m = {...menu,'Date':date};
+        Menus_update.push(m);
+        
+      }
+    }
     console.log("Menus :",MENUS);
     
-    if(MENUS !=undefined) {
-      if(MENUS.length > 0) {setMenus(MENUS); setIsloaded(true);}
-      else{setMenus([]);setIsloaded(false);}
-    }
+    if(Menus_update.length > 0) {setMenus(Menus_update); setIsloaded(true);}
+    else{setMenus([]);setIsloaded(false);}
   }
   
   useFocusEffect(
@@ -34,9 +39,8 @@ export default function History() {
   return (
     <SafeAreaProvider>
       <View style={styles.container}>
-        <Text style={styles.title}>Page des Historiques </Text>
+        <Text style={styles.title}>Historiques </Text>
           <View style={styles.RecongnitionContainer}>
-            <Text style={styles.title1}>Vos Menus : </Text>
 
             {menus && isloaded? 
               menus.map((ligne,i)=>{
@@ -53,13 +57,15 @@ export default function History() {
 
 const styles = StyleSheet.create({
   container: {
+    height: "100%",
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "white",
   },
   title: {
-    top : 20,
+    top : 0,
+    bottom: "90%",
     alignSelf: "center",
     height: "10%",
     fontSize: 20,
