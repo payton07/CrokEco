@@ -2,11 +2,11 @@ import 'dotenv/config';  // Charger les variables depuis le fichier .env
 
 export default {
   expo: {
-    name: "Ecocrock",
-    slug: "Ecocrock",
+    name: "CrokEco",
+    slug: "CrokEco",
     version: "1.0.0",
     orientation: "portrait",
-    icon: "./assets/images/icon.png",
+    icon: "./assets/images/logo.png",
     scheme: "myapp",
     userInterfaceStyle: "automatic",
     newArchEnabled: false, // Désactive la nouvelle archi si problème
@@ -17,14 +17,14 @@ export default {
     },
     ios: {
       supportsTablet: true,
-      bundleIdentifier: "com.anonymous.Ecocrock",
+      bundleIdentifier: "com.anonymous.CrokEco",
     },
     android: {
       adaptiveIcon: {
         foregroundImage: "./assets/images/adaptive-icon.png",
         backgroundColor: "#ffffff",
       },
-      package: "com.anonymous.Ecocrock",
+      package: "com.anonymous.CrokEco",
     },
     web: {
       bundler: "metro",
