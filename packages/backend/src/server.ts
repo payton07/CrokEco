@@ -67,15 +67,6 @@ fastify.get('/ping', async (request, reply) => {
   return reply.code(201).send({ message: "ping reussi !", code: 201 });
 });
 
-// fastify.get('/ajout', async (request, reply) => {
-//   console.log("Dans accueil");
-  
-//   // Verif connexion avant sinon return ;
-  
-//   return reply.sendFile('ajout.html');
-
-// });
-
 fastify.post('/login', async (request, reply) => {
   // const name = "admin";
   // const mdpadmin = "123";

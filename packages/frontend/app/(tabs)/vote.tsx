@@ -13,7 +13,7 @@ export default function Votes() {
   // Fonction pour récupérer les plats à voter
   async function loads(){
     const data = await GetPlat_a_Vote(false);
-    console.log(data.message);
+    // console.log(data.message);
     setPlats(data);
     setIsloaded(true);
   }

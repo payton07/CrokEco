@@ -111,11 +111,8 @@ export default function AddDishForm() {
             />
           )}
         />
-      </View>
-      {errors.name && <Text style={styles.errorText}>{errors.name.message}</Text>}
+        {errors.name && <Text style={styles.errorText}>{errors.name.message}</Text>}
 
-
-      <View style={styles.inputContainer}>
         <Text style={styles.label}>Ingrédients :</Text>
         <TextInput
           style={styles.input2}
@@ -139,7 +136,7 @@ export default function AddDishForm() {
           </View>
         )}
         <TextInput
-          style={[styles.input, { width: "80%" }]}
+          style={[styles.input, { width: "100%" }]}
           placeholder="quantite en grammes"
           value={quantite}
           onChangeText={Alterquantite}
@@ -206,10 +203,12 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderWidth: 1,
     borderColor: '#ddd',
+    height : "50%",
+    // justifyContent : "center"
   },
   label: {
-    color: '#666',
-    marginBottom: 8,
+    color: '#777',
+    marginBottom: 20,
   },
   input: {
     backgroundColor: 'white',
@@ -217,6 +216,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#ddd',
+    bottom : "2%"
   },
   input2: {
     backgroundColor: 'white',
@@ -224,6 +224,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#ddd',
+    bottom : "3%"
     // width:"60%"
   },
   errorText: {
@@ -247,7 +248,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#2ecc71',
     padding: 8,
     borderRadius: 8,
-    marginTop: 8,
+    marginTop: 20,
     alignItems: 'center',
   },
   addButtonText: {

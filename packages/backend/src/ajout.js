@@ -1,8 +1,4 @@
-
-// import {addPlats, addPlats_Ingredients, getPlats_Ingredients_Client} from "../utils/acces_bdd.ts"
-// import { HOST, PORT } from '../utils/other.js';
-const HOST = '192.168.1.129';
-// const HOST = '172.30.22.24';
+const HOST = '172.24.10.186';
 const PORT = 3000;
 
 const IP = HOST;

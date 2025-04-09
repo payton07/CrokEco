@@ -10,6 +10,7 @@ import * as Location from "expo-location";
 import { FormatDataPlatReconnu } from "@/utils/other";
 import { Ping, PostResto, PostMenu, PostRecherche } from "@/utils/routes";
 import { TextBlock } from "@/utils/type";
+import Button from "@/components/Button";
 
 // Permet de trier les blocs de texte reconnus
 // en fonction de leur position sur l'image
@@ -297,25 +298,33 @@ export default function Index() {
                   <>
                     <TouchableOpacity
                       style={styles.imageButton}
-                      onPress={pickImage}
                     >
-                      <Text style={styles.imageButtonText}>
-                        Choisir une image
-                      </Text>
+                      <Button
+                        theme="primary"
+                        label="Choisir une image "
+                        onPress={pickImage}
+                      />
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={{ ...styles.imageButton, top: 10 }}
-                      onPress={setRecoData}
+                      // onPress={setRecoData}
                     >
-                      <Text style={styles.imageButtonText}>Analyser</Text>
+                      <Button
+                        theme="primary"
+                        label="Analyser"
+                        onPress={setRecoData}
+                      />
                     </TouchableOpacity>
                   </>
                 ) : (
                   <TouchableOpacity
                     style={styles.imageButton}
-                    onPress={setRecoData}
                   >
-                    <Text style={styles.imageButtonText}>Retour</Text>
+                    <Button
+                      theme="primary"
+                      label="Retour "
+                      onPress={setRecoData}
+                    />
                   </TouchableOpacity>
                 )}
               </View>
@@ -383,14 +392,13 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
   },
   imageButton: {
-    backgroundColor: "#007BFF",
-    padding: 12,
+    top : 10,
     borderRadius: 8,
     alignItems: "center",
     marginVertical: 6,
   },
   imageButtonText: {
-    color: "white",
+    color: "black",
     fontWeight: "bold",
   },
   label: {
