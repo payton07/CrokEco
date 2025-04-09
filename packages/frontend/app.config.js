@@ -6,7 +6,7 @@ export default {
     slug: "CrokEco",
     version: "1.0.0",
     orientation: "portrait",
-    icon: "./assets/images/logo.png",
+    icon: "./assets/images/logo2.png",
     scheme: "myapp",
     userInterfaceStyle: "automatic",
     newArchEnabled: false, // Désactive la nouvelle archi si problème
