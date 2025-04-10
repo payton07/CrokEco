@@ -2,13 +2,17 @@ import { ActivityIndicator, ScrollView, StyleSheet } from "react-native";
 import { Text, View } from "@/components/Themed";
 import React, { useCallback, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { getMenus_Historique, getPlats, getRecherches_Historique } from "@/utils/bdd";
+import {
+  getMenus_Historique,
+  getPlats,
+  getRecherches_Historique,
+} from "@/utils/bdd";
 import MenuHistory from "@/components/MenuHistory";
-import { useFocusEffect } from '@react-navigation/native';
-import { TouchableOpacity } from 'react-native';
+import { useFocusEffect } from "@react-navigation/native";
+import { TouchableOpacity } from "react-native";
 import { Form } from "react-hook-form";
 import { FormatDataPlatReconnu } from "@/utils/other";
-import { MostOccurent } from '../../utils/other';
+import { MostOccurent } from "../../utils/other";
 import { Fond_vert_clair, Fourchette } from "@/utils/constants";
 
 export default function History() {
@@ -21,7 +25,12 @@ export default function History() {
     const Menus_update = [];
     if (MENUS !== undefined) {
       for (const menu of MENUS) {
-        const recherche = await getRecherches_Historique({ ID_menu: menu.ID_menu }, true, false, false);
+        const recherche = await getRecherches_Historique(
+          { ID_menu: menu.ID_menu },
+          true,
+          false,
+          false,
+        );
         const date = recherche?.at(0)?.Date;
         const textrequested = JSON.parse(recherche?.at(0)?.Text_request);
         const formatData = await FormatDataPlatReconnu(textrequested);
@@ -29,31 +38,31 @@ export default function History() {
         const mostOccurent = MostOccurent(colors);
 
         let lacolor = "";
-        if(mostOccurent !== null ) {
+        if (mostOccurent !== null) {
           lacolor = mostOccurent;
-        }
-        else {
+        } else {
           lacolor = "black";
         }
-        const m = { ...menu, Date: date ,color:lacolor};
+        const m = { ...menu, Date: date, color: lacolor };
         Menus_update.push(m);
       }
     }
 
     if (Menus_update.length > 0) {
-
       // Tri des menus par date
       // const sortAsc = true; // true pour trier par date croissante, false pour décroissante
       Menus_update.sort((a, b) => {
         const parseDate = (str: string) => {
-          const [day, month, year] = str.split('/');
+          const [day, month, year] = str.split("/");
           return new Date(`${year}-${month}-${day}`);
         };
-      
+
         const dateA = parseDate(a.Date);
         const dateB = parseDate(b.Date);
-      
-        return sortAsc ? dateA.getTime() - dateB.getTime() : dateB.getTime() - dateA.getTime();
+
+        return sortAsc
+          ? dateA.getTime() - dateB.getTime()
+          : dateB.getTime() - dateA.getTime();
       });
 
       setMenus(Menus_update);
@@ -67,7 +76,7 @@ export default function History() {
   useFocusEffect(
     useCallback(() => {
       getloadsMenus();
-    }, [])
+    }, []),
   );
 
   return (
@@ -89,7 +98,7 @@ export default function History() {
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={true}
         >
-          {isloaded && menus.length >0 ? (
+          {isloaded && menus.length > 0 ? (
             menus.map((ligne, i) => <MenuHistory key={i} ligne={ligne} />)
           ) : isloaded && menus.length === 0 ? (
             <Text style={styles.textcenterize}>Aucun Menu</Text>
@@ -106,7 +115,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // backgroundColor: "white",
-    backgroundColor : Fond_vert_clair,
+    backgroundColor: Fond_vert_clair,
     paddingHorizontal: 16,
     // paddingTop: 20,
   },
@@ -114,9 +123,8 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: "bold",
     color: Fourchette,
-    margin:20,
+    margin: 20,
     marginBottom: 30,
-
   },
   scrollContent: {
     paddingBottom: 20,
@@ -137,10 +145,10 @@ const styles = StyleSheet.create({
     width: "60%",
     right: "-20%",
   },
-  
+
   filterButtonText: {
     color: "white",
     fontWeight: "bold",
     fontSize: 12,
-  },  
+  },
 });

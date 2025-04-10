@@ -1,17 +1,41 @@
-import {StyleSheet,Alert,Image as RNImage,TouchableOpacity,TextInput,TouchableWithoutFeedback,FlatList,ScrollView,KeyboardAvoidingView,Keyboard,Platform, ActivityIndicator,} from "react-native";
+import {
+  StyleSheet,
+  Alert,
+  Image as RNImage,
+  TouchableOpacity,
+  TextInput,
+  TouchableWithoutFeedback,
+  FlatList,
+  ScrollView,
+  KeyboardAvoidingView,
+  Keyboard,
+  Platform,
+  ActivityIndicator,
+} from "react-native";
 import { Text, View } from "@/components/Themed";
 import React, { useState, useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
 import TextRecognition from "@react-native-ml-kit/text-recognition";
-import {addMenus_Historique,addRecherches_Historique,addRestaurants_Historique,getPlats,getRestaurants,} from "@/utils/bdd";
+import {
+  addMenus_Historique,
+  addRecherches_Historique,
+  addRestaurants_Historique,
+  getPlats,
+  getRestaurants,
+} from "@/utils/bdd";
 import Textshow from "@/components/Textshow";
 import * as Location from "expo-location";
 import { FormatDataPlatReconnu } from "@/utils/other";
 import { Ping, PostResto, PostMenu, PostRecherche } from "@/utils/routes";
 import { TextBlock } from "@/utils/type";
 import Button from "@/components/Button";
-import { Fond_vert_clair, Fourchette, Vert_C, Vert_feuille } from "@/utils/constants";
+import {
+  Fond_vert_clair,
+  Fourchette,
+  Vert_C,
+  Vert_feuille,
+} from "@/utils/constants";
 
 // Permet de trier les blocs de texte reconnus
 // en fonction de leur position sur l'image
@@ -35,7 +59,9 @@ export default function Index() {
   const imagePath = require("../../assets/ingImages/image12.jpg");
   const [filled, setFilled] = useState(false);
   const [done, setDone] = useState(false);
-  const [imageUri, setImageUri] = useState(RNImage.resolveAssetSource(imagePath).uri);
+  const [imageUri, setImageUri] = useState(
+    RNImage.resolveAssetSource(imagePath).uri,
+  );
   const [nomResto, setNomResto] = useState("");
   const [Adresse, setAdresse] = useState("");
   // cette variable est utilisee , au cas où on a les restaurants
@@ -43,7 +69,9 @@ export default function Index() {
   //
   const [filteredRestos, setfilteredRestos] = useState<any[]>([]);
   const [RestosData, setRestosData] = useState<string[]>([]);
-  const [location, setLocation] = useState<Location.LocationObject | null>(null);
+  const [location, setLocation] = useState<Location.LocationObject | null>(
+    null,
+  );
   const [loc, setLoc] = useState(false);
 
   async function getLocation() {
@@ -85,7 +113,7 @@ export default function Index() {
     }
   }
 
-// Charger les données de localisation , Insert les données en local ensuite les envoyer au serveur
+  // Charger les données de localisation , Insert les données en local ensuite les envoyer au serveur
   async function LoadLocAndInsertClient_SendDataToServeur(lines: any[]) {
     let Longitude = 0;
     let Latitude = 0;
@@ -172,14 +200,21 @@ export default function Index() {
       const lines: string[] = [];
       for (const ligne of sortedText.split("\n")) {
         const v = ligne.split("*");
-        const v1 = v.map((item) =>{ 
-          const res = item.trim().split(",")
-          return res[0]});
+        const v1 = v.map((item) => {
+          const res = item.trim().split(",");
+          return res[0];
+        });
         v1.forEach((item) => {
-        if(!parseFloat(item) && isNaN(parseInt(item) )&& item !== "" && item !== " " && isNaN(parseFloat(item))){
-          lines.push(item.trim());
-        }
-      });
+          if (
+            !parseFloat(item) &&
+            isNaN(parseInt(item)) &&
+            item !== "" &&
+            item !== " " &&
+            isNaN(parseFloat(item))
+          ) {
+            lines.push(item.trim());
+          }
+        });
       }
       return lines;
     } catch (error) {
@@ -188,7 +223,7 @@ export default function Index() {
     }
   }
 
-  // Fonction appelée pour choisir un ingredient dans la liste des suggestions 
+  // Fonction appelée pour choisir un ingredient dans la liste des suggestions
   function Choose(ingredient: string) {
     if (ingredient.trim()) {
       setNomResto(ingredient.trim());
@@ -221,7 +256,7 @@ export default function Index() {
       setfilteredRestos([]);
     } else {
       const filtered = RestosData.filter((Element) =>
-        Element.toLowerCase().startsWith(text.toLowerCase())
+        Element.toLowerCase().startsWith(text.toLowerCase()),
       );
       setfilteredRestos(filtered);
     }
@@ -235,101 +270,93 @@ export default function Index() {
           behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
           {/* <ScrollView contentContainerStyle={styles.scrollContainer}> */}
-            {/* <Text style={styles.title}>Scanner</Text> */}
-            <View style={styles.container}>
-              <View style={styles.inputContainer}>
-                {done ? (
-                  <View style={styles.RecongnitionContainer}>
-                    <Text style={styles.title1}>Text Reconnu :</Text>
-                    {data ? (
-                      data.map((ligne, i) => (
-                        <Textshow key={i} ligne={ligne} />
-                      ))
-                    ) : (
-                      <Text style={styles.text}>Aucun texte reconnu</Text>
-                    )}
-                  </View>
-                ) : null}
+          {/* <Text style={styles.title}>Scanner</Text> */}
+          <View style={styles.container}>
+            <View style={styles.inputContainer}>
+              {done ? (
+                <View style={styles.RecongnitionContainer}>
+                  <Text style={styles.title1}>Text Reconnu :</Text>
+                  {data ? (
+                    data.map((ligne, i) => <Textshow key={i} ligne={ligne} />)
+                  ) : (
+                    <Text style={styles.text}>Aucun texte reconnu</Text>
+                  )}
+                </View>
+              ) : null}
 
-                {imageUri && !done && (
-                  <View style={styles.imageContainer}>
-                    <RNImage source={{ uri: imageUri }}style={styles.image} />
-                  </View>
-                )}
+              {imageUri && !done && (
+                <View style={styles.imageContainer}>
+                  <RNImage source={{ uri: imageUri }} style={styles.image} />
+                </View>
+              )}
 
-                {!done ? (
-                  <>
-                    <Text style={styles.label}>Restaurants :</Text>
-                    <TextInput
-                      style={styles.input2}
-                      placeholder="Taper le nom du resto"
-                      value={nomResto}
-                      onChangeText={filterRestos}
-                    />
-                    {filteredRestos.length > 0 && (
-                      <View style={styles.suggestionsBox}>
-                        <FlatList
-                          data={filteredRestos}
-                          keyExtractor={(item, index) => index.toString()}
-                          renderItem={({ item }) => (
-                            <TouchableWithoutFeedback
-                              onPress={() => Choose(item)}
-                            >
-                              <View style={styles.suggestionItem}>
-                                <Text style={styles.suggestionText}>
-                                  {item}
-                                </Text>
-                              </View>
-                            </TouchableWithoutFeedback>
-                          )}
-                        />
-                      </View>
-                    )}
-                    <Text style={styles.label}>Adresse :</Text>
-                    <TextInput
-                      style={styles.input2}
-                      placeholder="Taper l'adresse du resto"
-                      value={Adresse}
-                      onChangeText={setAdresse}
-                    />
-                  </>
-                ) : null}
-
-                {!done ? (
-                  <>
-                    <TouchableOpacity
-                      style={styles.imageButton}
-                    >
-                      <Button
-                        theme="primary"
-                        label="Choisir une image "
-                        onPress={pickImage}
+              {!done ? (
+                <>
+                  <Text style={styles.label}>Restaurants :</Text>
+                  <TextInput
+                    style={styles.input2}
+                    placeholder="Taper le nom du resto"
+                    value={nomResto}
+                    onChangeText={filterRestos}
+                  />
+                  {filteredRestos.length > 0 && (
+                    <View style={styles.suggestionsBox}>
+                      <FlatList
+                        data={filteredRestos}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({ item }) => (
+                          <TouchableWithoutFeedback
+                            onPress={() => Choose(item)}
+                          >
+                            <View style={styles.suggestionItem}>
+                              <Text style={styles.suggestionText}>{item}</Text>
+                            </View>
+                          </TouchableWithoutFeedback>
+                        )}
                       />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={{ ...styles.imageButton, top: 10 }}
-                      // onPress={setRecoData}
-                    >
-                      <Button
-                        theme="primary"
-                        label="Analyser"
-                        onPress={setRecoData}
-                      />
-                    </TouchableOpacity>
-                  </>
-                ) : (
+                    </View>
+                  )}
+                  <Text style={styles.label}>Adresse :</Text>
+                  <TextInput
+                    style={styles.input2}
+                    placeholder="Taper l'adresse du resto"
+                    value={Adresse}
+                    onChangeText={setAdresse}
+                  />
+                </>
+              ) : null}
+
+              {!done ? (
+                <>
+                  <TouchableOpacity style={styles.imageButton}>
+                    <Button
+                      theme="primary"
+                      label="Choisir une image "
+                      onPress={pickImage}
+                    />
+                  </TouchableOpacity>
                   <TouchableOpacity
-                    style={styles.imageButton}
+                    style={{ ...styles.imageButton, top: 10 }}
+                    // onPress={setRecoData}
                   >
                     <Button
                       theme="primary"
-                      label="Retour "
+                      label="Analyser"
                       onPress={setRecoData}
                     />
                   </TouchableOpacity>
-                )}
-              </View>
+                </>
+              ) : (
+                <TouchableOpacity style={styles.imageButton}>
+                  <Button
+                    theme="primary"
+                    label="Retour "
+                    onPress={setRecoData}
+                  />
+                </TouchableOpacity>
+              )}
             </View>
+          </View>
           {/* </ScrollView> */}
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
@@ -343,30 +370,34 @@ const styles = StyleSheet.create({
     // paddingBottom: 40,
   },
   imageContainer: {
-    flex: 1,
-    width : "auto",
-    borderBlockColor : Fourchette,
-    borderWidth :5,
-    borderRadius : 25,
-    backgroundColor : "white",
-    alignItems : "center",
+    // flex: 1,
+    height: "60%",
+    width: "auto",
+    borderBlockColor: Fourchette,
+    borderWidth: 5,
+    borderRadius: 25,
+    backgroundColor: "white",
+    alignItems: "center",
   },
   container: {
     flex: 1,
     alignItems: "center",
-    // backgroundColor: "white",
-    backgroundColor : Fond_vert_clair,
+    backgroundColor: "white",
+    // backgroundColor : Vert_C,
+    // backgroundColor : Fond_vert_clair,
   },
   inputContainer: {
-    width: "90%",
-    height: "90%",
+    width: "100%",
+    height: "100%",
     padding: 16,
+    marginBottom: 10,
     // backgroundColor: "white",
-    backgroundColor : Fond_vert_clair,
-    borderRadius: 20,
-    marginTop: 20,
-    // borderBlockColor : Fourchette,
-    borderWidth :5,
+    // backgroundColor : Vert_C,
+    backgroundColor: Fond_vert_clair,
+    // borderRadius: 20,
+    // marginTop: 20,
+    borderBlockColor: Fourchette,
+    borderWidth: 5,
   },
   title: {
     marginTop: 20,
@@ -403,8 +434,8 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
   },
   imageButton: {
-    top : 10,
-    borderRadius: 8,
+    top: 10,
+    borderRadius: 5,
     alignItems: "center",
     marginVertical: 6,
   },

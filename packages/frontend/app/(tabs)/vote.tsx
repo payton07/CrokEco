@@ -9,59 +9,60 @@ import { Fond_vert_clair } from "@/utils/constants";
 
 export default function Votes() {
   const [plats, setPlats] = useState<any[]>([]);
-  const [isloaded , setIsloaded] = useState(false);
+  const [isloaded, setIsloaded] = useState(false);
 
   // Fonction pour récupérer les plats à voter
-  async function loads(){
+  async function loads() {
     const data = await GetPlat_a_Vote(false);
     // console.log(data.message);
-    if(data ==null){console.log("Veuillez verifier votre connexion au serveur ");
-     return ;}
+    if (data == null) {
+      console.log("Veuillez verifier votre connexion au serveur ");
+      return;
+    }
     setPlats(data);
     setIsloaded(true);
   }
 
   // useFocusEffect pour charger les données lorsque la page est affichée
   useFocusEffect(
-    useCallback(()=>{
+    useCallback(() => {
       loads();
-    },[])
+    }, []),
   );
   return (
     <SafeAreaProvider>
       <View style={styles.container}>
         <Text style={styles.title}> Page des Votes </Text>
-          <ScrollView
+        <ScrollView
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={true}
         >
-            {isloaded && plats.length>0 ? 
-              plats.map((ligne,i)=>{
-                return <Vote_display key={i} ligne={ligne} />
-              })
-              : 
-              <Text style={styles.textcenterize}>Aucun Plats</Text>
-            }
+          {isloaded && plats.length > 0 ? (
+            plats.map((ligne, i) => {
+              return <Vote_display key={i} ligne={ligne} />;
+            })
+          ) : (
+            <Text style={styles.textcenterize}>Aucun Plats</Text>
+          )}
         </ScrollView>
       </View>
     </SafeAreaProvider>
   );
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
     // backgroundColor: "white",
-    backgroundColor : `${Fond_vert_clair}`,
+    backgroundColor: `${Fond_vert_clair}`,
     paddingHorizontal: 16,
   },
   scrollContent: {
     paddingBottom: 20,
   },
   title: {
-    top : 20,
+    top: 20,
     alignSelf: "center",
     height: "10%",
     fontSize: 20,
@@ -77,15 +78,15 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "black",
-    alignSelf : "center",
+    alignSelf: "center",
   },
   RecongnitionContainer: {
-    alignSelf : 'center',
-    alignContent : 'center',
+    alignSelf: "center",
+    alignContent: "center",
     padding: 16,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 12,
-    borderBlockColor: 'black',
+    borderBlockColor: "black",
     // borderColor: 'black',
     // shadowColor: '#000',
     // shadowOffset: { width: 0, height: 2 },
@@ -106,7 +107,7 @@ const styles = StyleSheet.create({
   textcenterize: {
     fontSize: 16,
     color: "black",
-    alignSelf : "center",
-    top : 100
+    alignSelf: "center",
+    top: 100,
   },
 });

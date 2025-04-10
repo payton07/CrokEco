@@ -1,5 +1,10 @@
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import {Entypo, Fontisto, MaterialCommunityIcons, MaterialIcons} from '@expo/vector-icons';
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import {
+  Entypo,
+  Fontisto,
+  MaterialCommunityIcons,
+  MaterialIcons,
+} from "@expo/vector-icons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link, Tabs } from "expo-router";
 
@@ -16,16 +21,22 @@ function TabBarIcon(props: {
 }
 
 import React, { ReactNode, useState } from "react";
-import { ScrollView, Image, View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  ScrollView,
+  Image,
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { hide } from 'expo-splash-screen';
+import { hide } from "expo-splash-screen";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-<MaterialCommunityIcons name="line-scan" size={24} color="black" /> 
+  <MaterialCommunityIcons name="line-scan" size={24} color="black" />;
   return (
     <Tabs
-
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         // Disable the static render of the header on web
@@ -37,7 +48,9 @@ export default function TabLayout() {
         name="index"
         options={{
           title: "Index",
-          tabBarIcon: ({ color }) => <MaterialCommunityIcons name="line-scan" size={24} color={color} />,
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="line-scan" size={24} color={color} />
+          ),
           headerShown: false,
         }}
       />
@@ -45,7 +58,9 @@ export default function TabLayout() {
         name="historique"
         options={{
           title: "Historique",
-          tabBarIcon: ({ color }) => <Fontisto name="history" size={24} color={color} />,
+          tabBarIcon: ({ color }) => (
+            <Fontisto name="history" size={24} color={color} />
+          ),
           headerShown: false,
         }}
       />
@@ -53,7 +68,9 @@ export default function TabLayout() {
         name="research"
         options={{
           title: "Research ",
-          tabBarIcon: ({ color }) => <Ionicons name="search-sharp" size={24} color={color} />,
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="search-sharp" size={24} color={color} />
+          ),
           headerShown: false,
         }}
       />
@@ -61,7 +78,9 @@ export default function TabLayout() {
         name="vote"
         options={{
           title: "Votes",
-          tabBarIcon: ({ color }) => <Entypo name="thumbs-up" size={24} color={color} />, 
+          tabBarIcon: ({ color }) => (
+            <Entypo name="thumbs-up" size={24} color={color} />
+          ),
           headerShown: false,
         }}
       />
@@ -69,14 +88,15 @@ export default function TabLayout() {
         name="add"
         options={{
           title: "Add",
-          tabBarIcon: ({ color }) => <FontAwesome name="cutlery" size={24} color={color} />, 
+          tabBarIcon: ({ color }) => (
+            <FontAwesome name="cutlery" size={24} color={color} />
+          ),
           headerShown: false,
         }}
       />
     </Tabs>
   );
 }
-
 
 const styles = StyleSheet.create({
   header: {

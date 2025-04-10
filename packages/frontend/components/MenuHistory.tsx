@@ -1,49 +1,76 @@
-import { Fond_vert_clair, Fourchette, Vert_feuille } from '@/utils/constants';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { router } from 'expo-router';
-import React from 'react';
-import { StyleSheet, View,TouchableOpacity,Text} from "react-native";
+import { Fond_vert_clair, Fourchette, Vert_feuille } from "@/utils/constants";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { router } from "expo-router";
+import React from "react";
+import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 
-function switchToMenu(objet : any[]){
-  router.push({ pathname: `/(hidden)/menus/[id]`, params: { id: objet.at(0), ID_menu: objet.at(0), ID_restaurant: objet.at(1)}});
+function switchToMenu(objet: any[]) {
+  router.push({
+    pathname: `/(hidden)/menus/[id]`,
+    params: {
+      id: objet.at(0),
+      ID_menu: objet.at(0),
+      ID_restaurant: objet.at(1),
+    },
+  });
 }
 
-export default function MenuHistory({ligne} : {ligne: {ID_menu: number, ID_restaurant : number, NomMenu : string, Date : string,color: string}}) {
-
-  function call(){
-    if(ligne.ID_menu === null) return;
-    switchToMenu([ligne.ID_menu,ligne.ID_restaurant]);
+export default function MenuHistory({
+  ligne,
+}: {
+  ligne: {
+    ID_menu: number;
+    ID_restaurant: number;
+    NomMenu: string;
+    Date: string;
+    color: string;
+  };
+}) {
+  function call() {
+    if (ligne.ID_menu === null) return;
+    switchToMenu([ligne.ID_menu, ligne.ID_restaurant]);
   }
-  
-  return (<View >
-              <TouchableOpacity style={styles.reco} onPress={call}>
-              <Text style={styles.text}>{ligne.NomMenu}{ligne.ID_menu}</Text><Text style={styles.text}>{ligne.Date}</Text><FontAwesome style={styles.star} name="star" size={24} color={ligne.color} />
-              </TouchableOpacity>
-          </View>
+
+  return (
+    <View>
+      <TouchableOpacity style={styles.reco} onPress={call}>
+        <Text style={styles.text}>
+          {ligne.NomMenu}
+          {ligne.ID_menu}
+        </Text>
+        <Text style={styles.text}>{ligne.Date}</Text>
+        <FontAwesome
+          style={styles.star}
+          name="star"
+          size={24}
+          color={ligne.color}
+        />
+      </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-text: {
+  text: {
     fontSize: 16,
     color: "black",
-    },
-star : {
-    right : 40,
-    },
-reco : {
-    bottom : 10, 
-    flexDirection : "row",
-    justifyContent : "space-between",
-    alignItems : "center",
-    width : "100%",
+  },
+  star: {
+    right: 40,
+  },
+  reco: {
+    bottom: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
     padding: 16,
     // backgroundColor: "#fff",
-    backgroundColor : Vert_feuille ,//Fourchette,
+    backgroundColor: Vert_feuille, //Fourchette,
     shadowColor: "#000",
     shadowOffset: {
-    width: 0,
-    height: 2,
+      width: 0,
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
@@ -55,5 +82,5 @@ reco : {
     borderColor: "#ccc",
     borderWidth: 1,
     marginVertical: 12,
-    },
+  },
 });

@@ -8,15 +8,15 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 export default function Info() {
   return (
     <SafeAreaProvider>
-    <View style={styles.container}>
-      <Text style={styles.title}>Info page</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
-      <EditScreenInfo path="app/(tabs)/info.tsx" />
-    </View>
+      <View style={styles.container}>
+        <Text style={styles.title}>Info page</Text>
+        <View
+          style={styles.separator}
+          lightColor="#eee"
+          darkColor="rgba(255,255,255,0.1)"
+        />
+        <EditScreenInfo path="app/(tabs)/info.tsx" />
+      </View>
     </SafeAreaProvider>
   );
 }

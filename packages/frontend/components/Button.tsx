@@ -12,14 +12,9 @@ type Props = {
 export default function Button({ label, theme, onPress }: Props) {
   if (theme === "primary") {
     return (
-      <View
-        style={[
-          styles.buttonContainer,
-          { borderWidth: 4, borderRadius: 20 },
-        ]}
-      >
+      <View style={[styles.buttonContainer, { borderRadius: 5 }]}>
         <Pressable
-          style={[styles.button, { backgroundColor:Vert_feuille }]}
+          style={[styles.button, { backgroundColor: Fourchette }]}
           onPress={onPress}
         >
           {/* <FontAwesome
@@ -28,9 +23,7 @@ export default function Button({ label, theme, onPress }: Props) {
             color="#25292e"
             style={styles.buttonIcon}
           /> */}
-          <Text style={[styles.buttonLabel, { color: "#25292e" }]}>
-            {label}
-          </Text>
+          <Text style={styles.buttonLabel}>{label}</Text>
         </Pressable>
       </View>
     );
@@ -53,10 +46,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 3,
-    backgroundColor : Fond_vert_clair,
+    backgroundColor: Fourchette,
   },
   button: {
-    borderRadius: 20,
+    borderRadius: 5,
     width: "100%",
     height: "100%",
     alignItems: "center",
@@ -67,7 +60,8 @@ const styles = StyleSheet.create({
     paddingRight: 8,
   },
   buttonLabel: {
-    color: Fourchette,
+    color: "white",
     fontSize: 16,
+    fontWeight: "bold",
   },
 });

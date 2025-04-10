@@ -7,19 +7,19 @@ import { Fond_vert_clair } from "@/utils/constants";
 export default function Add() {
   return (
     <SafeAreaProvider>
-    <AddDishForm />
+      <AddDishForm />
     </SafeAreaProvider>
   );
 }
 
 const styles = StyleSheet.create({
-container:{
+  container: {
     paddingTop: 10,
     // backgroundColor: "white",
-    backgroundColor : `${Fond_vert_clair}`,
+    backgroundColor: `${Fond_vert_clair}`,
     // marginBottom: "73%",
     // paddingBottom: "83%",
-},
+  },
   text: {
     fontSize: 22,
     fontWeight: "bold",

@@ -47,3 +47,14 @@ le reste c'est sur xcode , autre possibilité : je verrais plus tard
 Frontend : faut add  resto , gerer mise à jour 
 
 == Faut que lors de l'ajout des plats par le script de mallo , ce soit en autoincrement 
+
+
+""" ➡️ Description à copier-coller :
+
+Génére un logo vectoriel plat avec :
+Un C stylisé et légèrement allongé (main levée, organique, artistique, en vert foncé),
+Une feuille verte intégrée dans le C, bien visible et moderne,
+Une fourchette bleue foncée à droite du C, légèrement rapprochée mais pas collée (laisse un petit espace visuel propre),
+Le tout sur un fond vert clair doux.
+Le logo doit rester équilibré, minimaliste, et bien espacé entre chaque élément.
+"""

@@ -2,11 +2,16 @@ import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 
 const ProgressBar = ({ progress }: { progress: any[] }) => {
-  
   return (
     <View style={styles.progressBar}>
-      <View style={{backgroundColor: progress[1] ,...styles.progress, width: `${progress[0]}%`}}>
-        <Text style={{fontSize:15}}>{`${progress[0]}%`}</Text>
+      <View
+        style={{
+          backgroundColor: progress[1],
+          ...styles.progress,
+          width: `${progress[0]}%`,
+        }}
+      >
+        <Text style={{ fontSize: 15 }}>{`${progress[0]}%`}</Text>
       </View>
     </View>
   );
