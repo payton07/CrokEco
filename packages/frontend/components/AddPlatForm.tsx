@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { getIngredients} from '@/utils/bdd';
 import { PostPlatClient } from '@/utils/routes';
 import { Ingredient,FormData, schema } from '@/utils/type';
+import { Fond_vert_clair } from '@/utils/constants';
   
 
 export default function AddDishForm() {
@@ -179,7 +180,8 @@ export default function AddDishForm() {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
+    backgroundColor : `${Fond_vert_clair}`,
     borderRadius: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },

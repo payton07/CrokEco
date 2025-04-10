@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {ScrollView, StyleSheet, TextInput,Text, ActivityIndicator} from "react-native";
 import {View } from "./Themed";
 import Fav from './Fav';
+import { Fond_vert_clair } from "@/utils/constants";
 
 export default function Suggestion({ loads }: { loads : any[] }) {
   // console.log("Suggestion loads",loads);
@@ -28,7 +29,8 @@ export default function Suggestion({ loads }: { loads : any[] }) {
 const styles = StyleSheet.create({
     wrapper: {
       marginBottom: 10,
-      backgroundColor : "#C0F3F0",
+      // backgroundColor : "#C0F3F0",
+      backgroundColor : `${Fond_vert_clair}`,
       // "#C0F3F0",
     },
     title: {
@@ -49,7 +51,7 @@ const styles = StyleSheet.create({
       paddingVertical: 10,
       // flexGrow: 1,
       alignItems: "center",
-      backgroundColor : "white",
+      backgroundColor : `${Fond_vert_clair}`,
       // minHeight: "50%",
       // flexDirection: "column",
       // paddingBottom : 100,
@@ -58,6 +60,6 @@ const styles = StyleSheet.create({
       flexDirection: "row",
       flexWrap: "wrap",
       justifyContent: "flex-start",
-      backgroundColor : "#C0F3F0",
+      backgroundColor : `${Fond_vert_clair}`,
     },
   });

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {ScrollView, StyleSheet,Text, ActivityIndicator} from "react-native";
 import {View } from "./Themed";
 import Fav from './Fav';
+import { Fond_vert_clair } from "@/utils/constants";
 
 export default function Favoris({ loads }: { loads: any[] }) {
   const [loading, setLoading] = useState(false);
@@ -22,7 +23,8 @@ export default function Favoris({ loads }: { loads: any[] }) {
 
 const styles = StyleSheet.create({
   wrapper: {
-    backgroundColor : "#C0F3F0",
+    backgroundColor : `${Fond_vert_clair}`,
+    // backgroundColor : "#C0F3F0",
   },
   title: {
     backgroundColor : "white",

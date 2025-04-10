@@ -1,6 +1,7 @@
 import { StyleSheet, View, Pressable, Text } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import React from "react";
+import { Fond_vert_clair, Fourchette, Vert_feuille } from "@/utils/constants";
 
 type Props = {
   label: string;
@@ -14,11 +15,11 @@ export default function Button({ label, theme, onPress }: Props) {
       <View
         style={[
           styles.buttonContainer,
-          { borderWidth: 4, borderRadius: 18 },
+          { borderWidth: 4, borderRadius: 20 },
         ]}
       >
         <Pressable
-          style={[styles.button, { backgroundColor: "#fff" }]}
+          style={[styles.button, { backgroundColor:Vert_feuille }]}
           onPress={onPress}
         >
           {/* <FontAwesome
@@ -52,9 +53,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 3,
+    backgroundColor : Fond_vert_clair,
   },
   button: {
-    borderRadius: 10,
+    borderRadius: 20,
     width: "100%",
     height: "100%",
     alignItems: "center",
@@ -65,7 +67,7 @@ const styles = StyleSheet.create({
     paddingRight: 8,
   },
   buttonLabel: {
-    color: "#fff",
+    color: Fourchette,
     fontSize: 16,
   },
 });

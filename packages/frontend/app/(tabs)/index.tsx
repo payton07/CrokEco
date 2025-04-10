@@ -11,6 +11,7 @@ import { FormatDataPlatReconnu } from "@/utils/other";
 import { Ping, PostResto, PostMenu, PostRecherche } from "@/utils/routes";
 import { TextBlock } from "@/utils/type";
 import Button from "@/components/Button";
+import { Fond_vert_clair, Fourchette, Vert_C, Vert_feuille } from "@/utils/constants";
 
 // Permet de trier les blocs de texte reconnus
 // en fonction de leur position sur l'image
@@ -343,31 +344,41 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     flex: 1,
+    width : "auto",
+    borderBlockColor : Fourchette,
+    borderWidth :5,
+    borderRadius : 25,
+    backgroundColor : "white",
+    alignItems : "center",
   },
   container: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "white",
+    // backgroundColor: "white",
+    backgroundColor : Fond_vert_clair,
   },
   inputContainer: {
     width: "90%",
     height: "90%",
     padding: 16,
-    backgroundColor: "#f9f9f9",
-    borderRadius: 10,
+    // backgroundColor: "white",
+    backgroundColor : Fond_vert_clair,
+    borderRadius: 20,
     marginTop: 20,
+    // borderBlockColor : Fourchette,
+    borderWidth :5,
   },
   title: {
     marginTop: 20,
     alignSelf: "center",
     fontSize: 24,
     fontWeight: "bold",
-    color: "black",
+    color: Fourchette,
   },
   title1: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "black",
+    color: Fourchette,
     alignSelf: "center",
     marginBottom: 12,
   },
@@ -382,13 +393,13 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
-    color: "black",
+    color: Fourchette,
   },
   image: {
     width: "100%",
     height: "100%",
-    borderRadius: 10,
-    marginBottom: 10,
+    borderRadius: 20,
+    marginBottom: 20,
     resizeMode: "cover",
   },
   imageButton: {
@@ -398,11 +409,11 @@ const styles = StyleSheet.create({
     marginVertical: 6,
   },
   imageButtonText: {
-    color: "black",
+    color: Fourchette,
     fontWeight: "bold",
   },
   label: {
-    color: "#666",
+    color: Fourchette,
     marginTop: 12,
     marginBottom: 4,
   },
@@ -412,6 +423,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: "#ddd",
+    color: Fourchette,
   },
   suggestionsBox: {
     backgroundColor: "#f7f7f7",
@@ -427,6 +439,6 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ddd",
   },
   suggestionText: {
-    color: "#333",
+    color: Fourchette,
   },
 });

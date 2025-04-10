@@ -5,6 +5,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import Vote_display from "@/components/vote_display";
 import { useFocusEffect } from "expo-router";
 import { GetPlat_a_Vote } from "@/utils/routes";
+import { Fond_vert_clair } from "@/utils/constants";
 
 export default function Votes() {
   const [plats, setPlats] = useState<any[]>([]);
@@ -14,6 +15,8 @@ export default function Votes() {
   async function loads(){
     const data = await GetPlat_a_Vote(false);
     // console.log(data.message);
+    if(data ==null){console.log("Veuillez verifier votre connexion au serveur ");
+     return ;}
     setPlats(data);
     setIsloaded(true);
   }
@@ -32,7 +35,7 @@ export default function Votes() {
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={true}
         >
-            {plats.length>0 && isloaded? 
+            {isloaded && plats.length>0 ? 
               plats.map((ligne,i)=>{
                 return <Vote_display key={i} ligne={ligne} />
               })
@@ -50,7 +53,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "white",
+    // backgroundColor: "white",
+    backgroundColor : `${Fond_vert_clair}`,
     paddingHorizontal: 16,
   },
   scrollContent: {

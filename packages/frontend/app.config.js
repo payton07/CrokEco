@@ -1,4 +1,5 @@
-import 'dotenv/config';  // Charger les variables depuis le fichier .env
+// Charger les variables depuis le fichier .env
+import 'dotenv/config';  
 
 export default {
   expo: {
@@ -6,14 +7,14 @@ export default {
     slug: "CrokEco",
     version: "1.0.0",
     orientation: "portrait",
-    icon: "./assets/images/logo2.png",
+    icon: "./assets/images/icon.png",
     scheme: "myapp",
     userInterfaceStyle: "automatic",
-    newArchEnabled: false, // Désactive la nouvelle archi si problème
+    newArchEnabled: false, 
     splash: {
-      image: "./assets/images/splash-icon.png",
+      image: "./assets/images/splash.png",
       resizeMode: "contain",
-      backgroundColor: "#ffffff",
+      backgroundColor: "#2E6B3D",
     },
     ios: {
       supportsTablet: true,
@@ -21,8 +22,8 @@ export default {
     },
     android: {
       adaptiveIcon: {
-        foregroundImage: "./assets/images/adaptive-icon.png",
-        backgroundColor: "#ffffff",
+        foregroundImage: "./assets/images/icon.png",
+        backgroundColor: "#2E6B3D",
       },
       package: "com.anonymous.CrokEco",
     },

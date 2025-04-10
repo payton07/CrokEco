@@ -9,6 +9,7 @@ import { TouchableOpacity } from 'react-native';
 import { Form } from "react-hook-form";
 import { FormatDataPlatReconnu } from "@/utils/other";
 import { MostOccurent } from '../../utils/other';
+import { Fond_vert_clair, Fourchette } from "@/utils/constants";
 
 export default function History() {
   const [menus, setMenus] = useState<any[]>([]);
@@ -59,7 +60,7 @@ export default function History() {
       setIsloaded(true);
     } else {
       setMenus([]);
-      setIsloaded(false);
+      setIsloaded(true);
     }
   }
 
@@ -104,14 +105,15 @@ export default function History() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    // backgroundColor: "white",
+    backgroundColor : Fond_vert_clair,
     paddingHorizontal: 16,
     // paddingTop: 20,
   },
   title: {
     fontSize: 25,
     fontWeight: "bold",
-    color: "black",
+    color: Fourchette,
     margin:20,
     marginBottom: 30,
 
@@ -128,7 +130,7 @@ const styles = StyleSheet.create({
   filterButton: {
     alignSelf: "center",
     marginBottom: 10,
-    backgroundColor: "#f0f0f0",
+    backgroundColor: Fourchette,
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 20,
@@ -137,7 +139,7 @@ const styles = StyleSheet.create({
   },
   
   filterButtonText: {
-    color: "black",
+    color: "white",
     fontWeight: "bold",
     fontSize: 12,
   },  

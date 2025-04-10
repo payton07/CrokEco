@@ -1,4 +1,5 @@
-const HOST = '172.24.10.186';
+// const HOST = '172.24.10.186';
+const HOST = '192.168.1.129';
 const PORT = 3000;
 
 document.getElementById("loginForm").addEventListener("submit", async function(event) {

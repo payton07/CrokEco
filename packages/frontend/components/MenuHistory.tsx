@@ -1,3 +1,4 @@
+import { Fond_vert_clair, Fourchette, Vert_feuille } from '@/utils/constants';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { router } from 'expo-router';
 import React from 'react';
@@ -16,7 +17,7 @@ export default function MenuHistory({ligne} : {ligne: {ID_menu: number, ID_resta
   
   return (<View >
               <TouchableOpacity style={styles.reco} onPress={call}>
-              <Text style={styles.text}>{ligne.NomMenu}{ligne.ID_menu}</Text><Text>{ligne.Date}</Text><FontAwesome style={styles.star} name="star" size={24} color={ligne.color} />
+              <Text style={styles.text}>{ligne.NomMenu}{ligne.ID_menu}</Text><Text style={styles.text}>{ligne.Date}</Text><FontAwesome style={styles.star} name="star" size={24} color={ligne.color} />
               </TouchableOpacity>
           </View>
   );
@@ -37,7 +38,8 @@ reco : {
     alignItems : "center",
     width : "100%",
     padding: 16,
-    backgroundColor: "#fff",
+    // backgroundColor: "#fff",
+    backgroundColor : Vert_feuille ,//Fourchette,
     shadowColor: "#000",
     shadowOffset: {
     width: 0,

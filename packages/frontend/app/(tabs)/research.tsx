@@ -8,7 +8,7 @@ import Searcher from "@/components/Searcher";
 import Favoris from "@/components/Favoris";
 import Suggestion from "@/components/Suggestion";
 import { change, getDataWithCacheExpiration} from "@/utils/other";
-import { DO_MAJ_CODE, good } from "@/utils/constants";
+import { DO_MAJ_CODE, Fond_vert_clair, good } from "@/utils/constants";
 import { PostUpdateRequest } from "@/utils/routes";
 
 // Variables globales
@@ -179,7 +179,8 @@ export default function Research() {
 const styles = StyleSheet.create({
   container: {
     paddingTop: 10,
-    backgroundColor: "white",
+    // backgroundColor: "white",
+    backgroundColor : `${Fond_vert_clair}`,
     marginBottom: "73%",
     paddingBottom: "83%",
   },
