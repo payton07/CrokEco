@@ -1,10 +1,9 @@
 import Constants from "expo-constants";
-export const port = 3000;
-export const IP = "192.168.1.129";
-// export const IP = '172.24.10.186';
+export const port = Constants.expoConfig?.extra?.PORT ;
+export const IP = Constants.expoConfig?.extra?.HOST ;
+
+export const SECRET_KEY = Constants.expoConfig?.extra?.SECRET_KEY ;
 export const url = `http://${IP}:${port}/api/`;
-export const SECRET_KEY =
-  Constants.expoConfig?.extra?.SECRET_KEY ?? "default_secret_key";
 export const DO_MAJ_CODE = 3333;
 export const good = "#4CAF50";
 export const bad = "red";

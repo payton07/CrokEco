@@ -3,6 +3,7 @@ import { resto, menu, recherche } from "./type";
 import { IP, port, SECRET_KEY, url } from "./constants";
 import { FormData } from "@/utils/type";
 
+// const SECRET_KEY='913580834d7f3d1235c2761b7e20a52ceea8cb864df4f3993ffda91417cb3829';
 function genereHMACSignature(method: string, table: string, data: any) {
   const timestamp = Math.floor(Date.now() / 1000);
 
@@ -23,6 +24,8 @@ async function GET(table: string, id: string | boolean) {
       headers: { "Content-Type": "application/json" },
     });
 
+    console.log("url de get");
+    
     if (!response.ok) {
       throw new Error(`Erreur ${response.status}: ${response.statusText}`);
     }
@@ -45,7 +48,7 @@ async function POST(table: string, data: any) {
     "X-Signature": signature,
     "X-Timestamp": timestamp.toString(),
   };
-  console.log("appel à POST avec url : ", url1);
+  console.log("appel à POST avec url : ",SECRET_KEY);
   const response = await fetch(url1, {
     method: method,
     headers: headers,
@@ -115,6 +118,8 @@ export async function GetPlat_a_Vote(id: string | boolean) {
 
 export async function Ping() {
   const urll = `http://${IP}:${port}/ping`;
+  console.log(urll);
+  
   try {
     const response = await fetch(urll, {
       method: "GET",

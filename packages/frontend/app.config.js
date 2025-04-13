@@ -38,6 +38,8 @@ export default {
     },
     extra: {
       SECRET_KEY: process.env.SECRET_KEY, 
+      HOST:process.env.HOST,
+      PORT:process.env.PORT,
     },
   },
 };

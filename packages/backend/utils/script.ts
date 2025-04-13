@@ -7,6 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 function addKeyIfNotExist(envPath: string, secretKey: string) {
+  // verif car sinon il le rajoute à la suite et on peut pas vider tt le fichier , on reisque de perdre d'autre infos
   try {
     if (fs.existsSync(envPath)) {
       const Contenu = fs.readFileSync(envPath, "utf-8");

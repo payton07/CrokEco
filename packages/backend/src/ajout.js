@@ -1,5 +1,5 @@
 // const HOST = '172.24.10.186';
-const HOST = '192.168.1.129';
+const HOST = '0.0.0.0';
 const PORT = 3000;
 
 const IP = HOST;

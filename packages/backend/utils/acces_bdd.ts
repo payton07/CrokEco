@@ -13,7 +13,7 @@ async function openDatabase(): Promise<sqlite3.Database | null> {
   if (fs.existsSync(dbPath)) {
     console.log("Le fichier existe.");
   } else {
-    console.log("Le fichier n'existe pas.");
+    console.log("Le fichier n'existe pas.", dbPath);
     return null;
   }
   if (!db) {

@@ -30,7 +30,6 @@ import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 import fastifyStatic from "@fastify/static";
 import bcrypt from "bcrypt";
-import { HOST, PORT } from "../utils/other.ts";
 
 type resto = { NomResto: string; Latitude: number; Longitude: number };
 type menu = { NomMenu: string; ID_restaurant: number };
@@ -48,7 +47,9 @@ const DO_MAJ_CODE = 3333;
 // Charger les variables d'environnement depuis le fichier .env
 dotenv.config();
 
-const SECRET_KEY = process.env.SECRET_KEY || "defaultSecretKey";
+const SECRET_KEY = process.env.SECRET_KEY??'' ;
+const HOST = process.env.HOST;
+const PORT : number = process?.env?.PORT ? parseInt(process.env.PORT) :  3000;
 
 function verifyHMACSignature(
   method: string,
@@ -60,12 +61,13 @@ function verifyHMACSignature(
   const body = JSON.stringify(data);
 
   const message = `${method}\n/api/${table}\n${body}\n${timestamp}`;
-
+  
   const computedSignature = crypto
-    .createHmac("sha256", SECRET_KEY)
-    .update(message)
-    .digest("hex");
-
+  .createHmac("sha256", SECRET_KEY)
+  .update(message)
+  .digest("hex");
+  
+  console.log("message : ",message,"clientsignature:",clientSignature,"compted :",computedSignature);
   return computedSignature === clientSignature;
 }
 
