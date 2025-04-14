@@ -23,7 +23,7 @@ import {
   getRestaurant_Client,
   getUsers,
   updatePlats_Client,
-} from "../utils/acces_bdd.ts";
+} from "../utils/acces_bdd.js";
 import crypto from "crypto";
 import dotenv from "dotenv";
 import path, { dirname } from "path";
@@ -48,7 +48,7 @@ const DO_MAJ_CODE = 3333;
 dotenv.config();
 
 const SECRET_KEY = process.env.SECRET_KEY??'' ;
-const HOST = process.env.HOST;
+const HOST = '0.0.0.0';
 const PORT : number = process?.env?.PORT ? parseInt(process.env.PORT) :  3000;
 
 function verifyHMACSignature(
