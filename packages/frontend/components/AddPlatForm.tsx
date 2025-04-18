@@ -142,6 +142,7 @@ export default function AddDishForm() {
           value={ingredient}
           onChangeText={filterIngredients}
         />
+        <View style={styles.flottante}>
         {filteredIngredients.length > 0 && (
           <View style={styles.suggestionsBox}>
             <FlatList
@@ -157,6 +158,7 @@ export default function AddDishForm() {
             />
           </View>
         )}
+        </View>
         <TextInput
           style={[styles.input, { width: "100%" }]}
           placeholder="quantite en grammes"
@@ -268,7 +270,6 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: Fourchette,
-    // backgroundColor: Vert_feuille,
     padding: 12,
     borderRadius: 8,
     alignItems: "center",
@@ -318,6 +319,7 @@ const styles = StyleSheet.create({
     borderColor: "#ddd",
     marginTop: 8,
     maxHeight: 200,
+    zIndex: 1,
     // width: '45%',
   },
   suggestionItem: {
@@ -328,4 +330,12 @@ const styles = StyleSheet.create({
   suggestionText: {
     color: "#333",
   },
+  flottante :{
+    position : "absolute",
+    zIndex : 10,
+    width : "100%",
+    top : 227,
+    left : 12,
+    backgroundColor : "transparent",
+  }
 });

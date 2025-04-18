@@ -51,19 +51,6 @@ export default function History() {
     if (Menus_update.length > 0) {
       // Tri des menus par date
       // const sortAsc = true; // true pour trier par date croissante, false pour décroissante
-      Menus_update.sort((a, b) => {
-        const parseDate = (str: string) => {
-          const [day, month, year] = str.split("/");
-          return new Date(`${year}-${month}-${day}`);
-        };
-
-        const dateA = parseDate(a.Date);
-        const dateB = parseDate(b.Date);
-
-        return sortAsc
-          ? dateA.getTime() - dateB.getTime()
-          : dateB.getTime() - dateA.getTime();
-      });
 
       setMenus(Menus_update);
       setIsloaded(true);
@@ -79,6 +66,24 @@ export default function History() {
     }, []),
   );
 
+  function sortPlats(){
+    const res = menus.sort((a, b) => {
+      const parseDate = (str: string) => {
+        const [day, month, year] = str.split("/");
+        return new Date(`${year}-${month}-${day}`);
+      };
+
+      const dateA = parseDate(a.Date);
+      const dateB = parseDate(b.Date);
+
+      return sortAsc
+        ? dateA.getTime() - dateB.getTime()
+        : dateB.getTime() - dateA.getTime();
+    });
+
+    setMenus(res);
+  }
+
   return (
     <SafeAreaProvider>
       <View style={styles.container}>
@@ -87,7 +92,7 @@ export default function History() {
           style={styles.filterButton}
           onPress={() => {
             setSortAsc(!sortAsc);
-            getloadsMenus();
+            sortPlats();
           }}
         >
           <Text style={styles.filterButtonText}>

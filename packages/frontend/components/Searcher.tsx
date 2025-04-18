@@ -6,7 +6,7 @@ import {
   TouchableWithoutFeedback,
   Text,
 } from "react-native";
-import { View } from "./Themed";
+import { View } from './Themed';
 import { getPlats } from "@/utils/bdd";
 import { router } from "expo-router";
 import { Fond_vert_clair } from "@/utils/constants";
@@ -29,7 +29,7 @@ export default function Searcher() {
     let s = `%${e}%`;
     console.log("la query :", s);
 
-    const Plats = await getPlats({ Nom_plat: s }, true, true, 30);
+    const Plats = await getPlats({ Nom_plat: s }, true, true, 5);
 
     if (Plats === undefined || Plats.length === 0) {
       setFilteredPlats([]);
@@ -57,9 +57,10 @@ export default function Searcher() {
         <TextInput
           style={styles.homeScreenFilename}
           onChangeText={setSres}
-          placeholder="  Search..."
-        ></TextInput>
-      </View>
+          placeholder="Search..."
+        />
+      </View >
+      <View style={styles.flottante}>
       {filteredPlats.length > 0 && (
         <View style={styles.suggestionsBox}>
           <FlatList
@@ -75,6 +76,7 @@ export default function Searcher() {
           />
         </View>
       )}
+      </View>
     </View>
   );
 }
@@ -82,15 +84,20 @@ export default function Searcher() {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Fond_vert_clair,
+    zIndex: 10,
   },
   getStartedContainer: {
     alignItems: "center",
+    marginLeft: 10,
     // backgroundColor: '#fff',
     backgroundColor: Fond_vert_clair,
+    // backgroundColor: 'red',
   },
   homeScreenFilename: {
     marginTop: 10,
     marginBottom: 10,
+    padding: 10,
+    // marginLeft: 10,
     // color : "black",
     // marginLeft: 20,
     // paddingHorizontal: 15,
@@ -102,14 +109,11 @@ const styles = StyleSheet.create({
     // left : 10,
     height: 40,
     position: "relative",
-    // backgroundColor: Fond_vert_clair,
-    backgroundColor: "white",
+    backgroundColor: 'white',
   },
-  suggestionsBox: {
-    // backgroundColor: 'white',
-    backgroundColor: Fond_vert_clair,
+  suggestionsBox: {    
+    backgroundColor: "transparent",
     borderRadius: 9,
-    borderWidth: 1,
     borderColor: "#ddd",
     maxHeight: 200,
     zIndex: 1,
@@ -121,11 +125,20 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
     backgroundColor: "white",
-    // backgroundColor: Fond_vert_clair,
     borderRadius: 9,
     zIndex: 1,
   },
   suggestionText: {
     color: "#333",
+    zIndex: 1,
   },
+  flottante :{
+    position : "absolute",
+    zIndex : 10,
+    width : "98%",
+    top : 50,
+    left : 10,
+    backgroundColor : "transparent",
+
+  }
 });

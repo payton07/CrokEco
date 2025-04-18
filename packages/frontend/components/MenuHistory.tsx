@@ -35,7 +35,7 @@ export default function MenuHistory({
     <View>
       <TouchableOpacity style={styles.reco} onPress={call}>
         <Text style={styles.text}>
-          {ligne.NomMenu}
+          {ligne.NomMenu.trim().length > 0 ? ligne.NomMenu : "Menu"}
           {ligne.ID_menu}
         </Text>
         <Text style={styles.text}>{ligne.Date}</Text>

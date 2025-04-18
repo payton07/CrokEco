@@ -153,7 +153,7 @@ export default function Index() {
       const resultat = await Ping();
       if (resultat == 201) {
         const res1 = await PostResto(resto);
-        const menuPost = { NomMenu: "menu", ID_restaurant: res1.code };
+        const menuPost = { NomMenu: nomResto, ID_restaurant: res1.code };
         const res2 = await PostMenu(menuPost);
         const recherchePost = {
           Text_request: textReconnu,
@@ -261,7 +261,6 @@ export default function Index() {
       setfilteredRestos(filtered);
     }
   }
-
   return (
     <SafeAreaProvider>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

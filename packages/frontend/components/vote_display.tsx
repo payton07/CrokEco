@@ -16,6 +16,9 @@ export default function Vote_display({
 }) {
   console.log("dans vote display");
   const [isloaded, setIsloaded] = useState(false);
+  const [Liked, setLiked] = useState(ligne.Like);
+  const [DisLiked, setDisLiked] = useState(ligne.DisLike);
+  const [isDone, setIsDone] = useState(false);
 
   const query = { ID_plat: ligne.ID_plat };
   function call() {
@@ -23,13 +26,21 @@ export default function Vote_display({
   }
   async function dislike() {
     call();
-    const set = { DisLike: ligne.DisLike + 1 };
-    await PostUpdatePlatsRequest({ query: query, set: set });
+    if(!isDone) {
+      setIsDone(true);
+      setDisLiked(DisLiked + 1);
+      const set = { DisLike: ligne.DisLike + 1 };
+      await PostUpdatePlatsRequest({ query: query, set: set });
+    }
   }
   async function like() {
     call();
-    const set = { Like: ligne.Like + 1 };
-    await PostUpdatePlatsRequest({ query: query, set: set });
+    if(!isDone) {
+      setIsDone(true);
+      setLiked(Liked + 1);
+      const set = { Like: ligne.Like + 1 };
+      await PostUpdatePlatsRequest({ query: query, set: set });
+    }
   }
 
   return (
@@ -37,11 +48,11 @@ export default function Vote_display({
       <Text style={styles.text}>{ligne.Nom_plat}</Text>
       <TouchableOpacity style={styles.reco1} onPress={like}>
         <AntDesign name="like2" size={24} color="blue" />
-        <Text>{ligne.Like}</Text>
+        <Text>{Liked}</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.reco1} onPress={dislike}>
         <AntDesign name="dislike2" size={24} color="red" />
-        <Text>{ligne.DisLike}</Text>
+        <Text>{DisLiked}</Text>
       </TouchableOpacity>
     </View>
   );
