@@ -10,7 +10,8 @@ const DO_MAJ_CODE = 3333;
 // Charger les variables d'environnement depuis le fichier .env
 dotenv.config();
 const SECRET_KEY = process.env.SECRET_KEY ?? '';
-const HOST = '0.0.0.0';
+// const HOST = '0.0.0.0';
+const HOST = '172.24.10.219';
 const PORT = process?.env?.PORT ? parseInt(process.env.PORT) : 3000;
 function verifyHMACSignature(method, table, data, timestamp, clientSignature) {
     const body = JSON.stringify(data);
