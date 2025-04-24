@@ -13,7 +13,7 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useState } from "react";
 import { getIngredients } from "@/utils/bdd";
-import { PostPlatClient } from "@/utils/routes";
+import { Ping, PostPlatClient } from "@/utils/routes";
 import { Ingredient, FormData, schema } from "@/utils/type";
 import { Fond_vert_clair, Fourchette, Vert_feuille } from "@/utils/constants";
 
@@ -98,12 +98,21 @@ export default function AddDishForm() {
     // console.log("la data du form",data);
 
     // Insertion dans la bd de la backends
-    const re = await PostPlatClient(data);
-    //
-    Alert.alert(
-      re.message,
-      `Nom: ${data.name}\nNombre : ${data.ingredients.length} ingrédients`,
-    );
+    const resultat = await Ping();
+    if (resultat == 201) {
+      const re = await PostPlatClient(data);
+      //
+      Alert.alert(
+        re.message,
+        `Nom: ${data.name}\nNombre : ${data.ingredients.length} ingrédients`,
+      );
+    }
+    else {
+      Alert.alert(
+        "Erreur de connexion",
+        "Veuillez verifier votre connexion au serveur et reessayer",
+      );
+    }
     reset();
     setLoading(false);
     setIngredient("");

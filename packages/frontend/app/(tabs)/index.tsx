@@ -162,7 +162,10 @@ export default function Index() {
         };
         await PostRecherche(recherchePost);
       } else {
-        Alert.alert("Veuillez vous connecter à internet");
+          Alert.alert(
+            "Erreur de connexion",
+            "Veuillez verifier votre connexion au serveur",
+          );
       }
     }
   }

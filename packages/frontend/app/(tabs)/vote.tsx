@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet } from "react-native";
+import { Alert, ScrollView, StyleSheet } from "react-native";
 import { Text, View } from "@/components/Themed";
 import React, { useCallback, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -16,9 +16,12 @@ export default function Votes() {
   // Fonction pour récupérer les plats à voter
   async function loads() {
     const data = await GetPlat_a_Vote(false);
-    console.log(data);
     if (data == null) {
       console.log("Veuillez verifier votre connexion au serveur ");
+      Alert.alert(
+        "Erreur de connexion",
+        "Veuillez verifier votre connexion au serveur",
+      );
       return;
     }
     const plats = JSON.parse(data?.plats);

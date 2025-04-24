@@ -48,7 +48,9 @@ async function GET(table: string, id: string | boolean) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Erreur lors de la récupération du plat:", error);
+    // console.error("Erreur lors de la récupération du plat:", error);
+    console.log("Erreur lors de la récupération du plat:", error);
+    
     return null;
   }
 }
@@ -70,7 +72,7 @@ async function POST(table: string, data: any) {
     "X-Signature": signature,
     "X-Timestamp": timestamp.toString(),
   };
-  console.log("appel à POST avec url : ",SECRET_KEY);
+  // console.log("appel à POST avec url : ",SECRET_KEY);
   const response = await fetch(url1, {
     method: method,
     headers: headers,
@@ -133,11 +135,11 @@ export async function GetPlat_a_Vote(id: string | boolean) {
 
 /**
  * @description Effectue un ping sur le serveur pour vérifier s'il est en ligne
- * @returns null si erreur, sinon le code de la réponse du fetch
+ * @returns null si erreur, sinon le code de la réponse du fetch (201)
  */
 export async function Ping() {
   const urll = `http://${IP}:${port}/ping`;
-  console.log(urll);
+  // console.log(urll);
   
   try {
     const response = await fetch(urll, {
@@ -151,7 +153,9 @@ export async function Ping() {
     const data = await response.json();
     return data.code;
   } catch (error) {
-    console.error("Erreur lors du ping:", error);
+    // console.error("Erreur lors du ping:", error);
+    console.log("Erreur lors du ping:", error);
+    
     return null;
   }
 }
