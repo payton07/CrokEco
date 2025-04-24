@@ -49,7 +49,8 @@ dotenv.config();
 
 const SECRET_KEY = process.env.SECRET_KEY??'' ;
 // const HOST = '0.0.0.0';
-const HOST = '172.24.10.219';
+// const HOST = '172.24.10.219';
+const HOST = '192.168.1.129';
 const PORT : number = process?.env?.PORT ? parseInt(process.env.PORT) :  3000;
 
 function verifyHMACSignature(
@@ -334,6 +335,7 @@ fastify.post("/api/platsInsert", async (request, reply) => {
     const plat = plats?.at(0);
     const id = plats?.at(0).ID_plat;
     delete plat.ID_plat;
+    plat.Certified = 1;
 
     const res = await addPlats(plat);
     if (res && assoc != undefined && assoc.length > 0) {

@@ -1,6 +1,6 @@
 // const HOST = '172.24.10.186';
 // const HOST = '0.0.0.0';
-const HOST = '172.24.10.219';
+const HOST = '192.168.1.129';
 const PORT = 3000;
 // http://172.24.10.219:3000
 const IP = HOST;
