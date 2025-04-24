@@ -47,11 +47,11 @@ const DO_MAJ_CODE = 3333;
 // Charger les variables d'environnement depuis le fichier .env
 dotenv.config();
 
-const SECRET_KEY = process.env.SECRET_KEY??'' ;
+const SECRET_KEY = process.env.SECRET_KEY ?? "";
 // const HOST = '0.0.0.0';
 // const HOST = '172.24.10.219';
-const HOST = '192.168.1.129';
-const PORT : number = process?.env?.PORT ? parseInt(process.env.PORT) :  3000;
+const HOST = "192.168.1.129";
+const PORT: number = process?.env?.PORT ? parseInt(process.env.PORT) : 3000;
 
 function verifyHMACSignature(
   method: string,
@@ -63,13 +63,20 @@ function verifyHMACSignature(
   const body = JSON.stringify(data);
 
   const message = `${method}\n/api/${table}\n${body}\n${timestamp}`;
-  
+
   const computedSignature = crypto
-  .createHmac("sha256", SECRET_KEY)
-  .update(message)
-  .digest("hex");
-  
-  console.log("message : ",message,"clientsignature:",clientSignature,"compted :",computedSignature);
+    .createHmac("sha256", SECRET_KEY)
+    .update(message)
+    .digest("hex");
+
+  console.log(
+    "message : ",
+    message,
+    "clientsignature:",
+    clientSignature,
+    "compted :",
+    computedSignature
+  );
   return computedSignature === clientSignature;
 }
 
@@ -169,9 +176,27 @@ fastify.get("/api/platsClient", async (request, reply) => {
   console.log("get platsClient");
   try {
     const data = await getPlats_Client(false, true, false);
-    console.log("la data", data?.length, data);
+    // console.log("la data", data?.length, data);
+    const dico_assoc : Record<number,any[]>= {};
 
-    return reply.send(JSON.stringify(data));
+    if (data != undefined && data.length > 0) {
+      // Pour chaque plat, on va chercher les associations etre lui et ses ingredients puis  les ajouter au dico_assoc
+      for (const plat of data) {
+        const id  = plat.ID_plat;
+        const assoc = await getPlats_Ingredients_Client({ ID_plat: id },true,false,false);
+        if (dico_assoc[id] == undefined) {
+          dico_assoc[id] = [];
+        }
+        if(assoc != undefined && assoc.length > 0) {
+          dico_assoc[id].push(...assoc);
+        }
+      }
+    }
+
+    if (data == undefined || data.length == 0) {
+      return reply.status(404).send({ error: "Pas de plats client" });
+    }
+    return reply.send({plats:JSON.stringify(data),assocs : JSON.stringify(dico_assoc)});
   } catch (err) {
     console.error("Erreur lors de la récupération des plats clients:", err);
     return reply.status(500).send({ error: "Erreur interne du serveur" });
@@ -385,22 +410,19 @@ fastify.post("/api/platsDelete", async (request, reply) => {
 
     const del = await deletePlats_Ingredients_Client(query);
     const del1 = await deletePlats_Client(query);
-if (del && del1) {
+    if (del && del1) {
       console.log("plat delete : ", del, del1);
       return reply
         .status(201)
         .send({ message: "Plat supprimé avec succès", code: 201 });
+    } else {
+      return reply.status(201).send({ message: "Failed ", code: 404 });
     }
-  else {
-    return reply.status(201).send({ message: "Failed ", code: 404 });
-  }
   } catch (err) {
     console.error("Erreur lors de l'ajout du Plat:", err);
     return reply.status(500).send({ error: "Erreur interne du serveur" });
   }
 });
-
-
 
 // Ajout resto
 fastify.post("/api/restaurants", async (request, reply) => {
