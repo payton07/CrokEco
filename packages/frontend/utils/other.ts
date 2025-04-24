@@ -8,9 +8,11 @@ import { blue, good, ok, bad } from "./constants";
  * @param idplat : number
  * @param plat : any
  * @param Assocs : any[]
- * @returns Retourne un  qui contient les infos du plat et des ingredients qu'il contient
+ * @description Fonction qui permet de formater les informations d'un plat
+ *  et de ses ingredients
+ * @returns un objet contenant les informations du plat, la couleur et les ingredients
  */
-export async function change(idplat: number,plat=null,Assocs=null) : Promise<{info : any, color : string | undefined, ingredients : any[]}> {
+export async function FormatInfoPlatIngredients(idplat: number,plat=null,Assocs=null) : Promise<{info : any, color : string | undefined, ingredients : any[]}> {
   if (idplat != undefined) {
     // on recupere les lignes de l'association entre les plats et les ingredients
     let plat_ingredients: any[]|undefined = [];
@@ -87,6 +89,16 @@ export async function change(idplat: number,plat=null,Assocs=null) : Promise<{in
   return { info: undefined, color: undefined, ingredients: [] };
 }
 
+/**
+ * 
+ * @param score : number
+ * @returns 
+ * @description Fonction qui retourne la couleur en fonction du score, 
+ * 0 : bleu ,
+ * < 1 : vert ,
+ * 1-5 : orange ,
+ * sinon : rouge 
+ */
 export function Qualite_color(score: number) {
   if (score == 0) {
     return blue;
@@ -100,6 +112,17 @@ export function Qualite_color(score: number) {
   return bad;
 }
 
+/**
+ * 
+ * @param key : string
+ * @param CallFunction : () => {}
+ * @param expirationTimeInMinutes : number par défaut 30 minutes
+ * @description Fonction qui permet de récupérer des données en cache avec une expiration
+ *  Si les données sont dans le cache et qu'elles ne sont pas expirées,
+ *  on les retourne, sinon on appelle la fonction pour récupérer les données
+ * @returns any
+ * @throws Erreur si la récupération des données échoue
+ */
 export async function getDataWithCacheExpiration(
   key: string,
   CallFunction: () => {},
@@ -126,6 +149,15 @@ export async function getDataWithCacheExpiration(
   }
 }
 
+/**
+ * 
+ * @param data : string[]
+ * @description Fonction qui permet de formater les données des plats reconnus
+ *  en appelant la fonction getPlats et FormatInfoPlatIngredients
+ *  pour chaque plat reconnu
+ * @returns [] liste des plats reconnus avec leur couleur et leur id
+ * @throws Erreur si la récupération des plats échoue
+ */
 export async function FormatDataPlatReconnu(data: string[]) {
   const lines: any[] = [];
   for (const ligne of data) {
@@ -134,7 +166,7 @@ export async function FormatDataPlatReconnu(data: string[]) {
       const plats = await getPlats({ Nom_plat: query }, false, true, 1);
       if (plats && plats.length > 0) {
         const id = plats[0].ID_plat;
-        const obj = await change(id);
+        const obj = await FormatInfoPlatIngredients(id);
         lines.push({ text: ligne, color: obj?.color, id: id });
       } else {
         lines.push({ text: ligne, color: "black", id: null });
@@ -146,6 +178,13 @@ export async function FormatDataPlatReconnu(data: string[]) {
   return lines;
 }
 
+/**
+ * 
+ * @param strings : string[]
+ * @description Fonction qui permet de trouver la chaîne de caractères la plus fréquente
+ *  dans un tableau de chaînes de caractères
+ * @returns string | null
+ */
 export function MostOccurent(strings: string[]): string | null {
   if (strings.length === 0) return null;
 

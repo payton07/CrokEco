@@ -6,7 +6,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import { images } from "@/utils/picture";
 import * as FileSystem from "expo-file-system";
 import ProgressBar from "@/components/progressBar";
-import { change } from "@/utils/other";
+import { FormatInfoPlatIngredients } from "@/utils/other";
 import { info_t } from "@/utils/type";
 
 export default function details() {
@@ -29,10 +29,10 @@ export default function details() {
       if(params?.Plat != undefined && params.assocs != undefined) {
         const Plat = JSON.parse(params?.Plat as string);
         const associations = JSON.parse(params?.assocs as string);
-        obj = await change(ID_plat,Plat, associations);
+        obj = await FormatInfoPlatIngredients(ID_plat,Plat, associations);
       }
       else {
-        obj = await change(ID_plat);
+        obj = await FormatInfoPlatIngredients(ID_plat);
       }
 
       if (obj != undefined && obj.color != undefined && obj.info != undefined) {

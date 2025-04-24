@@ -12,6 +12,9 @@ export type FormData = {
   ingredients: Ingredient[];
 };
 
+/**
+ * Cette fonction permet de valider les données du formulaire
+ */
 export const schema = yup.object({
   name: yup.string().required("Le nom du plat est obligatoire"),
   ingredients: yup

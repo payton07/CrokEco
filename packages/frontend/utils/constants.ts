@@ -28,6 +28,9 @@ export const Plats_differents = [
   "ORIGINE France",
   "les complements du jour",
 ];
+/**
+ * Ce sont les mots qui ne ne sont des pas des plats
+ */
 export const Words_Not_Plats = [
   "origine France",
   "www.languedoc -restauration.fr",

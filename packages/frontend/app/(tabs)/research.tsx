@@ -18,7 +18,7 @@ import {
 import Searcher from "@/components/Searcher";
 import Favoris from "@/components/Favoris";
 import Suggestion from "@/components/Suggestion";
-import { change, getDataWithCacheExpiration } from "@/utils/other";
+import { FormatInfoPlatIngredients, getDataWithCacheExpiration } from "@/utils/other";
 import {
   DO_MAJ_CODE,
   Fond_vert_clair,
@@ -51,10 +51,10 @@ async function setup1() {
       plats_Inter = [],
       plats_suggested_data = [];
     for (const a of plats_favs) {
-      if (a.ID_plat) plats_favs_data.push(await change(a.ID_plat));
+      if (a.ID_plat) plats_favs_data.push(await FormatInfoPlatIngredients(a.ID_plat));
     }
     for (const a of plats_suggested) {
-      if (a.ID_plat) plats_Inter.push(await change(a.ID_plat));
+      if (a.ID_plat) plats_Inter.push(await FormatInfoPlatIngredients(a.ID_plat));
     }
     for (const a of plats_Inter) {
       // TODO remettre la condition

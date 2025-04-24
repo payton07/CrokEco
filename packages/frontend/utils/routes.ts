@@ -4,6 +4,16 @@ import { IP, port, SECRET_KEY, url } from "./constants";
 import { FormData } from "@/utils/type";
 
 // const SECRET_KEY='913580834d7f3d1235c2761b7e20a52ceea8cb864df4f3993ffda91417cb3829';
+/**
+ * 
+ * @param method Décrit le type de la requête (GET, POST)
+ * @param table Le nom de la table sur laquelle effectuer la requête
+ * @param data Les données à envoyer dans le corps de la requête
+ * @returns L'objet contenant la signature et le timestamp
+ * @description Cette fonction génère une signature HMAC pour sécuriser les requêtes envoyées à l'API.
+ * La signature est calculée en utilisant la méthode HMAC avec la clé secrète et le message formé par la méthode, l'URL de l'API, le corps de la requête et le timestamp.
+ * Le timestamp est également inclus dans l'objet retourné.
+ */
 function genereHMACSignature(method: string, table: string, data: any) {
   const timestamp = Math.floor(Date.now() / 1000);
 
@@ -15,7 +25,13 @@ function genereHMACSignature(method: string, table: string, data: any) {
 
   return { signature, timestamp };
 }
-
+/**
+ * 
+ * @param table Nom de la table sur laquelle effectuer la requête
+ * @param id identifiant de l'élément à récupérer (ou false pour récupérer tous les éléments)
+ * @description Effectue une requête GET sur l'API
+ * @returns la réponse de l'API au format JSON ou null en cas d'erreur
+ */
 async function GET(table: string, id: string | boolean) {
   const url1 = id ? `${url}${table}/${id}` : `${url}${table}`;
   try {
@@ -37,6 +53,12 @@ async function GET(table: string, id: string | boolean) {
   }
 }
 
+/**
+ * @description Effectue une requête POST sur l'API
+ * @param table Nom de la table sur laquelle effectuer la requête
+ * @param data Données à envoyer dans le corps de la requête
+ * @returns La réponse de l'API au format JSON
+ */
 async function POST(table: string, data: any) {
   const method = "POST";
   const url1 = `${url}${table}`;
@@ -58,10 +80,7 @@ async function POST(table: string, data: any) {
   return res;
 }
 
-/**
- *  OPE suf PLAT
- * @param data
- */
+
 export async function PostPlatClient(data: FormData) {
   console.log("appel à ajoutPlat");
   const res = await POST("platsClient", data);
@@ -74,10 +93,6 @@ export async function GetPlatClient(id: string | boolean) {
   console.log("Plat récupéré:", res);
 }
 
-/**
- *  ANALYSE
- * @param data
- */
 
 export async function PostResto(data: resto) {
   console.log("appel à ajoutResto");
@@ -116,6 +131,10 @@ export async function GetPlat_a_Vote(id: string | boolean) {
   return res;
 }
 
+/**
+ * @description Effectue un ping sur le serveur pour vérifier s'il est en ligne
+ * @returns null si erreur, sinon le code de la réponse du fetch
+ */
 export async function Ping() {
   const urll = `http://${IP}:${port}/ping`;
   console.log(urll);

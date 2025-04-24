@@ -9,9 +9,10 @@ const dbPath = `${FileSystem.documentDirectory}SQLite/${dbName}`;
 let db: SQLite.SQLiteDatabase;
 
 /**
- *  Ouvrir la base de données SQLite
+ * Ouvre la base de données SQLite
+ * @param reload - Si true, recharge la base de données même si elle existe déjà
+ * @returns La base de données SQLite ouverte
  */
-
 async function openDatabase(reload = false): Promise<SQLite.SQLiteDatabase> {
   const dbExists = await FileSystem.getInfoAsync(dbPath);
 
@@ -56,7 +57,11 @@ async function openDatabase(reload = false): Promise<SQLite.SQLiteDatabase> {
   return SQLite.openDatabaseAsync(dbName);
 }
 
-// Initialise la base de données une seule fois
+/**
+ * Initialise la base de données SQLite
+ * @param reload - Si true, recharge la base de données même si elle existe déjà
+ * @returns La base de données SQLite ouverte
+ */
 export async function initDB(reload = false): Promise<void> {
   if (db && reload == true) {
     db = await openDatabase(reload);
@@ -70,11 +75,14 @@ export async function initDB(reload = false): Promise<void> {
  * Foncttions d'Operation Basique CRUD
  */
 
+
 /**
- *
- * @param table
- * @param data
- * @returns
+ * 
+ * @param table Le nom de la table dans laquelle insérer les données
+ * @param data Les données à insérer sous forme d'objet
+ * @returns L'ID de la dernière ligne insérée
+ * @throws Erreur si l'insertion échoue
+ * @description Insère des données dans une table SQLite
  */
 export async function addSmt(table: string, data: any): Promise<number> {
   await initDB();
@@ -98,13 +106,17 @@ export async function addSmt(table: string, data: any): Promise<number> {
   });
   return res[0];
 }
+
 /**
- *
- * @param table_name
- * @param data
- * @param all
- * @param limit
- * @returns
+ * 
+ * @param table_name Le nom de la table à interroger
+ * @param data Les données à filtrer (sous forme d'objet ou false)
+ * @param all Si true, retourne toutes les lignes correspondantes
+ * @param limit Limite le nombre de résultats retournés
+ * @param str Si true, utilise LIKE au lieu de =
+ * @returns Un tableau d'objets contenant les résultats de la requête
+ * @throws Erreur si la requête échoue
+ * @description Récupère des données d'une table SQLite
  */
 export async function getSmt(
   table_name: string,
@@ -167,14 +179,16 @@ export async function getSmt(
   return res;
 }
 
-/**
- *
- * @param table
- * @param query
- * @param set
- * @returns
- */
 
+/**
+ * 
+ * @param table Le nom de la table à mettre à jour
+ * @param query La condition WHERE pour cibler les lignes à mettre à jour
+ * @param set Les données à mettre à jour sous forme d'objet
+ * @returns Le nombre de lignes affectées par la mise à jour
+ * @throws Erreur si la mise à jour échoue
+ * @description Met à jour des données dans une table SQLite
+ */
 export async function updateSmt(
   table: string,
   query: string,
@@ -208,10 +222,12 @@ export async function updateSmt(
 }
 
 /**
- *
- * @param table
- * @param query
- * @returns
+ * 
+ * @param table Le nom de la table à supprimer
+ * @param query La condition WHERE pour cibler les lignes à supprimer
+ * @returns Le nombre de lignes supprimées
+ * @throws Erreur si la suppression échoue
+ * @description Supprime des données d'une table SQLite
  */
 export async function deleteSmt(table: string, query: string): Promise<number> {
   await initDB();
