@@ -16,16 +16,24 @@ export default function details() {
   const [color, setColor] = useState("black");
   const params = useLocalSearchParams();
 
-  // Fonction pour retourner  à la page de recherche
+  // Fonction pour retourner  à la page précédente
   function retour() {
-    router.push({ pathname: `/(tabs)/research` });
+    router.back();
   }
 
   // Fonction pour charger les infos du plat
   async function load() {
     if (typeof params.id === "string") {
       const ID_plat = parseInt(params.id);
-      const obj = await change(ID_plat);
+      let obj = null;
+      if(params?.Plat != undefined && params.assocs != undefined) {
+        const Plat = JSON.parse(params?.Plat as string);
+        const associations = JSON.parse(params?.assocs as string);
+        obj = await change(ID_plat,Plat, associations);
+      }
+      else {
+        obj = await change(ID_plat);
+      }
 
       if (obj != undefined && obj.color != undefined && obj.info != undefined) {
         setIngredients_info(obj.ingredients);

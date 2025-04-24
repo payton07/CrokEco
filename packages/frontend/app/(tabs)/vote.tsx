@@ -9,17 +9,22 @@ import { Fond_vert_clair } from "@/utils/constants";
 
 export default function Votes() {
   const [plats, setPlats] = useState<any[]>([]);
+  const [associations, setAssociations] = useState<any[]>([]);
   const [isloaded, setIsloaded] = useState(false);
+
 
   // Fonction pour récupérer les plats à voter
   async function loads() {
     const data = await GetPlat_a_Vote(false);
-    // console.log(data.message);
+    console.log(data);
     if (data == null) {
       console.log("Veuillez verifier votre connexion au serveur ");
       return;
     }
-    setPlats(data);
+    const plats = JSON.parse(data?.plats);
+    const assocs = JSON.parse(data?.assocs);
+    setPlats(plats);
+    setAssociations(assocs);
     setIsloaded(true);
   }
 
@@ -39,7 +44,7 @@ export default function Votes() {
         >
           {isloaded && plats.length > 0 ? (
             plats.map((ligne, i) => {
-              return <Vote_display key={i} ligne={ligne} />;
+              return <Vote_display key={i} ligne={ligne} associations={associations[ligne.ID_plat]}/>;
             })
           ) : (
             <Text style={styles.textcenterize}>Aucun Plats</Text>

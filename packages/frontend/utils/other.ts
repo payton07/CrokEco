@@ -3,16 +3,36 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { info_t } from "../utils/type";
 import { blue, good, ok, bad } from "./constants";
 
-export async function change(idplat: number) {
+/**
+ * 
+ * @param idplat : number
+ * @param plat : any
+ * @param Assocs : any[]
+ * @returns Retourne un  qui contient les infos du plat et des ingredients qu'il contient
+ */
+export async function change(idplat: number,plat=null,Assocs=null) : Promise<{info : any, color : string | undefined, ingredients : any[]}> {
   if (idplat != undefined) {
-    const plat_ingredients = await getPlats_Ingredients(
-      { ID_plat: idplat },
-      true,
-      false,
-      10
-    );
+    // on recupere les lignes de l'association entre les plats et les ingredients
+    let plat_ingredients: any[]|undefined = [];
+    // Si on a deja les associations, on les utilise
+    // sinon on les recupere de la base de données
+    if(Assocs != null) {
+      plat_ingredients = Assocs;
+    }
+    else{
+      plat_ingredients = await getPlats_Ingredients(
+        { ID_plat: idplat },
+        true,
+        false,
+        false,
+      );
+    }
+    // Definition des variables score et ingredients_data
     let score: number = 0;
     let ingredients_data: any[] = [];
+
+    // On recupere les ingredients de chaque ligne
+    // on les stocke dans ingredients_data  et on calcule le score
     if (plat_ingredients != undefined) {
       for (const ligne of plat_ingredients) {
         const res = await getIngredients(
@@ -24,6 +44,9 @@ export async function change(idplat: number) {
         ingredients_data.push(res?.at(0));
         score += res?.at(0).Score_unique_EF;
       }
+
+      // Pour chaque ingredient, on recupere le nom et on calcule le pourcentage dans le plat et la couleur 
+      // on les stocke dans un tableau
       const obj_ingredient_out = [];
       for (const ingredient of ingredients_data) {
         const obj = [
@@ -35,13 +58,22 @@ export async function change(idplat: number) {
         ];
         obj_ingredient_out.push(obj);
       }
-      const plat = await getPlats({ ID_plat: idplat }, false, false);
+
+      // Si le plat est null, on le recupere de la base de données
+      // sinon on le prend tel quel
+      let objetPlat: any[] | undefined = [];
+      if(plat != null) { objetPlat = [plat];}
+      else {objetPlat = await getPlats({ ID_plat: idplat }, false, false, 1);}
+
+      // on cree l'objet qui contient les infos du plat qui seront affichés
       const info: info_t = {
-        Nom: plat?.at(0).Nom_plat,
+        Nom: objetPlat?.at(0).Nom_plat,
         Score: score.toPrecision(3),
         Unite: "mPt / kg de produit",
         id: idplat,
       };
+
+      // on cree l'objet qui contient les infos du plat et des ingredients qu'il contient
       const out = {
         info: info,
         color: Qualite_color(score),

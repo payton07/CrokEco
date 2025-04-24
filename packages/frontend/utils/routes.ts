@@ -24,7 +24,7 @@ async function GET(table: string, id: string | boolean) {
       headers: { "Content-Type": "application/json" },
     });
 
-    console.log("url de get");
+    // console.log("url de get");
     
     if (!response.ok) {
       throw new Error(`Erreur ${response.status}: ${response.statusText}`);
@@ -112,7 +112,7 @@ export async function PostUpdatePlatsRequest(data: { query: any; set: any }) {
 
 export async function GetPlat_a_Vote(id: string | boolean) {
   const res = await GET("platsClient", id);
-  console.log("Plat client récupéré:", res);
+  // console.log("Plat client récupéré:", res);
   return res;
 }
 

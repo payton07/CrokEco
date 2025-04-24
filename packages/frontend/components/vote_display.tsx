@@ -1,10 +1,11 @@
 import { PostUpdatePlatsRequest } from "@/utils/routes";
 import { AntDesign } from "@expo/vector-icons";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 
 export default function Vote_display({
-  ligne,
+  ligne, associations
 }: {
   ligne: {
     ID_plat: number;
@@ -13,8 +14,9 @@ export default function Vote_display({
     DisLike: number;
     Nom_plat: string;
   };
+  associations:any[];
 }) {
-  console.log("dans vote display");
+  // console.log("dans vote display");
   const [isloaded, setIsloaded] = useState(false);
   const [Liked, setLiked] = useState(ligne.Like);
   const [DisLiked, setDisLiked] = useState(ligne.DisLike);
@@ -43,9 +45,25 @@ export default function Vote_display({
     }
   }
 
+  function goDetails() {
+    call();
+    if (ligne.ID_plat === null) return;
+    
+      router.push({
+        pathname: `/(hidden)/details/[id]`,
+        params: {
+          id: ligne.ID_plat,
+          Plat: JSON.stringify(ligne),
+          assocs: JSON.stringify(associations),
+        },
+      });
+  }
+
   return (
     <View style={styles.reco}>
-      <Text style={styles.text}>{ligne.Nom_plat}</Text>
+      <TouchableOpacity onPress={goDetails}>
+        <Text style={styles.text}>{ligne.Nom_plat}</Text>
+      </TouchableOpacity>
       <TouchableOpacity style={styles.reco1} onPress={like}>
         <AntDesign name="like2" size={24} color="blue" />
         <Text>{Liked}</Text>
