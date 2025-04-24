@@ -66,7 +66,7 @@ export default function History() {
     }, []),
   );
 
-  function sortPlats(){
+  function sortPlats() {
     const res = menus.sort((a, b) => {
       const parseDate = (str: string) => {
         const [day, month, year] = str.split("/");
