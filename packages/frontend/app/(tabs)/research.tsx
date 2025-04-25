@@ -18,7 +18,7 @@ import {
 import Searcher from "@/components/Searcher";
 import Favoris from "@/components/Favoris";
 import Suggestion from "@/components/Suggestion";
-import { checkForDailyUpdate, FormatInfoPlatIngredients, getDataWithCacheExpiration } from "@/utils/other";
+import { checkForDailyUpdate, DoSomethingWhenServerReady, FormatInfoPlatIngredients, getDataWithCacheExpiration } from "@/utils/other";
 import {
   DO_MAJ_CODE,
   Fond_vert_clair,

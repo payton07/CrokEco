@@ -26,7 +26,7 @@ import {
 } from "@/utils/bdd";
 import Textshow from "@/components/Textshow";
 import * as Location from "expo-location";
-import { FormatDataPlatReconnu, sendDataWhenServerReady } from "@/utils/other";
+import { FormatDataPlatReconnu, DoSomethingWhenServerReady } from "@/utils/other";
 import { Ping, PostResto, PostMenu, PostRecherche } from "@/utils/routes";
 import { TextBlock } from "@/utils/type";
 import Button from "@/components/Button";
@@ -148,16 +148,16 @@ export default function Index() {
       await addRecherches_Historique(recherche);
 
       setNomResto("");
-      const res1 = await sendDataWhenServerReady(resto,PostResto);
+      const res1 = await DoSomethingWhenServerReady(resto,PostResto);
       const menuPost = { NomMenu: nomResto, ID_restaurant: res1.code };
-      const res2 = await sendDataWhenServerReady(menuPost,PostMenu);
+      const res2 = await DoSomethingWhenServerReady(menuPost,PostMenu);
       const recherchePost = {
         Text_request: textReconnu,
         ID_menu: res2.code,
         Date: new Date().toLocaleDateString("fr-FR"),
       };
       // Envoi des données au serveur si la connexion est ok sinon on attend la reconnexion puis l'envoie
-      await sendDataWhenServerReady(recherchePost,PostRecherche);
+      await DoSomethingWhenServerReady(recherchePost,PostRecherche);
     }
   }
 

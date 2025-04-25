@@ -216,11 +216,12 @@ export function MostOccurent(strings: string[]): string | null {
  *  lorsque le serveur est prêt ou que l'utilisateur est connecté , sinon elle attend la reconnexion
  * @returns Promise<any>
  */
-export async function sendDataWhenServerReady(data: any,SendFunction : Function): Promise<any> {
+export async function DoSomethingWhenServerReady(data: any,SendFunction : Function): Promise<any> {
   const isConnected = await NetInfo.fetch().then(state => state.isConnected);
 
   if (isConnected && await Ping()) {
-    return await SendFunction(data);
+    if (data == null) {return await SendFunction();}
+    else {return await SendFunction(data);}
   } else {
     console.log('Serveur ou réseau indisponible. En attente de reconnexion...');
 
@@ -231,7 +232,9 @@ export async function sendDataWhenServerReady(data: any,SendFunction : Function)
 
         if (online && serverUp) {
           clearInterval(interval);
-          const res = await SendFunction(data);
+          let res ;
+          if (data == null) {res = await SendFunction();}
+          else {res = await SendFunction(data);}
           resolve(res);
         }
       }, 5000);
@@ -256,7 +259,7 @@ export async function checkForDailyUpdate (UpdateFonction : Function ){
 
     if (lastUpdate !== today) {
       // Appelle ton backend ici
-      await UpdateFonction();
+      await DoSomethingWhenServerReady(null,UpdateFonction);
 
       // Mets à jour la date locale
       await AsyncStorage.setItem(LAST_UPDATE_KEY, today);
