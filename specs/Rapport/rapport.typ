@@ -1,3 +1,5 @@
+#import "@preview/modern-report-umfds:0.1.2": umfds
+
 /*
 == Introduction
 1-2 pages
@@ -71,10 +73,9 @@ de Gantt).
 
 == Bilan et Conclusions*/
 
-RAPPORT DE STAGE
-
-
-#pagebreak()
+#show : umfds.with(lang: "fr", title: "Crok'eco
+Projet de Programmation 2", authors: ("BATATAY Mallory
+KEGLO Partice",), abstract: "", date: "2024 - 2025", department: [Informatique], img: image("../../assets/logo/logo2.png", width: 50%))
 
 = Remerciement (Si nécessaire)
 
@@ -92,7 +93,7 @@ RAPPORT DE STAGE
 
 Nous réalisons ce projet dans le cadre de notre 3e en Licence Informatique. Le projet a débuté en décembre 2024 et nous a accompagné tout au long de notre 2e semestres. Ce projet s'incrit dans la continuité de celui commencé l'année précedente par des étudiants de Cursus Master en Ingénierie (CMI) Informatique en 3e année. Le sujet que nous avons choisi est celui de Monsieur Bourreau. Le but du projet est de créer une application permettant de noté l'impact écologique avec une couleur. Celle-ci peut etre de couleur Verte, Orange ou Rouge respectivement d'une empreinte carbonne faible a élevé.
 
-Ce projet a été réalisé avec KEGLO Patrice, BARATAY Mallory et PHILIPOT Ewen. PHILIPOT Ewen ayant arreté la Licence avant les vacances de février nous avons réalisé la majeur partie du projet à deux. 
+Ce projet a été réalisé avec KEGLO Patrice, BARATAY Mallory et PHILIPOT Ewen. PHILIPOT Ewen ayant arrêté la Licence avant les vacances de février, nous avons réalisé la majeure partie du projet à deux. 
 
 #pagebreak()
 
@@ -128,6 +129,18 @@ Le but de cette derniere methode est de permettre a tout le monde de participer 
 
 = Choix technique
 
+Le développement de l’application a été réalisé en TypeScript, un sur-ensemble typé de JavaScript, afin de bénéficier d’un typage statique, d’une meilleure lisibilité du code et d’une maintenance facilitée.
+
+Nous avons utilisé le framework React Native, couplé à Expo, pour accélérer le processus de développement multi-plateformes (Android et iOS).
+Outils et bibliothèques principaux :
+    ...
+
+Plateformes de test :
+
+L’application a été testée à la fois sur simulateurs Android via Android Studio et sur appareils physiques pour s’assurer d’une bonne compatibilité et d’une expérience utilisateur fluide.
+
+Nous avons utilisé GitHub comme plateforme de gestion de version tout au long du projet afin de collaborer efficacement, et d'avoir un historique clair des modifications. Les branches ont été utilisées pour séparer le dévellopement des différentes fonctionnalités, ce qui a facilité l’intégration progressive des différentes parties de l’application dans la branche principale.
+
 #pagebreak()
 
 = Architectures
@@ -142,7 +155,7 @@ Le but de cette derniere methode est de permettre a tout le monde de participer 
 
 == Base de donnée
 
-Afin de connaotre l'impact ecologique d'un plat nous avons choisi dans un premier temps de se servir de la base de donnée fournie par l'ADEME. La base de l'ADEME sur la consommation CO2 est une immense base regroupant tout les types d'emission de gaz à effet de serre tel que la production de materiaux, ..., ainsi que toute les emissions liee au CO2. En inspectant la base de données nous avons découvert que toutes les information liée à la nourriture provenait de 2 base de donnée qui sont AGRYBALISE et AGRYBALISE 2.0. AGRIBALYSE est un programme collectif et innovant qui met à disposition des données de référence sur les impacts environnementaux des produits agricoles et alimentaires à travers une base de données construite selon la méthodologie des Analyses du Cycle de Vie. Il est possible de se servir du site web d'agrybalise pour connaitre l'imapct environnemental d'un aliment ou bien de télécharger leur base de donnée. Nous avons donc télécharger la base de données concernant dans un premeir temps uniquement les plats ayant nécessité une transformation. Cette base de donnée etait disponible au format CSV. Afin de traiter de rendre les donnée utilisable nous avons creer un programme python servant à initialiser une base de donnee en sql comportant tous les plats décrit dans le CSV.
+Afin de connaitre l'impact ecologique d'un plat nous avons choisi dans un premier temps de se servir de la base de donnée fournie par l'ADEME. La base de l'ADEME sur la consommation CO2 est une immense base regroupant tout les types d'emission de gaz à effet de serre tel que la production de materiaux, ..., ainsi que toute les emissions liee au CO2. En inspectant la base de données nous avons découvert que toutes les information liée à la nourriture provenait de 2 base de donnée qui sont AGRYBALISE et AGRYBALISE 2.0. AGRIBALYSE est un programme collectif et innovant qui met à disposition des données de référence sur les impacts environnementaux des produits agricoles et alimentaires à travers une base de données construite selon la méthodologie des Analyses du Cycle de Vie. Il est possible de se servir du site web d'agrybalise pour connaitre l'imapct environnemental d'un aliment ou bien de télécharger leur base de donnée. Nous avons donc télécharger la base de données concernant dans un premeir temps uniquement les plats ayant nécessité une transformation. Cette base de donnée etait disponible au format CSV. Afin de traiter de rendre les donnée utilisable nous avons creer un programme python servant à initialiser une base de donnee en sql comportant tous les plats décrit dans le CSV.
 Le CSV etait cinstruit de la maniere suivante : par plat enregistrer il y avait une ligne pour chaque ingredient. Cela signifie qu'on retrouve l'imapct écologique d'un ingredient pour que dans chaque plats comportant cette ingredient, mais l'impact différé en fonction de la proportion de cette aliment dans le plat.
 En analysant plus precisement nos besoin nous avons remarqué qu'il manqué trop de plats dans la base de donnée actuel. Afin de pallier a ce probleme nous avons changé une nouvelle fois de base de donnée pour prendre finalement celle comportant uniquement les ingredients avec l'imapct associé par kilo d'aliment.
 Pour connaitre l'imapct ecologique d'un plat, on doit donc realisé la somme de l'imapct de chaque plat et faire un produit en croix pour le ramener à un kilo de plat.
