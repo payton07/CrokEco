@@ -1,7 +1,9 @@
 import { getIngredients, getPlats, getPlats_Ingredients } from "./bdd";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { info_t } from "../utils/type";
-import { blue, good, ok, bad } from "./constants";
+import { blue, good, ok, bad, LAST_UPDATE_KEY } from "./constants";
+import { Ping } from "./routes";
+import NetInfo from '@react-native-community/netinfo';
 
 /**
  * 
@@ -205,3 +207,65 @@ export function MostOccurent(strings: string[]): string | null {
   }
   return mostFrequent;
 }
+
+/**
+ * 
+ * @param data : any , c'est les données à envoyer au serveur
+ * @param SendFunction : Function , c'est la fonction qui va envoyer les données au serveur
+ * @description Fonction qui permet d'envoyer des données au serveur
+ *  lorsque le serveur est prêt ou que l'utilisateur est connecté , sinon elle attend la reconnexion
+ * @returns Promise<any>
+ */
+export async function sendDataWhenServerReady(data: any,SendFunction : Function): Promise<any> {
+  const isConnected = await NetInfo.fetch().then(state => state.isConnected);
+
+  if (isConnected && await Ping()) {
+    return await SendFunction(data);
+  } else {
+    console.log('Serveur ou réseau indisponible. En attente de reconnexion...');
+
+    return new Promise<any>((resolve) => {
+      const interval = setInterval(async () => {
+        const online = await NetInfo.fetch().then(state => state.isConnected);
+        const serverUp = await Ping();
+
+        if (online && serverUp) {
+          clearInterval(interval);
+          const res = await SendFunction(data);
+          resolve(res);
+        }
+      }, 5000);
+    });
+  }
+}
+
+/**
+ * 
+ * @param UpdateFonction : Function
+ * @description Fonction qui permet de vérifier si la mise à jour a été effectuée aujourd'hui
+ *  Si ce n'est pas le cas, elle appelle la fonction UpdateFonction
+ *  et met à jour la date de la dernière mise à jour
+ * @returns Promise<void>
+ * @throws Erreur si la mise à jour échoue
+ */
+export async function checkForDailyUpdate (UpdateFonction : Function ){
+  const today = new Date().toISOString().split('T')[0]; // format YYYY-MM-DD
+  
+  try {
+    const lastUpdate = await AsyncStorage.getItem(LAST_UPDATE_KEY);
+
+    if (lastUpdate !== today) {
+      // Appelle ton backend ici
+      await UpdateFonction();
+
+      // Mets à jour la date locale
+      await AsyncStorage.setItem(LAST_UPDATE_KEY, today);
+      console.log('Données mises à jour automatiquement.');
+    } else {
+      console.log("Mise à jour déjà effectuée aujourd'hui.");
+    }
+  } catch (error) {
+    // console.error('Erreur pendant la mise à jour automatique :', error);
+    console.log("Erreur pendant la mise à jour automatique :", error);
+  }
+};

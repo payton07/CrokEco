@@ -10,6 +10,8 @@ export const bad = "red";
 export const ok = "orange";
 export const blue = "blue";
 
+export const LAST_UPDATE_KEY = 'lastUpdateDate';
+
 // code couleurs
 export const couleur1 = "#153243";
 export const couleur2 = "#61d095";

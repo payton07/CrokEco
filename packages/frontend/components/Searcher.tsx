@@ -15,6 +15,10 @@ export default function Searcher() {
   const [filteredPlats, setFilteredPlats] = useState<any[]>([]);
 
   async function setSres(input: string) {
+    if(input=== "") {
+      setFilteredPlats([]);
+      return;
+    }
     await search(input);
   }
 

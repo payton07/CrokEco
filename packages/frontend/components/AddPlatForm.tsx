@@ -9,7 +9,7 @@ import {
   FlatList,
   TouchableWithoutFeedback,
 } from "react-native";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, set } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useState } from "react";
 import { getIngredients } from "@/utils/bdd";
@@ -81,6 +81,12 @@ export default function AddDishForm() {
   }
 
   async function filterIngredients(text: string) {
+    if(text.trim() === "") {
+      setFilteredIngredients([]);
+      setIngredient("");
+      setIngredientsData([]);
+      return;
+    }
     setIngredient(text);
     await Alter_IngredientFromBdd(text);
     if (text.trim() === "") {

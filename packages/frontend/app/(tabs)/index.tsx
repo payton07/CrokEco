@@ -26,7 +26,7 @@ import {
 } from "@/utils/bdd";
 import Textshow from "@/components/Textshow";
 import * as Location from "expo-location";
-import { FormatDataPlatReconnu } from "@/utils/other";
+import { FormatDataPlatReconnu, sendDataWhenServerReady } from "@/utils/other";
 import { Ping, PostResto, PostMenu, PostRecherche } from "@/utils/routes";
 import { TextBlock } from "@/utils/type";
 import Button from "@/components/Button";
@@ -124,6 +124,8 @@ export default function Index() {
       Longitude = location.coords.longitude;
       Latitude = location.coords.latitude;
 
+      // Pas besoin de tout mettre sous forme cle : valeur , car ceux qui ne le sont pas , sont explicites par leur nom
+      // equivalent à la clé
       const resto = {
         NomResto: nomResto,
         Latitude,
@@ -134,7 +136,7 @@ export default function Index() {
       // Insertion des données dans la base de données locale
       const idresto = await addRestaurants_Historique(resto);
 
-      const menu = { NomMenu: "menu", ID_restaurant: idresto };
+      const menu = { NomMenu: nomResto, ID_restaurant: idresto };
       const res = await addMenus_Historique(menu);
 
       const textReconnu = JSON.stringify(lines);
@@ -146,27 +148,16 @@ export default function Index() {
       await addRecherches_Historique(recherche);
 
       setNomResto("");
-
-      // On ping le serveur pour verifier la connexion
-      // Si la connexion est ok , on envoie les données
-      // Sinon on alert l'utilisateur
-      const resultat = await Ping();
-      if (resultat == 201) {
-        const res1 = await PostResto(resto);
-        const menuPost = { NomMenu: nomResto, ID_restaurant: res1.code };
-        const res2 = await PostMenu(menuPost);
-        const recherchePost = {
-          Text_request: textReconnu,
-          ID_menu: res2.code,
-          Date: new Date().toLocaleDateString("fr-FR"),
-        };
-        await PostRecherche(recherchePost);
-      } else {
-          Alert.alert(
-            "Erreur de connexion",
-            "Veuillez verifier votre connexion au serveur",
-          );
-      }
+      const res1 = await sendDataWhenServerReady(resto,PostResto);
+      const menuPost = { NomMenu: nomResto, ID_restaurant: res1.code };
+      const res2 = await sendDataWhenServerReady(menuPost,PostMenu);
+      const recherchePost = {
+        Text_request: textReconnu,
+        ID_menu: res2.code,
+        Date: new Date().toLocaleDateString("fr-FR"),
+      };
+      // Envoi des données au serveur si la connexion est ok sinon on attend la reconnexion puis l'envoie
+      await sendDataWhenServerReady(recherchePost,PostRecherche);
     }
   }
 

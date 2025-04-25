@@ -18,7 +18,7 @@ import {
 import Searcher from "@/components/Searcher";
 import Favoris from "@/components/Favoris";
 import Suggestion from "@/components/Suggestion";
-import { FormatInfoPlatIngredients, getDataWithCacheExpiration } from "@/utils/other";
+import { checkForDailyUpdate, FormatInfoPlatIngredients, getDataWithCacheExpiration } from "@/utils/other";
 import {
   DO_MAJ_CODE,
   Fond_vert_clair,
@@ -87,7 +87,8 @@ export default function Research() {
       setLoading(true);
       await loadData();
     } catch (error) {
-      console.error("Erreur lors de la suppression de tout le cache :", error);
+      // console.error("Erreur lors de la suppression de tout le cache :", error);
+      console.log("Erreur lors de la suppression de tout le cache :", error);
     }
   }
 
@@ -174,9 +175,13 @@ export default function Research() {
       setLoading(false);
     }
   }
+  async function LoadAndCheckUpadate(){
+    await checkForDailyUpdate(CheckForUpdates);
+    await loadData();
+  }
 
   useEffect(() => {
-    loadData();
+    LoadAndCheckUpadate();
   }, [isLoaded]);
 
   return (
