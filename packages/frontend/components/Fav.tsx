@@ -1,20 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { StyleSheet, View, Text } from "react-native";
-// import {Image} from "expo-image"
 import { Link } from "expo-router";
-import { images } from "@/utils/picture";
+import { info_t } from "@/utils/type";
 
-export default function Fav({ out }: { out: any }) {
-  const [img, setImg] = useState(images.github);
+export default function Fav({ out }: { out: {info : info_t | undefined, color : string | undefined, ingredients : any[] }}) {
   const info = out?.info;
   const ide = info?.id;
-  const color = out?.color;
+  const color = out.color;
+  const lien = `/(hidden)/details/${ide}`;
   return (
     <Link
       href={`/(hidden)/details/${ide}`}
       style={{ backgroundColor: color, ...styles.image }}
+      testID={`${ide}`}
     >
-      {/* {img != null ? <></>: <Image style={styles.image} source={img}/>} */}
       <View style={{ backgroundColor: color, ...styles.image }}>
         <Text style={styles.title}>{info?.Nom}</Text>
         <Text style={styles.title}>{info?.Score}</Text>

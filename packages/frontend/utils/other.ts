@@ -14,7 +14,7 @@ import NetInfo from '@react-native-community/netinfo';
  *  et de ses ingredients
  * @returns un objet contenant les informations du plat, la couleur et les ingredients
  */
-export async function FormatInfoPlatIngredients(idplat: number,plat=null,Assocs=null) : Promise<{info : any, color : string | undefined, ingredients : any[]}> {
+export async function FormatInfoPlatIngredients(idplat: number,plat=null,Assocs=null) : Promise<{info : info_t | undefined, color : string | undefined, ingredients : any[]}> {
   if (idplat != undefined) {
     // on recupere les lignes de l'association entre les plats et les ingredients
     let plat_ingredients: any[]|undefined = [];
