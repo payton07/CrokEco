@@ -75,7 +75,7 @@ de Gantt).
 
 #show : umfds.with(lang: "fr", title: "Crok'eco
 Projet de Programmation 2", authors: ("BATATAY Mallory
-KEGLO Partice",), abstract: "", date: "2024 - 2025", department: [Informatique], img: image("Images/logo_vf.png", width: 50%))
+KEGLO Partice",), abstract: "", date: "2024 - 2025", department: [Informatique], img: image("Images/logo_vf.png", width: 60%))
 
 *Remerciement (Si nécessaire)*
 
@@ -85,7 +85,7 @@ KEGLO Partice",), abstract: "", date: "2024 - 2025", department: [Informatique],
   level: 1
 ): set block(above: 1.2em)
 
-#outline(title: "Table des matières",)
+#outline(title: "Table des matières")
 
 #pagebreak()
 
@@ -148,7 +148,7 @@ Le développement de l’application a été réalisé en TypeScript, un sur-ens
 
 Nous avons utilisé le framework React Native, couplé à Expo, pour accélérer le processus de développement multi-plateformes (Android et iOS).
 Outils et bibliothèques principaux :
-    ...
+- Pandas(Python) pour la gestion de donnée en CSV
 
 L’application a été testée à la fois sur simulateurs Android via Android Studio et sur appareils physiques pour s’assurer d’une bonne compatibilité et d’une expérience utilisateur fluide.
 
@@ -175,23 +175,42 @@ Entité association
 
 == Base de donnée
 
-Afin de connaitre l'impact ecologique d'un plat nous avons choisi dans un premier temps de se servir de la base de donnée fournie par l'ADEME. La base de l'ADEME sur la consommation CO2 est une immense base regroupant tout les types d'emission de gaz à effet de serre tel que la production de materiaux, ..., ainsi que toute les emissions liee au CO2. En inspectant la base de données nous avons découvert que toutes les information liée à la nourriture provenait de 2 base de donnée qui sont AGRYBALISE et AGRYBALISE 2.0. AGRIBALYSE est un programme collectif et innovant qui met à disposition des données de référence sur les impacts environnementaux des produits agricoles et alimentaires à travers une base de données construite selon la méthodologie des Analyses du Cycle de Vie. Il est possible de se servir du site web d'agrybalise pour connaitre l'imapct environnemental d'un aliment ou bien de télécharger leur base de donnée. Nous avons donc télécharger la base de données concernant dans un premeir temps uniquement les plats ayant nécessité une transformation. Cette base de donnée etait disponible au format CSV. Afin de traiter de rendre les donnée utilisable nous avons creer un programme python servant à initialiser une base de donnee en sql comportant tous les plats décrit dans le CSV.
-Le CSV etait cinstruit de la maniere suivante : par plat enregistrer il y avait une ligne pour chaque ingredient. Cela signifie qu'on retrouve l'imapct écologique d'un ingredient pour que dans chaque plats comportant cette ingredient, mais l'impact différé en fonction de la proportion de cette aliment dans le plat.
+=== Recherche
+Afin de connaitre l'impact ecologique d'un plat nous avons choisi dans un premier temps de se servir de la base de donnée fournie par l'ADEME. La base de l'ADEME sur la consommation CO2 est une immense base regroupant tout les types d'emission de gaz à effet de serre tel que la production de materiaux, ..., ainsi que toute les emissions liee à l'alimentation.
+
+En inspectant la base de données nous avons remarqué que toutes les informations liée à la nourriture provenait de 2 base de donnée qui sont AGRIBALYSE et AGRIBALYSE 2.0. AGRIBALYSE est un programme collectif et innovant qui met à disposition des données de référence sur les impacts environnementaux des produits agricoles et alimentaires à travers une base de données construite selon la méthodologie des Analyses du Cycle de Vie. Il est possible de se servir du site web d'AGRIBALYSE pour connaitre l'imapct environnemental d'un aliment ou bien de télécharger leur base de donnée.
+
+Nous avons donc télécharger la base de données concernant dans un premier temps uniquement les plats ayant nécessité une transformation. Cette base de donnée etait disponible au format CSV. Afin de traiter de rendre les donnée utilisable nous avons coder un programme python servant à initialiser une base de donnee en sql comportant tous les plats décrit dans le CSV.
+
+Le CSV etait construit de la maniere suivante : par plat enregistrer il y avait une ligne pour chaque ingredient. Cela signifie qu'on retrouve l'imapct écologique d'un ingredient pour que dans chaque plats comportant cette ingredient, mais l'impact différé en fonction de la proportion de cette aliment dans le plat.
 En analysant plus precisement nos besoin nous avons remarqué qu'il manqué trop de plats dans la base de donnée actuel. Afin de pallier a ce probleme nous avons changé une nouvelle fois de base de donnée pour prendre finalement celle comportant uniquement les ingredients avec l'imapct associé par kilo d'aliment.
 Pour connaitre l'imapct ecologique d'un plat, on doit donc realisé la somme de l'imapct de chaque plat et faire un produit en croix pour le ramener à un kilo de plat.
 Pour connaitre le poids de chaque aliment dans un plat et pour remplir la table sql des plat nous avons choisi de faire confiance au utilisateur de l'application. Une page de l'application permet d'enregistrer la composition d'un plat. Chaque plat nouvellement creer peut etre voter par un utilisateur afin d'etre ajouter par nous à la base de donnée comportant tous les plats.
 
-=== Conception
+=== Modélisation
+
+parler du modele E A
 
 === Implémentation
+
+Afin de convertir les données d'AGRIBALYSE dans notre base de données décrites dans la partie précedente, nous avons choisi de coder un programme Python. Le but du programme est de créer à partir de 0 la base de données.
+Pour cela, on commence par créer le fichier qui contiendra la base de données. Si celui existe déjà, il est remplacé. Ensuite on importe le fichier .sql contenant l'agencement des tables. Cela permet d'initialiser toutes les tanble mais a ce moment là celle ci sont encore vide.
+Pour remplir la base de données on extrait les information du fichier Excel d'AGRIBALYSE.
+
+Au moment de remplir la base de données il est important de respecter les contraintes de clé etrangere. Pour cela il est impératif de 
+Programme python
 
 == Application utilisateur
 
+=== Modélisation
+Nous avons commencé par faire des croquis de l'application sur figma afin de réflechir à quelle fonctinonalité nous allions implémenté. ...
+
 === Conception
 
-=== Modélisation
 
 === Implémentation
+
+== Fonctionnalités non implémenté
 
 == Statistiques
 
@@ -209,18 +228,13 @@ Pour connaitre le poids de chaque aliment dans un plat et pour remplir la table 
 #pagebreak()
 
 = Bibliographie
+
+base ademe : #link("https://base-empreinte.ademe.fr/") \
+site AGRIBALYSE : https://doc.agribalyse.fr/documentation \
+2009/2019 : https://www.insee.fr/fr/statistiques/7728873?sommaire=7728903 \
+22% : https://www.insee.fr/fr/statistiques/7728883?sommaire=7728903 \
+
 #outline(
-  title: [Tables des ...],
+  title: [Tables des figures],
   target: figure,
-)
-
-#figure(
-  image("../CodeE_A2.svg"
-  ),
-  caption: "asa"
-)
-
-#figure(
-  table(),
-  caption: "fzeaf"
 )
