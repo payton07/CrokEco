@@ -100,30 +100,45 @@ Ce projet a été réalisé avec KEGLO Patrice, BARATAY Mallory et PHILIPOT Ewen
 = Spécification du sujet
 
 == Enjeux climatiques
-Selon l'INSEE, en 2018, l'alimentation representé 22% de l'empreinte carbonne de la France.
-Que ce soit lié au transport de la nourriture, à l’élevage des animaux, à la quantité d’eau utilisée tout au long de la production, il y a beaucoup de facteurs polluants pour amener la nourriture dans nos assiettes. Une majorité de la population n’est pas informée sur ce sujet et ne pense pas à l’impact que sa nourriture a sur la planète.
+
+Selon l'INSEE, en 2018, l'alimentation representé 22% de l'empreinte carbonne de la France. Que ce soit lié au transport de la nourriture, à l’élevage des animaux, à la quantité d’eau utilisée tout au long de la production, il y a beaucoup de facteurs polluants pour amener la nourriture dans nos assiettes. Une majorité de la population n’est pas informée sur ce sujet et ne pense pas à l’impact que sa nourriture à sur la planète.
+
+Des solutions sont déjà présentes pour réduire l'émission de gaz à effet de serre qu'en notre nourriture. Effectivement, tous les aliments ne se valent en matière de pollution. Certains aliment tel que la viandes et le poisson ont un impact écologique bien plus important, que les fruits, légumes ou céréales. Le fait de consommer des produits de saison et locales permet aussi de réduire l'emission du à notre alimentation.
+
+Entre 2009 et 2019, la quantité de viande consommée baisse de 5 % en France métropolitaine selon l'INSEE. On constate donc une volonté en France de vouloir consommer plus écologiquement et la demande concernant des applications permettant de se renseigner devient de plus en plus grande. On note également une augmentation de projets allant dans ce sens, que ce soit avec la nourriture mais également d’autres produits du quotidien comme les cosmétiques et les textiles qui sont des domaines eux aussi très polluants.
+
+
+#figure(image("Images/repas.png", width: 80%), caption: "Emission de kg de CO2 en fonction du type de rapas 
+Source: ADEME")
+
 
 == Approche du sujet
-De nos jours la problematique de l'ecologie et tres importante. Afin d'aider la population a faire des geste ecologique il est important de lui donner les outils permettant de comprendre. La nourrriture et une source tres importante de la production de CO2 mondial. La composition d'un plat influt enormement sur cette production. Lorsque l'on va au restaurant et que nous ne savons pas quoi manger, un bon reflex pourrait etre de choisir en fonction de l'imapct ecologique d'un plat.
+
+Afin d'aider la population a faire des geste ecologique il est important de lui donner les outils permettant d'atteidre ses objectifs. La composition d'un plat étant la première cause de l'impact écologique du plat, il serait interessant de pouvoir etre informé sur l'empreinte écologique du plat que l'on souhaite mangé.
 Afin de pallier a ce problème nous avons imaginé plusieurs solition : 
 
-Approche 1 : Demander au restaurateur d'afficher l'impact ecologique des plats, en lui aidant grace a l'informatique à calculer rapidement et à afficher simplement le résultat. Deja essaye l'annee derniere mais le restaurateur pas content !
+Afin de faire profiter une solution au étudiant dans un premier, il sreait possible de s'accorder avec le Crous ou les gérant des restaurants de la Faculté des Sciences pour faire afficher sur les televiseurs du crous l'impact écologique de chaque plat. L'affichage pourrait ce faire à l'aide d'une pastille de couleur.
 
-Approche 2 : Afficher sur les televiseurs du crous l'impact écologique de chaque plat.
+Sinon, nous pourrions afficher le résultat à l'aide d'un QR Code. Le QR Code redirigerai vers une page qui détaillerai l'empreinte carbonne de chaque plat.
 
-Le problème des 2 approches précédentes est quelle nécessite l'accord du restaurateur pour se mettre en place et de plus elle ne peut pass etre généraliser a tous les restaurant de France.
+Cette solution avait déjà était enviqagé l'année derniere mais sans succès car, comme la première, elle possède un problème. En effet, elle nécessite un accord avec les gérant des restaurant qui sont assez retissant a voir l'imapct écologique de leurs plats révélé. De plus, mais s'il avait était possible d'avoir l'accord pour les restaurants de la Faculté des Sciences, ces solutions demanderait énormement d'effort pour etre deployer à l'echelle de la France Car il nécessiterait l'accord de chaque restaurants. 
 
-Approche 3 : Se servir des bases de données déjà existante pour calculer l'impact et deployer une application coloboratives ou chaque utilisateurs reseigne la quatité des ingredients pour un plats. La recette est enregistrer et lorsque l'on scanne un menu l'appli renvoie l'impact écologique de chaque plats.
+Nous avons donc choisi de faire une application collaborative qui calcule l'imapct écologique de tous les plats en scannant leurs noms sur le menu. Le but de cette derniere methode est de permettre a tout le monde de participer a amielorer l'ecologie en rendant l'application collaborative. Cette méthode peut fonctionner dans n'importe quelle restaurant traditionnel et peut etre étendu au self et cantine scolaire.
 
-Le but de cette derniere methode est de permettre a tout le monde de participer a amielorer l'ecologie en redant l'application collaborative. Cette méthode peut fonctionner dans n'importe quelle restaurant traditionnel et peut etre étendu au self et cantine scolaire.
+/*== Cahier des charges
 
-== Cahier des charges
+Le but de ce projet est de développer une application pour la cantine, qui permet d’afficher l’indice carbone des plats préparés et proposés. Comme le nutriscore fourni une échelle nutritionnelle (part de gras, de sucre et d’additifs) sur les aliments, l’indice carbone des plats fournit un équivalent carbone à la production du plat. Il s’inspire du bilan carbone et du nutriscore.
+*/
 
 #pagebreak()
 
 = Gestion du projet
 
-*DIAGRAMME DE GANTT*
+Le projet c'est déroulé en 3 étapes principale qui ont été la base de donnée, le dévellopement des fonctionnalités de l'application et enfin le design de l'application.
+
+Globalement, le temps estimé pour chaque étapes du projet a été respecté selon nos prévisions, à part pour la base donnée que nous du retravaillé au cours du projet a cause de changement imprévu.
+
+#figure(image("Images/Diagramme de Gantt.png"), caption: "Diagramme de Gantt")
 
 #pagebreak()
 
@@ -135,11 +150,11 @@ Nous avons utilisé le framework React Native, couplé à Expo, pour accélérer
 Outils et bibliothèques principaux :
     ...
 
-Plateformes de test :
-
 L’application a été testée à la fois sur simulateurs Android via Android Studio et sur appareils physiques pour s’assurer d’une bonne compatibilité et d’une expérience utilisateur fluide.
 
 Nous avons utilisé GitHub comme plateforme de gestion de version tout au long du projet afin de collaborer efficacement, et d'avoir un historique clair des modifications. Les branches ont été utilisées pour séparer le dévellopement des différentes fonctionnalités, ce qui a facilité l’intégration progressive des différentes parties de l’application dans la branche principale.
+
+Les données que nous utilisons pour notre base donné proviennte toutes du programme de collecte de donnée AGRIBALYSE 2.0. 
 
 #pagebreak()
 
@@ -147,7 +162,12 @@ Nous avons utilisé GitHub comme plateforme de gestion de version tout au long d
 
 == Modele Statique
 
+UML
+Entité association
+
 == Architectures de l'application
+
+
 
 #pagebreak()
 
@@ -163,9 +183,11 @@ Pour connaitre le poids de chaque aliment dans un plat et pour remplir la table 
 
 === Conception
 
-=== Modelisation
+=== Implémentation
 
 == Application utilisateur
+
+=== Conception
 
 === Modélisation
 
