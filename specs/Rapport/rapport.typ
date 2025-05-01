@@ -75,9 +75,9 @@ de Gantt).
 
 #show : umfds.with(lang: "fr", title: "Crok'eco
 Projet de Programmation 2", authors: ("BATATAY Mallory
-KEGLO Partice",), abstract: "", date: "2024 - 2025", department: [Informatique], img: image("../../assets/logo/logo2.png", width: 50%))
+KEGLO Partice",), abstract: "", date: "2024 - 2025", department: [Informatique], img: image("../../assets/logo/logo_vf.png", width: 50%))
 
-= Remerciement (Si nécessaire)
+*Remerciement (Si nécessaire)*
 
 #pagebreak()
 
@@ -85,11 +85,11 @@ KEGLO Partice",), abstract: "", date: "2024 - 2025", department: [Informatique],
   level: 1
 ): set block(above: 1.2em)
 
-#outline()
+#outline(title: "Table des matières",)
 
 #pagebreak()
 
-= Introduction
+*Introduction*
 
 Nous réalisons ce projet dans le cadre de notre 3e en Licence Informatique. Le projet a débuté en décembre 2024 et nous a accompagné tout au long de notre 2e semestres. Ce projet s'incrit dans la continuité de celui commencé l'année précedente par des étudiants de Cursus Master en Ingénierie (CMI) Informatique en 3e année. Le sujet que nous avons choisi est celui de Monsieur Bourreau. Le but du projet est de créer une application permettant de noté l'impact écologique avec une couleur. Celle-ci peut etre de couleur Verte, Orange ou Rouge respectivement d'une empreinte carbonne faible a élevé.
 
@@ -187,4 +187,18 @@ Pour connaitre le poids de chaque aliment dans un plat et pour remplir la table 
 #pagebreak()
 
 = Bibliographie
+#outline(
+  title: [Tables des ...],
+  target: figure,
+)
 
+#figure(
+  image("../CodeE_A2.svg"
+  ),
+  caption: "asa"
+)
+
+#figure(
+  table(),
+  caption: "fzeaf"
+)
