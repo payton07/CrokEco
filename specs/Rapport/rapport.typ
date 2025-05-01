@@ -75,7 +75,7 @@ de Gantt).
 
 #show : umfds.with(lang: "fr", title: "Crok'eco
 Projet de Programmation 2", authors: ("BATATAY Mallory
-KEGLO Partice",), abstract: "", date: "2024 - 2025", department: [Informatique], img: image("../../assets/logo/logo_vf.png", width: 50%))
+KEGLO Partice",), abstract: "", date: "2024 - 2025", department: [Informatique], img: image("Images/logo_vf.png", width: 50%))
 
 *Remerciement (Si nécessaire)*
 
