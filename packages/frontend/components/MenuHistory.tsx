@@ -16,9 +16,9 @@ function switchToMenu(objet: any[]) {
 }
 
 export default function MenuHistory({
-  ligne,
+  menu,
 }: {
-  ligne: {
+  menu: {
     ID_menu: number;
     ID_restaurant: number;
     NomMenu: string;
@@ -27,23 +27,23 @@ export default function MenuHistory({
   };
 }) {
   function call() {
-    if (ligne.ID_menu === null) return;
-    switchToMenu([ligne.ID_menu, ligne.ID_restaurant]);
+    if (menu.ID_menu === null) return;
+    switchToMenu([menu.ID_menu, menu.ID_restaurant]);
   }
 
   return (
     <View>
       <TouchableOpacity style={styles.reco} onPress={call}>
         <Text style={styles.text}>
-          {ligne.NomMenu.trim().length > 0 ? ligne.NomMenu : "Menu"}
-          {ligne.ID_menu}
+          {menu.NomMenu.trim().length > 0 ? menu.NomMenu : "Menu"}
+          {menu.ID_menu}
         </Text>
-        <Text style={styles.text}>{ligne.Date}</Text>
+        <Text style={styles.text}>{menu.Date}</Text>
         <FontAwesome
           style={styles.star}
           name="star"
           size={24}
-          color={ligne.color}
+          color={menu.color}
         />
       </TouchableOpacity>
     </View>

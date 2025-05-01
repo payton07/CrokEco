@@ -8,7 +8,7 @@ export default function Vote_display({
   ligne, associations
 }: {
   ligne: {
-    ID_plat: number;
+    ID_plat: number | null ;
     Certified: string;
     Like: number;
     DisLike: number;
@@ -47,16 +47,17 @@ export default function Vote_display({
 
   function goDetails() {
     call();
-    if (ligne.ID_plat === null) return;
-    
-      router.push({
-        pathname: `/(hidden)/details/[id]`,
-        params: {
-          id: ligne.ID_plat,
-          Plat: JSON.stringify(ligne),
-          assocs: JSON.stringify(associations),
-        },
-      });
+    if (ligne.ID_plat == null ||ligne.ID_plat === null) {return;}
+    else{
+        router.push({
+          pathname: `/(hidden)/details/[id]`,
+          params: {
+            id: ligne.ID_plat,
+            Plat: JSON.stringify(ligne),
+            assocs: JSON.stringify(associations),
+          },
+        });
+      }
   }
 
   return (

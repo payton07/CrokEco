@@ -104,7 +104,7 @@ export default function History() {
           showsVerticalScrollIndicator={true}
         >
           {isloaded && menus.length > 0 ? (
-            menus.map((ligne, i) => <MenuHistory key={i} ligne={ligne} />)
+            menus.map((objmenu, i) => <MenuHistory key={i} menu={objmenu} />)
           ) : isloaded && menus.length === 0 ? (
             <Text style={styles.textcenterize}>Aucun Menu</Text>
           ) : (
