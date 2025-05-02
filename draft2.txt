@@ -7,9 +7,8 @@ podfile_properties = JSON.parse(File.read(File.join(__dir__, 'Podfile.properties
 ENV['RCT_NEW_ARCH_ENABLED'] = podfile_properties['newArchEnabled'] == 'true' ? '1' : '0'
 ENV['EX_DEV_CLIENT_NETWORK_INSPECTOR'] = podfile_properties['EX_DEV_CLIENT_NETWORK_INSPECTOR']
 
-platform :ios, podfile_properties['ios.deploymentTarget'] || '15.1'
-install! 'cocoapods',
-  :deterministic_uuids => false
+platform :ios, podfile_properties['ios.deploymentTarget'] || '18.2'
+install! 'cocoapods', :deterministic_uuids => false
 
 prepare_react_native_project!
 
@@ -17,7 +16,7 @@ target 'CrokEco' do
   use_expo_modules!
 
   if ENV['EXPO_USE_COMMUNITY_AUTOLINKING'] == '1'
-    config_command = ['node', '-e', "process.argv=['', '', 'config'];require('@react-native-community/cli').run()"];
+    config_command = ['node', '-e', "process.argv=['', '', 'config'];require('@react-native-community/cli').run()"]
   else
     config_command = [
       'node',
@@ -39,7 +38,6 @@ target 'CrokEco' do
   use_react_native!(
     :path => config[:reactNativePath],
     :hermes_enabled => podfile_properties['expo.jsEngine'] == nil || podfile_properties['expo.jsEngine'] == 'hermes',
-    # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/..",
     :privacy_file_aggregation_enabled => podfile_properties['apple.privacyManifestAggregationEnabled'] != 'false',
   )
@@ -52,29 +50,35 @@ target 'CrokEco' do
       :ccache_enabled => podfile_properties['apple.ccacheEnabled'] == 'true',
     )
 
-    # This is necessary for Xcode 14, because it signs resource bundles by default
-    # when building for devices.
-    installer.target_installation_results.pod_target_installation_results
-      .each do |pod_name, target_installation_result|
-      target_installation_result.resource_bundle_targets.each do |resource_bundle_target|
-        resource_bundle_target.build_configurations.each do |config|
+    # ✅ Ne pas signer les bundles de ressources
+    installer.target_installation_results.pod_target_installation_results.each do |_pod, result|
+      result.resource_bundle_targets.each do |resource_target|
+        resource_target.build_configurations.each do |config|
           config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
         end
       end
     end
+
+    # ✅ Exclure les archis obsolètes pour tous les pods
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'i386 armv7 x86_64'
+      end
+    end
+
+    # ✅ Cas spécial : ExpoModulesCore (si déjà exclu ailleurs, pas grave de redonder)
     installer.pods_project.targets.each do |target|
       if target.name == "ExpoModulesCore"
         target.build_configurations.each do |config|
-          config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'i386 armv7'
+          config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'i386 armv7 x86_64'
         end
       end
     end
-    react_native_post_install(installer) if defined?(react_native_post_install)
 
+    # ✅ Corrige l'accès au script expo-configure-project.sh sous macOS sandbox
     installer.pods_project.targets.each do |target|
       target.shell_script_build_phases.each do |phase|
         if phase.shell_script.include?("expo-configure-project.sh")
-          # Force les guillemets + chmod
           fixed_path = "\"${PODS_TARGET_SRCROOT}/Target Support Files/#{target.name}/expo-configure-project.sh\""
           phase.shell_script = "chmod +x #{fixed_path}\n/bin/bash #{fixed_path}"
         end
