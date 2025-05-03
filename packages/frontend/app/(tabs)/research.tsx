@@ -153,6 +153,7 @@ export default function Research() {
       const data = { ID_plat: ele?.ID_plat };
       const laMaj = await PostUpdateRequest(data);
       if (laMaj) await DoUpdates(laMaj);
+      await loadData();
     } else {
       // TODO : Voir les cas de merde
       console.log("Y a pas de plats dans ta BD !");
@@ -176,8 +177,8 @@ export default function Research() {
     }
   }
   async function LoadAndCheckUpadate(){
-    await checkForDailyUpdate(CheckForUpdates);
     await loadData();
+    await checkForDailyUpdate(CheckForUpdates);
   }
 
   useEffect(() => {
