@@ -212,6 +212,10 @@ Nous avons commencé par faire des croquis de l'application sur figma afin de r�
 
 == Fonctionnalités non implémenté
 
+Caméra
+Localisation
+Amélioration des suggestions
+
 == Statistiques
 
 
