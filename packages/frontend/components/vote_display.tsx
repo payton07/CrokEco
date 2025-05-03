@@ -30,18 +30,20 @@ export default function Vote_display({
     call();
     if(!isDone) {
       setIsDone(true);
-      setDisLiked(DisLiked + 1);
       const set = { DisLike: ligne.DisLike + 1 };
       await PostUpdatePlatsRequest({ query: query, set: set });
+      setDisLiked(DisLiked + 1);
+      router.reload();
     }
   }
   async function like() {
     call();
     if(!isDone) {
       setIsDone(true);
-      setLiked(Liked + 1);
       const set = { Like: ligne.Like + 1 };
       await PostUpdatePlatsRequest({ query: query, set: set });
+      setLiked(Liked + 1);
+      router.reload();
     }
   }
 
