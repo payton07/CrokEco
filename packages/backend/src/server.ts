@@ -42,7 +42,7 @@ export type Ingredient = {
   name: string;
   weight: string;
 };
-const DO_MAJ_CODE = 3333;
+const DO_MAJ_CODE = "3333DOMAJ";
 
 // Charger les variables d'environnement depuis le fichier .env
 dotenv.config();

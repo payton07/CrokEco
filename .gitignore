@@ -22,9 +22,9 @@ packages/frontend/*
 !*.typ
 packages/backend/*
 !packages/backend/package.json
-!packages/backend/src/
-!packages/backend/utils/
+!packages/backend/src
+!packages/backend/utils
 !packages/backend/dist
-!packages/backend/bdd_doc/
+!packages/backend/bdd_doc
 !packages/backend/Dockerfile
 !packages/backend/docker-compose.yml

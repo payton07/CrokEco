@@ -4,7 +4,7 @@ export const IP = Constants.expoConfig?.extra?.HOST ;
 
 export const SECRET_KEY = Constants.expoConfig?.extra?.SECRET_KEY ;
 export const url = `http://${IP}:${port}/api/`;
-export const DO_MAJ_CODE = 3333;
+export const DO_MAJ_CODE = "3333DOMAJ";
 export const good = "#4CAF50";
 export const bad = "red";
 export const ok = "orange";

@@ -152,7 +152,7 @@ export default function Research() {
     if (ele != null) {
       const data = { ID_plat: ele?.ID_plat };
       const laMaj = await PostUpdateRequest(data);
-      if (laMaj) await DoUpdates(laMaj);
+      if (laMaj.code == DO_MAJ_CODE) await DoUpdates(laMaj);
       await loadData();
     } else {
       // TODO : Voir les cas de merde
@@ -183,7 +183,7 @@ export default function Research() {
 
   useEffect(() => {
     LoadAndCheckUpadate();
-  }, [isLoaded]);
+  }, []);
 
   return (
     <DataContext.Provider value={{ data, isLoaded }}>
