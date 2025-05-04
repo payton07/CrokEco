@@ -18,8 +18,11 @@ The project is developed using a combination of the following technologies:
 ## 📂 Repository Structure
 The project is structured as follows:
 ├── src/ # Main source code
+
 ├── assets/ # Static assets like images and fonts 
+
 ├── scripts/ # Python scripts for data processing 
+
 └── README.md # Project documentation
 
 
