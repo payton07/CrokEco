@@ -3,9 +3,21 @@
 
 #show : umfds.with(lang: "fr", title: "Crok'eco
 Projet de Programmation 2", authors: ("BATATAY Mallory
-KEGLO Partice",), abstract: "", date: "2024 - 2025", department: [Informatique], img: image("Images/logo_vf.png", width: 60%))
+KEGLO Partice",), abstract: "Crok'eco est une application collaborative permettant à chacun de s'informer sur l'imapct écologique d'un plat.", date: "2024 - 2025", department: [Informatique], img: image("Images/logo_vf.png", width: 60%))
 
-*Remerciement (Si nécessaire)*
+#text(1.5em)[*Remerciement*]
+
+Nous tenons à exprimer notre sincère gratitude envers toutes les personnes qui ont contribué à la
+réussite de ce projet. Leur soutien et leur encadrement ont été d'une importance capitale tout au long de la création de cette application.
+
+Nous souhaitons exprimer nos sincères remerciements à M. Eric Bourreau pour nous avoir permis de travailler sur ce sujet. Sa confiance et son soutien nous ont permis de le réaliser avec succès. Nous lui sommes reconnaissant pour cette opportunité qui nous a permis d'acquérir une expérience en génie logiciel.
+
+Nous souhaitons tout particulièrement remercier Ewen PHILIPOT, pour nous avoir aider à initier le projet malgré qu'il soit parti au cours de cette année  scolaire. Ses connaissances approfondies nous ont permis d'avoir une base solide pour l'application.
+
+Je tiens également à exprimer ma gratitude envers Mme Elisabeth BAERT, responsable de la licence 3 Informatique, pour nous avoir permis de réaliser ces projets durant le second semestre. 
+
+Enfin, j'aimerais remercier chaleureusement toutes les personnes qui m'ont aidé dans la création de l'application ainsi que dans la rédaction de ce rapport et qui ont relu ce dernier. Leur soutien et leurs précieux commentaires ont grandement amélioré la qualité de ce travail.
+
 
 #pagebreak()
 
@@ -57,9 +69,9 @@ Nous avons donc choisi de faire une application collaborative qui calcule l'impa
 
 = Gestion du projet
 
-Le projet c'est déroulé en ' étapes principale qui ont été la base de donnée, le dévellopement des fonctionnalités de l'application, la création du serveur distant et enfin le design de l'application.
+Le projet c'est déroulé en autour 4 étapes qui ont été la base de données, le dévellopement des fonctionnalités de l'application, la création du serveur distant et enfin le design de l'application.
 
-Globalement, le temps estimé pour chaque étapes du projet a été respecté selon nos prévisions, à part pour la base donnée que nous du retravaillé au cours du projet a cause de changement imprévu.
+Globalement, le temps estimé pour chaque étapes du projet a été respecté selon nos prévisions, à part pour la base données que nous du retravaillé au cours du projet a cause de changement imprévu.
 
 #figure(image("Images/Diagramme de Gantt.png"), caption: "Diagramme de Gantt")
 
@@ -71,13 +83,13 @@ Le développement de l’application a été réalisé en TypeScript, un sur-ens
 
 Nous avons utilisé le framework React Native, couplé à Expo, pour accélérer le processus de développement multi-plateformes (Android et iOS).
 Outils et bibliothèques principaux :
-- Pandas(Python) pour la gestion de donnée en CSV
+- Pandas(Python) pour la gestion de données en CSV
 
 L’application a été testée à la fois sur simulateurs Android via Android Studio et sur appareils physiques pour s’assurer d’une bonne compatibilité et d’une expérience utilisateur fluide.
 
 Nous avons utilisé GitHub comme plateforme de gestion de version tout au long du projet afin de collaborer efficacement, et d'avoir un historique clair des modifications. Les branches ont été utilisées pour séparer le dévellopement des différentes fonctionnalités, ce qui a facilité l’intégration progressive des différentes parties de l’application dans la branche principale.
 
-Les données que nous utilisons pour notre base donné proviennte toutes du programme de collecte de donnée AGRIBALYSE 2.0. 
+Les données que nous utilisons pour notre base donné proviennte toutes du programme de collecte de données AGRIBALYSE 2.0. 
 
 
 = Architectures
@@ -100,17 +112,17 @@ Dans la partie de recherche et d'affichage de plat on retrouve dans un premier t
 
 = Application <app>
 
-== Base de donnée <BDD>
+== Base de données <BDD>
 
 === Recherche <Recherchebdd>
-Afin de connaitre l'impact ecologique d'un plat nous avons choisi dans un premier temps de se servir de la base de donnée fournie par l'ADEME. La base de l'ADEME sur la consommation CO2 est une immense base regroupant tout les types d'emission de gaz à effet de serre tel que celle du au textiles, à l'industrie ou autres, ainsi que toute les emissions liee à l'alimentation.
+Afin de connaitre l'impact ecologique d'un plat nous avons choisi dans un premier temps de se servir de la base de données fournie par l'ADEME. La base de l'ADEME sur la consommation CO2 est une immense base regroupant tout les types d'emission de gaz à effet de serre tel que celle du au textiles, à l'industrie ou autres, ainsi que toute les emissions liee à l'alimentation.
 
-En inspectant la base de données nous avons remarqué que toutes les informations liée à la nourriture provenait de 2 base de donnée qui sont AGRIBALYSE et AGRIBALYSE 2.0. AGRIBALYSE est un programme collectif et innovant qui met à disposition des données de référence sur les impacts environnementaux des produits agricoles et alimentaires à travers une base de données construite selon la méthodologie des Analyses du Cycle de Vie. Il est possible de se servir du site web d'AGRIBALYSE pour connaitre l'impact environnemental d'un aliment ou bien de télécharger leur base de donnée.
+En inspectant la base de données nous avons remarqué que toutes les informations liée à la nourriture provenait de deux bases de données qui sont AGRIBALYSE et AGRIBALYSE 2.0. AGRIBALYSE est un programme collectif et innovant qui met à disposition des données de référence sur les impacts environnementaux des produits agricoles et alimentaires à travers une base de données construite selon la méthodologie des Analyses du Cycle de Vie. Il est possible de se servir du site web d'AGRIBALYSE pour connaitre l'impact environnemental d'un aliment ou bien de télécharger leur base de données.
 
-Nous avons donc télécharger la base de données concernant dans un premier temps uniquement les plats ayant nécessité une transformation. Cette base de donnée etait disponible au format CSV. Afin de traiter de rendre les donnée utilisable nous avons coder un programme python servant à initialiser une base de donnee en sql comportant tous les plats décrit dans le CSV.
+Nous avons donc télécharger la base de données concernant dans un premier temps uniquement les plats ayant nécessité une transformation. Cette base de données etait disponible au format CSV. Afin de traiter de rendre les données utilisable nous avons coder un programme python servant à initialiser une base de données en sql comportant tous les plats décrit dans le CSV.
 
 Le CSV etait construit de la maniere suivante : par plat présent dans la base, il y avait une ligne pour chaque ingredient. Cela signifie qu'on retrouve l'impact écologique d'un ingredient pour que dans chaque plats comportant cette ingredient, mais l'impact différé en fonction de la proportion de cette aliment dans le plat.
-En analysant plus precisement nos besoin nous avons remarqué qu'il manqué trop de plats dans la base de données actuel. Afin de pallier a ce probleme nous avons changé une nouvelle fois de base de donnée pour prendre finalement celle comportant uniquement les ingredients avec l'impact associé par kilo d'aliment.
+En analysant plus precisement nos besoin nous avons remarqué qu'il manqué trop de plats dans la base de données actuel. Afin de pallier a ce probleme nous avons changé une nouvelle fois de base de données pour prendre finalement celle comportant uniquement les ingredients avec l'impact associé par kilo d'aliment.
 Pour connaitre l'impact ecologique d'un plat, on doit donc realisé la somme de l'impact de chaque plat et faire un produit en croix pour le ramener à un kilo de nourriture.
 
 Pour connaitre le poids de chaque aliment dans un plat et pour remplir la table sql des plat nous avons choisi de faire confiance au utilisateur de l'application. Une page de l'application permet d'enregistrer la composition d'un plat *voir partie*. Chaque plat nouvellement creer peut etre voter par un utilisateur afin d'etre ajouter par les modérateurs à la base de données comportant tous les plats.
@@ -186,3 +198,4 @@ site AGRIBALYSE : https://doc.agribalyse.fr/documentation \
   title: [Tables des figures],
   target: figure,
 )
+
