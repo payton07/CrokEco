@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script defer src="connect.js"></script>
+    <title>Connexion</title>
+    <style>
+        fieldset {
+            width: 40%;
+            position: absolute;
+            left: 30%;
+            top: 20%;
+            height: 40%;
+            text-align: center;
+            padding: 20px;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <form id="loginForm">
+        <fieldset id="sign_in">
+            <label for="nom">Nom : </label>
+            <input type="text" id="nom" name="nom"/>
+            <br><br>
+            <span class="error" id="nomError"></span>
+            <br>
+            
+            <label for="password">Mot de passe : </label>
+            <input type="password" id="password" name="mdp"/>
+            <br><br>
+            <span class="error" id="passwordError"></span>
+            <br>
+
+            <input type="submit" value="Connecter"/>
+        </fieldset>
+    </form>
+</body>
+</html>

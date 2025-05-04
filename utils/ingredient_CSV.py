@@ -4,7 +4,6 @@ import sqlite3
 import os
 
 INPUT_FILE = "../assets/Agribalyse_Detail_ingredient.csv"
-OUTPUT_FILE = "../assets/Agribalyse_Detail_ingredient_v2.csv"
 INPUT_SQL = "../specs/CodeE_A3.sql"
 OUTPUT_DB = "../packages/frontend/assets/ingredient_carbon_score.db"
 INGREDIENTS_KEYS = [0] + [i for i in range(6,24)]

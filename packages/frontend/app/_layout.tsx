@@ -15,6 +15,7 @@ import { Slot } from "expo-router";
 
 // Import your global CSS file
 import "../global.css";
+import React from "react";
 
 // export default Slot;
 
@@ -61,8 +62,8 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false}} />
-        <Stack.Screen name="(hidden)" options={{ headerShown: false}} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(hidden)" options={{ headerShown: false }} />
       </Stack>
     </ThemeProvider>
   );

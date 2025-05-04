@@ -2,3 +2,7 @@
 - faire la base de données + docs
 - extraction du csv
 - (plus tard) frontend
+
+
+Par ingredient s: {quantite dans le plat + id_ingredient + Score} 
+

@@ -1,149 +1,239 @@
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 import React, { createContext, useEffect, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getIngredients, getPlats, getSous_Groupes } from "@/utils/bdd";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  addPlats,
+  addPlats_Ingredients,
+  getLastElementPlats,
+  getPlats,
+  initDB,
+} from "@/utils/bdd";
 import Searcher from "@/components/Searcher";
 import Favoris from "@/components/Favoris";
 import Suggestion from "@/components/Suggestion";
+import { checkForDailyUpdate, DoSomethingWhenServerReady, FormatInfoPlatIngredients, getDataWithCacheExpiration } from "@/utils/other";
+import {
+  DO_MAJ_CODE,
+  Fond_vert_clair,
+  Fourchette,
+  good,
+} from "@/utils/constants";
+import { PostUpdateRequest } from "@/utils/routes";
+import { View } from "@/components/Themed";
+import { Vert_C } from "../../utils/constants";
 
-type info_t =  {Nom : string ,categorie : string , Score : string , Unite : string,id:number};
-const ele = { info: { Nom: "Pomme", categorie: "Fruit", Score: "0.5", Unite: "kg CO2 eq/kg de produit", id: 1 }, back: "Green" };
+// Variables globales
+const ele = {
+  info: {
+    Nom: "Pomme",
+    categorie: "Fruit",
+    Score: "0.5",
+    Unite: "kg CO2 eq/kg de produit",
+    id: 1,
+  },
+  back: "Green",
+};
 export const DataContext = createContext({ data: [ele], isLoaded: false });
 
-function Qualite(score : number) {
-  if (score <= 1) {
-    return "Green";
-  }
-  if (score >1 && score <=5) {
-    return "Orange";
-  }
-  return "Red";
-}
-async function clearAllCache() {
-  try {
-    await AsyncStorage.clear();
-    console.log("Tout le cache a été supprimé !");
-  } catch (error) {
-    console.error("Erreur lors de la suppression de tout le cache :", error);
-  }
-}
-async function change(ide : number  ) {
-  let back = "black";
-  if(ide != undefined){
-    const ras = await getPlats({Ciqual_AGB : ide},false,true);
-    const res = await getIngredients({Ciqual_AGB : ras?.at(0)?.Ciqual_AGB},true,false);
-    const sous_groupe = await getSous_Groupes({ID_sous_groupe : ras?.at(0)?.ID_sous_groupe},false);
-    if(ras !=undefined && res != undefined && sous_groupe != undefined) {
-      let score : number = 0;
-      for (const ele of res) {
-        score += ele.Changement_climatique;
-      }
-      const info :info_t = {Nom: ras?.at(0).Nom_Francais, categorie: sous_groupe?.at(0).Sous_groupe_d_aliment, Score: score.toPrecision(3), Unite:"kg CO2 eq/kg de produit",id:ide};
-      back = Qualite(score);
-      const out = {info : info, back : Qualite(score)};
-      return out;
-    }
-    else {
-      return {info : undefined, back : undefined};
-    }
-}
-}
-
-
-async function getDataWithCacheExpiration(key:string, apiCallFunction : ()=>{}, expirationTimeInMinutes = 30) {
-  try {
-    const cachedData = await AsyncStorage.getItem(key);
-    if (cachedData) {
-      const { data, timestamp } = JSON.parse(cachedData);
-      if (Date.now() - timestamp < expirationTimeInMinutes * 60 * 1000) {
-        console.log(`Données récupérées depuis le cache (${key})`);
-        return data;
-      }
-    }
-    console.log(`Appel API pour récupérer ${key}`);
-    const apiData = await apiCallFunction();
-    await AsyncStorage.setItem(
-      key,
-      JSON.stringify({ data: apiData, timestamp: Date.now() })
-    );
-    return apiData;
-  } catch (error) {
-    console.error("Erreur dans getDataWithCacheExpiration :", error);
-  }
-}
-
+// Fonction pour récupérer les plats favoris et suggérés
 async function setup1() {
-  const loa1 = await getPlats(false, true, false);
-  const loa2 = await getPlats(false, true, false, 100);
-  if (loa1 && loa2) {
-    let lod1 = [], lodInter = [] ,lod2 = [];
-    for (const a of loa1) {
-      if (a.Ciqual_AGB) lod1.push(await change(a.Ciqual_AGB));
+  const plats_favs = await getPlats(false, true, false);
+  const plats_suggested = await getPlats(false, true, false, 200);
+  if (plats_favs && plats_suggested) {
+    let plats_favs_data = [],
+      plats_Inter = [],
+      plats_suggested_data = [];
+    for (const a of plats_favs) {
+      if (a.ID_plat) plats_favs_data.push(await FormatInfoPlatIngredients(a.ID_plat));
     }
-    for (const a of loa2) {
-      if (a.Ciqual_AGB) lodInter.push(await change(a.Ciqual_AGB));
+    for (const a of plats_suggested) {
+      if (a.ID_plat) plats_Inter.push(await FormatInfoPlatIngredients(a.ID_plat));
     }
-    for (const a of lodInter){
-      if(a?.back =="Green") lod2.push(a)
+    for (const a of plats_Inter) {
+      // TODO remettre la condition
+      // if(a?.color == good)
+      plats_suggested_data.push(a);
     }
-    return { loads1: lod1, loads2: lod2 };
+    plats_suggested_data.push(...plats_suggested_data);
+    return {
+      plats_favoris: plats_favs_data,
+      plats_suggest: plats_suggested_data,
+    };
   }
-  return { loads1: undefined, loads2: undefined };
+  return { plats_favoris: undefined, plats_suggest: undefined };
 }
 
 export default function Research() {
   const [menuVisible, setMenuVisible] = useState(false);
-  const [loads1, setLoads1] = useState([]);
-  const [loads2, setLoads2] = useState([]);
+  const [platsfavs, setPlatsfavs] = useState([]);
+  const [platsuggested, setPlatsuggested] = useState([]);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  useEffect(() => {
-    async function loadData() {
-      if (!isLoaded) {
-        const donne = await getDataWithCacheExpiration("21", setup1, 30);
-        if (donne) {
-          setData(donne);
-          setLoads1(donne.loads1);
-          setLoads2(donne.loads2);
-          setIsLoaded(true);
-        }
-        setLoading(false);
-      }
+  // Fonction pour vider le cache
+  async function clearAllCache() {
+    try {
+      await AsyncStorage.clear();
+      console.log("Tout le cache a été supprimé !");
+      setIsLoaded(false);
+      setLoading(true);
+      await loadData();
+    } catch (error) {
+      // console.error("Erreur lors de la suppression de tout le cache :", error);
+      console.log("Erreur lors de la suppression de tout le cache :", error);
     }
-    loadData();
-  }, [isLoaded]);
+  }
+
+  // Fonction pour reset la base de données
+  // et vider le cache
+  async function reset() {
+    console.log("je reset !");
+    await initDB(true);
+    await clearAllCache();
+  }
+
+  // Fonction qui effectue la mise à jour
+  // des plats et des associations plat - ingredients
+  async function DoUpdates(data: {
+    message: string;
+    code: number;
+    last: string;
+  }) {
+    console.log("Lance la MAJ");
+    if (data.code === DO_MAJ_CODE) {
+      const objet = JSON.parse(data.message);
+      const plats: any[] = objet.plats;
+      const plats_ingredients: any[] = objet.plats_ingredients;
+
+      console.log("Les plats : ", plats);
+      console.log("Les plats ingredients : ", plats_ingredients);
+
+      // Inserer les plats dans la bd de l'appli
+      for (const plat of plats) {
+        await addPlats(plat);
+      }
+
+      // Inserer les associations plat - ingredients
+      for (const plat_ingredient of plats_ingredients) {
+        const id = await addPlats_Ingredients(plat_ingredient);
+        console.log(
+          "Ajout de l'association plat - ingredient avec id : ",
+          id,
+          plat_ingredient.ID_plat,
+          plat_ingredient.ID_ingredient,
+        );
+      }
+
+      const last_plat = await getLastElementPlats();
+      if (last_plat.ID_plat != data.last) {
+        console.log("Pb: Maj pas complete");
+      }
+      await clearAllCache();
+      console.log("Mise à jour terminée !!!");
+    } else {
+      console.log(data.message);
+    }
+  }
+
+  // Fonction pour vérifier les mises à jour
+  // et effectuer la mise à jour si nécessaire
+  async function CheckForUpdates() {
+    console.log("Demande de maj");
+    const el = await getPlats(false, true, false);
+    const ele = await getLastElementPlats();
+    if (ele != null) {
+      const data = { ID_plat: ele?.ID_plat };
+      const laMaj = await PostUpdateRequest(data);
+      if (laMaj.code == DO_MAJ_CODE) await DoUpdates(laMaj);
+      await loadData();
+    } else {
+      // TODO : Voir les cas de merde
+      console.log("Y a pas de plats dans ta BD !");
+    }
+  }
+
+  // Fonction pour charger les données soit depuis le cache
+  // soit depuis la base de données
+  // et mettre à jour l'état de l'application
+  // avec les plats favoris et suggérés
+  async function loadData() {
+    if (!isLoaded) {
+      const donne = await getDataWithCacheExpiration("21", setup1, 30);
+      if (donne) {
+        setData(donne);
+        setPlatsfavs(donne.plats_favoris);
+        setPlatsuggested(donne.plats_suggest);
+        setIsLoaded(true);
+      }
+      setLoading(false);
+    }
+  }
+  async function LoadAndCheckUpadate(){
+    await loadData();
+    await checkForDailyUpdate(CheckForUpdates);
+  }
+
+  useEffect(() => {
+    LoadAndCheckUpadate();
+  }, []);
 
   return (
     <DataContext.Provider value={{ data, isLoaded }}>
       <SafeAreaProvider>
         <View style={styles.container}>
           <View style={styles.header}>
-            <TouchableOpacity onPress={() => setMenuVisible(!menuVisible)}>
-              <Ionicons name="menu" size={30} color="black" />
+            <TouchableOpacity  onPress={() => setMenuVisible(!menuVisible)}>
+              <Ionicons name="menu" size={30} color={Fourchette} />
             </TouchableOpacity>
-            <Text style={styles.text}>Research</Text>
+            <Text testID={"menu-button"} style={styles.text}>Research</Text>
           </View>
+          <View
+            style={styles.separator}
+            lightColor={Vert_C}
+            darkColor={Vert_C}
+          />
           {menuVisible && (
             <View style={styles.absoluteContainer}>
               <View style={styles.overlay}>
                 <View style={styles.menu}>
                   <Text style={styles.menuText}>Menu</Text>
                   <Text style={styles.menuText}>Option 1</Text>
-                  <Text style={styles.menuText}>Option 2</Text>
-                  <Text style={styles.menuText}>Option 3</Text>
-                  <TouchableOpacity style={styles.clearButton} onPress={clearAllCache}>
+                  <TouchableOpacity style={styles.ResetButton} onPress={reset}>
+                    <Text style={styles.clearButtonText}>Reset BD</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.MaJButton}
+                    onPress={CheckForUpdates}
+                  >
+                    <Text style={styles.clearButtonText}>Demande MàJ</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.clearButton}
+                    onPress={clearAllCache}
+                  >
                     <Text style={styles.clearButtonText}>Vider le cache</Text>
                   </TouchableOpacity>
                 </View>
               </View>
             </View>
           )}
-          <Searcher path="app/(tabs)/research.tsx" />
-          {loading ? <ActivityIndicator size="large" color="#0000ff" />: <><Favoris loads={loads1} /><Suggestion loads={loads2} /></>}
+          <Searcher />
+          {loading ? (
+            <ActivityIndicator size="large" color="#0000ff" />
+          ) : (
+            <>
+              <Favoris loads={platsfavs} />
+              <Suggestion loads={platsuggested} />
+            </>
+          )}
         </View>
       </SafeAreaProvider>
     </DataContext.Provider>
@@ -153,15 +243,17 @@ export default function Research() {
 const styles = StyleSheet.create({
   container: {
     paddingTop: 10,
-    backgroundColor: "white",
-    marginBottom: "83%",
-    paddingBottom: "85%",
+    // backgroundColor: "white",
+    backgroundColor: `${Fond_vert_clair}`,
+    marginBottom: "73%",
+    paddingBottom: "83%",
   },
   header: {
     flexDirection: "row",
     width: "100%",
     paddingHorizontal: 20,
-    backgroundColor: "white",
+    // backgroundColor: "white",
+    backgroundColor: Fond_vert_clair,
   },
   absoluteContainer: {
     position: "absolute",
@@ -190,10 +282,17 @@ const styles = StyleSheet.create({
     color: "black",
   },
   text: {
+    top: -4,
     fontSize: 22,
     fontWeight: "bold",
     margin: 2,
-    color: "black",
+    color: Fourchette,
+  },
+  separator: {
+    marginVertical: 1,
+    height: 1,
+    width: "90%",
+    left: 22,
   },
   clearButton: {
     marginTop: 20,
@@ -202,8 +301,22 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: "center",
   },
+  MaJButton: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: "green",
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  ResetButton: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: "blue",
+    borderRadius: 5,
+    alignItems: "center",
+  },
   clearButtonText: {
     color: "white",
     fontSize: 16,
-  }
+  },
 });

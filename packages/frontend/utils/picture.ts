@@ -1,3 +1,3 @@
 export const images = {
-    github: require('@/assets/ingImages/image.png'),
-  };
+  github: require("@/assets/ingImages/image.png"),
+};
