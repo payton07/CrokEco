@@ -40,16 +40,16 @@ CREATE TABLE "Ingredients" (
 
 
 CREATE TABLE "Plats" (
-  "ID_plat" VARCHAR(10),
+  "ID_plat" INTEGER PRIMARY KEY AUTOINCREMENT,
   "Nom_plat" VARCHAR(50),
   "Certified" INTEGER,
-  "Vote" INTEGER,
-  CONSTRAINT PK_PLATS PRIMARY KEY("ID_plat")
+  "Like" INTEGER,
+  "DisLike" INTEGER
 );
 
 
 CREATE TABLE "Restaurants" (
-  "ID_restaurant" INT(6),
+  "ID_restaurant" INTEGER,
   "NomResto" VARCHAR(20),
   "Longitude" DECIMAL(10,8),
   "Latitude" DECIMAL(10,8),
@@ -58,16 +58,16 @@ CREATE TABLE "Restaurants" (
 
 
 CREATE TABLE "Menus" (
-  "ID_menu" INT(6),
+  "ID_menu" INTEGER,
   "NomMenu" VARCHAR(20),
-  "ID_restaurant" INT(6),
+  "ID_restaurant" INTEGER,
   CONSTRAINT PK_MENUS PRIMARY KEY("ID_menu")
   CONSTRAINT FK_MENUS_RESTAURANTS FOREIGN KEY ("ID_restaurant") REFERENCES Restaurants("ID_restaurant")
 );
 
 
 CREATE TABLE "Recherches" (
-  "ID_Recherche" INT(6),
+  "ID_Recherche" INTEGER,
   "Text_request" VARCHAR(30),
   "ID_menu" INT(6),
   "Date" Date,
@@ -87,9 +87,32 @@ CREATE TABLE "Plats_Ingredients" (
 
 
 CREATE TABLE "Menus_Plats" (
-  "ID_menu" INT(6),
-  "ID_plat" INT(6),
+  "ID_menu" INTEGER,
+  "ID_plat" INTEGER,
   CONSTRAINT PK_MENUS_PLATS PRIMARY KEY("ID_menu", "ID_plat"),
   CONSTRAINT FK_MENUS_PLATS_MENUS FOREIGN KEY ("ID_menu") REFERENCES Menus("ID_menu"),
   CONSTRAINT FK_MENUS_PLATS_PLATS FOREIGN KEY ("ID_plat") REFERENCES Plats("ID_plat")
+);
+
+CREATE TABLE "Restaurants_Historique" (
+  "ID_restaurant" INTEGER PRIMARY KEY AUTOINCREMENT,
+  "NomResto" VARCHAR(20),
+  "Longitude" DECIMAL(10,8),
+  "Latitude" DECIMAL(10,8),
+  "Adresse" VARCHAR(30)
+);
+
+CREATE TABLE "Menus_Historique" (
+  "ID_menu" INTEGER PRIMARY KEY AUTOINCREMENT,
+  "NomMenu" VARCHAR(20),
+  "ID_restaurant" INTEGER,
+  CONSTRAINT FK_MENUS_RESTAURANTS_HISTORIQUE FOREIGN KEY ("ID_restaurant") REFERENCES Restaurants_Historique("ID_restaurant")
+);
+
+CREATE TABLE "Recherches_Historique" (
+  "ID_Recherche" INTEGER PRIMARY KEY AUTOINCREMENT,
+  "Text_request" VARCHAR(30),
+  "ID_menu" INTEGER,
+  "Date" VARCHAR(10),
+  CONSTRAINT FK_RECHERCHES_MENUS_HISTORIQUE FOREIGN KEY ("ID_menu") REFERENCES Menus_Historique("ID_menu")
 );

@@ -40,6 +40,13 @@ export default function TabLayout() {
             tabBarStyle : {display : "none"},
         }}
       />
+     <Tabs.Screen
+        name="menus/[id]"
+        options={{
+            headerShown : false,
+            tabBarStyle : {display : "none"},
+        }}
+      />
     </Tabs>
   );
 }

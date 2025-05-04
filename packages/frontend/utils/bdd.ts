@@ -1,26 +1,32 @@
-import * as FileSystem from 'expo-file-system';
-import * as SQLite from 'expo-sqlite';
-import { Asset } from 'expo-asset';
+import * as FileSystem from "expo-file-system";
+import * as SQLite from "expo-sqlite";
+import { Asset } from "expo-asset";
 
-const dbName = 'ingredient_carbon_score.db';
+const dbName = "ingredient_carbon_score.db";
 // Le chemin où sera copiée la base de données
 const dbPath = `${FileSystem.documentDirectory}SQLite/${dbName}`;
 
-let db: SQLite.SQLiteDatabase; 
+let db: SQLite.SQLiteDatabase;
 
 /**
- *  Ouvrir la base de données SQLite
+ * Ouvre la base de données SQLite
+ * @param reload - Si true, recharge la base de données même si elle existe déjà
+ * @returns La base de données SQLite ouverte
  */
-
-async function openDatabase(): Promise<SQLite.SQLiteDatabase> {
+async function openDatabase(reload = false): Promise<SQLite.SQLiteDatabase> {
   const dbExists = await FileSystem.getInfoAsync(dbPath);
-  
-  if (!dbExists.exists) {
-    console.log("📂 Base de données introuvable dans documentDirectory, copie depuis le bundle...");
+
+  if (!dbExists.exists || (dbExists.exists && reload == true)) {
+    console.log("je relance ");
 
     try {
+      console.log(
+        "📂 Base de données introuvable dans documentDirectory, copie depuis le bundle..."
+      );
       // Charger l'asset via expo-asset
-      const asset = Asset.fromModule(require('../assets/ingredient_carbon_score.db'));
+      const asset = Asset.fromModule(
+        require("../assets/ingredient_carbon_score.db")
+      );
       // Assurer que l'asset est téléchargé
       await asset.downloadAsync();
 
@@ -28,7 +34,10 @@ async function openDatabase(): Promise<SQLite.SQLiteDatabase> {
         throw new Error("L'URI locale de l'asset n'a pas pu être récupérée.");
       }
       // Créer le répertoire si nécessaire
-      await FileSystem.makeDirectoryAsync(`${FileSystem.documentDirectory}SQLite/`, { intermediates: true });
+      await FileSystem.makeDirectoryAsync(
+        `${FileSystem.documentDirectory}SQLite/`,
+        { intermediates: true }
+      );
 
       // Copier l'asset vers le répertoire cible
       await FileSystem.copyAsync({
@@ -48,10 +57,17 @@ async function openDatabase(): Promise<SQLite.SQLiteDatabase> {
   return SQLite.openDatabaseAsync(dbName);
 }
 
-// Initialise la base de données une seule fois
-async function initDB(): Promise<void> {
+/**
+ * Initialise la base de données SQLite
+ * @param reload - Si true, recharge la base de données même si elle existe déjà
+ * @returns La base de données SQLite ouverte
+ */
+export async function initDB(reload = false): Promise<void> {
+  if (db && reload == true) {
+    db = await openDatabase(reload);
+  }
   if (!db) {
-    db = await openDatabase();
+    db = await openDatabase(reload);
   }
 }
 
@@ -59,119 +75,159 @@ async function initDB(): Promise<void> {
  * Foncttions d'Operation Basique CRUD
  */
 
+
 /**
  * 
- * @param table 
- * @param data 
- * @returns 
+ * @param table Le nom de la table dans laquelle insérer les données
+ * @param data Les données à insérer sous forme d'objet
+ * @returns L'ID de la dernière ligne insérée
+ * @throws Erreur si l'insertion échoue
+ * @description Insère des données dans une table SQLite
  */
-export async function addSmt(table: string, data : any): Promise<number> {
-  await initDB();
-  const res: number[]| PromiseLike<number> = [];
-  await db.withTransactionAsync(async () => {
-    const statement = await db.prepareAsync(
-      `
-      INSERT INTO ${table} (${Object.keys(data).join(", ")})
-      VALUES (${Object.values(data)
-          .map(a => `'${a}'`)
-          .join(", ")})
-  `,
-    );
-    try {
-      const result = await statement.executeAsync();
-      res.push(result.changes);
-    } finally {
-      await statement.finalizeAsync();
-    }
-  });
-  return res[0] ;
-}
-/**
- * 
- * @param table_name 
- * @param data 
- * @param all 
- * @param limit 
- * @returns 
- */
-export async function getSmt(table_name:string,data : boolean | any =false,all=false,limit : boolean | number=false,str : boolean=false): Promise<any[]> {
-  await initDB();
-  const res:any[] = [];
-  await db.withTransactionAsync(async () => {
-    // const
-    const statement = await db.prepareAsync(
-      `SELECT * FROM ${table_name}
-      ${
-          !data
-              ? ""
-              : "WHERE "+
-                Object.entries(data)
-                    .map(a => {
-                      let res=``;
-                      !str ? res =`${a[0]} = '${a[1]}'`
-                        : res= `${a[0]} LIKE '${a[1]}'`
-                      return res;
-                    })
-                    .join(" AND ")
-      }
-      ${limit ? "LIMIT "+limit : ""}
-      `
-    );
-    try {
-      const result = await statement.executeAsync();
-      
-      if(data && !all){
-        res.push(await result.getFirstAsync());
-      }
-      else {
-        const rows = await result.getAllAsync();
-        for(const row of rows){
-         res.push(row);
-      }
-    }
-    } finally {
-      await statement.finalizeAsync();
-    }
-  });
-  return res;
-}
-/**
- * 
- * @param table 
- * @param query 
- * @param set 
- * @returns 
- */
-export async function updateSmt(table: string, query: string, set:any): Promise<number> {
+export async function addSmt(table: string, data: any): Promise<number> {
   await initDB();
   const res: number[] | PromiseLike<number> = [];
   await db.withTransactionAsync(async () => {
-    const statement = await db.prepareAsync(
-      `
-      UPDATE ${table}
-      SET ${Object.entries(set)
-          .map(b => {
-              return `${b[0]} = '${b[1]}'`;
-          })
-          .join(", ")}
-      WHERE ${query};
-  `
-    );
+    const query = `
+    INSERT INTO ${table} (${Object.keys(data).join(", ")})
+    VALUES (${Object.values(data)
+      .map((a) => `'${a}'`)
+      .join(", ")})
+`;
+    const statement = await db.prepareAsync(query);
     try {
       const result = await statement.executeAsync();
-      res.push(result.changes);
-      
+      res.push(result.lastInsertRowId);
+    } catch (error) {
+      console.log(error);
     } finally {
       await statement.finalizeAsync();
     }
   });
   return res[0];
 }
+
 /**
  * 
- * @param table 
- * @param query 
- * @returns 
+ * @param table_name Le nom de la table à interroger
+ * @param data Les données à filtrer (sous forme d'objet ou false)
+ * @param all Si true, retourne toutes les lignes correspondantes
+ * @param limit Limite le nombre de résultats retournés
+ * @param str Si true, utilise LIKE au lieu de =
+ * @returns Un tableau d'objets contenant les résultats de la requête
+ * @throws Erreur si la requête échoue
+ * @description Récupère des données d'une table SQLite
+ */
+export async function getSmt(
+  table_name: string,
+  data: boolean | Record<string, any> = false,
+  all = false,
+  limit: boolean | number = false,
+  str = false
+): Promise<any[]> {
+  await initDB();
+  const res: any[] = [];
+  // const tableCheck = await db.getFirstAsync("SELECT name FROM sqlite_master WHERE type='table' AND name=?", ['Ingredients']);
+  // console.log("Table exists:", tableCheck);
+  // const rows = await db.getAllAsync(`SELECT * FROM Ingredients LIMIT 5`);
+  // console.log("Sample Rows:", rows);
+
+  await db.withTransactionAsync(async () => {
+    // console.log("Transaction started");
+
+    const whereClause =
+      typeof data === "object" && data !== null
+        ? "WHERE " +
+          Object.entries(data)
+            .map(([key, value]) => `${key} ${str ? "LIKE" : "="} ?`)
+            .join(" AND ")
+        : "";
+
+    let query = `SELECT * FROM ${table_name} ${whereClause}`;
+    const valuesArray =
+      typeof data === "object" && data !== null ? Object.values(data) : [];
+
+    if (typeof limit === "number" && limit > 0) {
+      query += " LIMIT ?";
+      valuesArray.push(limit);
+    }
+
+    const statement = await db.prepareAsync(query);
+    try {
+      const result = await statement.executeAsync(valuesArray);
+
+      if (data && !all) {
+        const firstRow = await result.getFirstAsync();
+        if (firstRow) {
+          res.push(firstRow);
+        }
+      } else {
+        const rows = await result.getAllAsync();
+        if (rows.length > 0) {
+          res.push(...rows);
+        }
+      }
+    } catch (error) {
+      console.error("Database error:", error);
+    } finally {
+      await statement.finalizeAsync();
+    }
+
+    // console.log("Transaction ended");
+  });
+
+  return res;
+}
+
+
+/**
+ * 
+ * @param table Le nom de la table à mettre à jour
+ * @param query La condition WHERE pour cibler les lignes à mettre à jour
+ * @param set Les données à mettre à jour sous forme d'objet
+ * @returns Le nombre de lignes affectées par la mise à jour
+ * @throws Erreur si la mise à jour échoue
+ * @description Met à jour des données dans une table SQLite
+ */
+export async function updateSmt(
+  table: string,
+  query: string,
+  set: Record<string, any>
+): Promise<number> {
+  await initDB();
+
+  let changes = 0;
+
+  await db.withTransactionAsync(async () => {
+    const updateQuery = `
+      UPDATE ${table}
+      SET ${Object.keys(set)
+        .map((key) => `${key} = ?`)
+        .join(", ")}
+      WHERE ${query};
+    `;
+
+    const values = Object.values(set);
+
+    const statement = await db.prepareAsync(updateQuery);
+    try {
+      const result = await statement.executeAsync(values);
+      changes = result.changes;
+    } finally {
+      await statement.finalizeAsync();
+    }
+  });
+
+  return changes;
+}
+
+/**
+ * 
+ * @param table Le nom de la table à supprimer
+ * @param query La condition WHERE pour cibler les lignes à supprimer
+ * @returns Le nombre de lignes supprimées
+ * @throws Erreur si la suppression échoue
+ * @description Supprime des données d'une table SQLite
  */
 export async function deleteSmt(table: string, query: string): Promise<number> {
   await initDB();
@@ -185,7 +241,6 @@ export async function deleteSmt(table: string, query: string): Promise<number> {
     try {
       const result = await statement.executeAsync();
       res.push(result.changes);
-      
     } finally {
       await statement.finalizeAsync();
     }
@@ -196,202 +251,396 @@ export async function deleteSmt(table: string, query: string): Promise<number> {
 /**
  * GETS / READS PAR TABLE ///////////////////////////////////////////////////////////////
  */
-export async function getIngredients(data : boolean | any =false,all=false,str=false,limit: boolean | number=10): Promise<any[] | undefined> {
-  const res:any[] = await getSmt("Ingredients",data,all,limit,str);
-  if(!res || res.length ==0){ return all? [] : undefined}
-  else {
-    return res ;
+export async function getIngredients(
+  data: boolean | any = false,
+  all = false,
+  str = false,
+  limit: boolean | number = 10
+): Promise<any[] | undefined> {
+  const res: any[] = await getSmt("Ingredients", data, all, limit, str);
+  if (!res || res.length == 0) {
+    return all ? [] : undefined;
+  } else {
+    return res;
   }
 }
-export async function getPlats(data : boolean | any =false,all=false,str=false,limit:number | boolean=10): Promise<any[] | undefined> {
-  const res:any[]| undefined = await getSmt("Plats",data,all,limit,str);
-  if(!res || res.length ==0 || res[0]==null){ return all? [] : undefined}
-  else {
-    return res ;
+export async function getMenus_Historique(
+  data: boolean | any = false,
+  all = false,
+  str = false,
+  limit: boolean | number = 10
+): Promise<any[] | undefined> {
+  const res: any[] = await getSmt("Menus_Historique", data, all, limit, str);
+  if (!res || res.length == 0) {
+    return all ? [] : undefined;
+  } else {
+    return res;
   }
 }
-export async function getSous_Groupes(data : boolean | any =false,all=false): Promise<any[] | undefined> {
-  const res:any[]| undefined = await getSmt("Sous_Groupes",data,all,10);
-  if(!res || res.length ==0){ return all? [] : undefined}
-  else {
-    return res ;
+export async function getRestaurants_Historique(
+  data: boolean | any = false,
+  all = false,
+  str = false,
+  limit: boolean | number = 10
+): Promise<any[] | undefined> {
+  const res: any[] = await getSmt(
+    "Restaurants_Historique",
+    data,
+    all,
+    limit,
+    str
+  );
+  if (!res || res.length == 0) {
+    return all ? [] : undefined;
+  } else {
+    return res;
   }
 }
-export async function getGroupes(data : boolean | any =false,all=false): Promise<any[] | undefined> {
-  const res:any[]| undefined = await getSmt("Groupes",data,all,10);
-  if(!res || res.length ==0){ return all? [] : undefined}
-  else {
-    return res ;
+export async function getRecherches_Historique(
+  data: boolean | any = false,
+  all = false,
+  str = false,
+  limit: boolean | number = 10
+): Promise<any[] | undefined> {
+  const res: any[] = await getSmt(
+    "Recherches_Historique",
+    data,
+    all,
+    limit,
+    str
+  );
+  if (!res || res.length == 0) {
+    return all ? [] : undefined;
+  } else {
+    return res;
   }
 }
-export async function getRecherches(data : boolean | any =false,all=false): Promise<any[] | undefined> {
-  const res:any[]| undefined = await getSmt("Recherches",data,all,10);
-  if(!res || res.length ==0){ return all? [] : undefined}
-  else {
-    return res ;
+export async function getPlats(
+  data: boolean | any = false,
+  all = false,
+  str = false,
+  limit: number | boolean = 10
+): Promise<any[] | undefined> {
+  const res: any[] | undefined = await getSmt("Plats", data, all, limit, str);
+  if (!res || res.length == 0 || res[0] == null) {
+    return all ? [] : undefined;
+  } else {
+    return res;
   }
 }
-export async function getMenus(data : boolean | any =false,all=false): Promise<any[] | undefined> {
-  const res:any[]| undefined = await getSmt("Menus",data,all,10);
-  if(!res || res.length ==0){ return all? [] : undefined}
-  else {
-    return res ;
+export async function getSous_Groupes(
+  data: boolean | any = false,
+  all = false,
+  str = false,
+  limit: number | boolean = 10
+): Promise<any[] | undefined> {
+  const res: any[] | undefined = await getSmt(
+    "Sous_Groupes",
+    data,
+    all,
+    limit,
+    str
+  );
+  if (!res || res.length == 0) {
+    return all ? [] : undefined;
+  } else {
+    return res;
   }
 }
-export async function getRestaurants(data : boolean | any =false,all=false): Promise<any[] | undefined> {
-  const res:any[]| undefined = await getSmt("Restaurants",data,all,10);
-  if(!res || res.length ==0){ return all? [] : undefined}
-  else {
-    return res ;
+export async function getGroupes(
+  data: boolean | any = false,
+  all = false
+): Promise<any[] | undefined> {
+  const res: any[] | undefined = await getSmt("Groupes", data, all, 10);
+  if (!res || res.length == 0) {
+    return all ? [] : undefined;
+  } else {
+    return res;
   }
 }
-export async function getPlats_Ingredients(data : boolean | any =false,all=false,str=false,limit: boolean | number=10): Promise<any[] | undefined> {
-  const res:any[] = await getSmt("Plats_Ingredients",data,all,limit,str);
-  if(!res || res.length ==0){ return all? [] : undefined}
-  else {
-    return res ;
+export async function getRecherches(
+  data: boolean | any = false,
+  all = false
+): Promise<any[] | undefined> {
+  const res: any[] | undefined = await getSmt("Recherches", data, all, 10);
+  if (!res || res.length == 0) {
+    return all ? [] : undefined;
+  } else {
+    return res;
   }
 }
-export async function getMenus_Plats(data : boolean | any =false,all=false): Promise<any[] | undefined> {
-  const res:any[]| undefined = await getSmt("Menus_Plats",data,all,10);
-  if(!res || res.length ==0){ return all? [] : undefined}
-  else {
-    return res ;
+export async function getMenus(
+  data: boolean | any = false,
+  all = false
+): Promise<any[] | undefined> {
+  const res: any[] | undefined = await getSmt("Menus", data, all, 10);
+  if (!res || res.length == 0) {
+    return all ? [] : undefined;
+  } else {
+    return res;
   }
+}
+export async function getRestaurants(
+  data: boolean | any = false,
+  all = false,
+  str = false,
+  limit = 10
+): Promise<any[] | undefined> {
+  const res: any[] | undefined = await getSmt(
+    "Restaurants",
+    data,
+    all,
+    limit,
+    str
+  );
+  if (!res || res.length == 0) {
+    return all ? [] : undefined;
+  } else {
+    return res;
+  }
+}
+export async function getPlats_Ingredients(
+  data: boolean | any = false,
+  all = false,
+  str = false,
+  limit: boolean | number = 10
+): Promise<any[] | undefined> {
+  const res: any[] = await getSmt("Plats_Ingredients", data, all, limit, str);
+  if (!res || res.length == 0) {
+    return all ? [] : undefined;
+  } else {
+    return res;
+  }
+}
+export async function getMenus_Plats(
+  data: boolean | any = false,
+  all = false
+): Promise<any[] | undefined> {
+  const res: any[] | undefined = await getSmt("Menus_Plats", data, all, 10);
+  if (!res || res.length == 0) {
+    return all ? [] : undefined;
+  } else {
+    return res;
+  }
+}
+
+export async function getLastElementPlats(): Promise<any | undefined> {
+  await initDB();
+  const res: any[] = [];
+  await db.withTransactionAsync(async () => {
+    let query = `SELECT * FROM Plats ORDER BY ID_plat DESC LIMIT 1;`;
+
+    const statement = await db.prepareAsync(query);
+    try {
+      const result = await statement.executeAsync();
+
+      const rows = await result.getFirstAsync();
+      res.push(rows);
+    } catch (error) {
+      console.error("Database error:", error);
+    } finally {
+      await statement.finalizeAsync();
+    }
+  });
+
+  const ele = res.at(0);
+  // const id = ele.ID_plat;
+
+  return ele;
 }
 
 /**
  * UPDATES PAR TABLE
  */
-export async function updateIngredients(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_ingredient}'`;
-  const res:number = await updateSmt("Ingredients",query,data);
-  return res ;
+export async function updateIngredients(
+  data: any,
+  query: string
+): Promise<number> {
+  const res: number = await updateSmt("Ingredients", query, data);
+  return res;
 }
-export async function updatePlats(data : any): Promise<number> {
-  const query = `idCD = '${data.Ciqual_AGB}'`;
-  const res:number = await updateSmt("Plats",query,data);
-  return res ;
+export async function updatePlats(data: any, query: string): Promise<number> {
+  const res: number = await updateSmt("Plats", query, data);
+  return res;
 }
-export async function updateSous_Groupes(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_sous_groupe}'`;
-  const res:number = await updateSmt("Sous_Groupes",query,data);
-  return res ;
+export async function updateSous_Groupes(
+  data: any,
+  query: string
+): Promise<number> {
+  const res: number = await updateSmt("Sous_Groupes", query, data);
+  return res;
 }
-export async function updateGroupes(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_groupe}'`;
-  const res:number = await updateSmt("Groupes",query,data);
-  return res ;
+export async function updateGroupes(data: any, query: string): Promise<number> {
+  const res: number = await updateSmt("Groupes", query, data);
+  return res;
 }
-export async function updateRecherches(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_recherche}'`;
-  const res:number = await updateSmt("Recherches",query,data);
-  return res ;
+export async function updateRecherches(
+  data: any,
+  query: string
+): Promise<number> {
+  const res: number = await updateSmt("Recherches", query, data);
+  return res;
 }
-export async function updateMenus(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_menu}'`;
-  const res:number = await updateSmt("Menus",query,data);
-  return res ;
+export async function updateMenus(data: any, query: string): Promise<number> {
+  const res: number = await updateSmt("Menus", query, data);
+  return res;
 }
-export async function updateRestaurants(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_menu}'`;
-  const res:number = await updateSmt("Restaurants",query,data);
-  return res ;
+export async function updateRestaurants(
+  data: any,
+  query: string
+): Promise<number> {
+  const res: number = await updateSmt("Restaurants", query, data);
+  return res;
 }
-export async function updatePlats_Ingredients(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_menu}'`;
-  const res:number = await updateSmt("Plats_Ingredients",query,data);
-  return res ;
+export async function updatePlats_Ingredients(
+  data: any,
+  query: string
+): Promise<number> {
+  const res: number = await updateSmt("Plats_Ingredients", query, data);
+  return res;
 }
-export async function updateMenus_Plats(data : any): Promise<number> {
-  const query = `idCD = '${data.ID_menu}'`;
-  const res:number = await updateSmt("Menus_Plats",query,data);
-  return res ;
+export async function updateMenus_Plats(
+  data: any,
+  query: string
+): Promise<number> {
+  const res: number = await updateSmt("Menus_Plats", query, data);
+  return res;
 }
 /**
  * INSERT PAR TABLE
  */
-export async function addIngredients(data : boolean | any =false,all=false): Promise<number> {
-  const res:number = await addSmt("Ingredients",data);
-  return res ;
+export async function addIngredients(
+  data: boolean | any = false,
+  all = false
+): Promise<number> {
+  const res: number = await addSmt("Ingredients", data);
+  return res;
 }
-export async function addPlats(data : boolean | any =false,all=false): Promise<number> {
-  const res:number = await addSmt("Plats",data);
-  return res ;
+export async function addPlats(
+  data: boolean | any = false,
+  all = false
+): Promise<number> {
+  const res: number = await addSmt("Plats", data);
+  return res;
 }
-export async function addSous_Groupes(data : boolean | any =false,all=false): Promise<number> {
-  const res:number = await addSmt("Sous_Groupes",data);
-  return res ;
+export async function addSous_Groupes(
+  data: boolean | any = false,
+  all = false
+): Promise<number> {
+  const res: number = await addSmt("Sous_Groupes", data);
+  return res;
 }
-export async function addGroupes(data : boolean | any =false,all=false): Promise<number> {
-  const res:number = await addSmt("Groupes",data);
-  return res ;
+export async function addGroupes(
+  data: boolean | any = false,
+  all = false
+): Promise<number> {
+  const res: number = await addSmt("Groupes", data);
+  return res;
 }
-export async function addRecherche(data : boolean | any =false,all=false): Promise<number> {
-  const res:number = await addSmt("Recherche",data);
-  return res ;
+export async function addRecherche(
+  data: boolean | any = false,
+  all = false
+): Promise<number> {
+  const res: number = await addSmt("Recherche", data);
+  return res;
 }
-export async function addMenus(data : boolean | any =false,all=false): Promise<number> {
-  const res:number = await addSmt("Menus",data);
-  return res ;
+export async function addMenus(
+  data: boolean | any = false,
+  all = false
+): Promise<number> {
+  const res: number = await addSmt("Menus", data);
+  return res;
 }
-export async function addRestaurants(data : boolean | any =false,all=false): Promise<number> {
-  const res:number = await addSmt("Restaurants",data);
-  return res ;
+export async function addRestaurants(
+  data: boolean | any = false,
+  all = false
+): Promise<number> {
+  const res: number = await addSmt("Restaurants", data);
+  return res;
 }
-export async function addPlats_Ingredients(data : boolean | any =false,all=false): Promise<number> {
-  const res:number = await addSmt("Plats_Ingredients",data);
-  return res ;
+export async function addPlats_Ingredients(
+  data: boolean | any = false,
+  all = false
+): Promise<number> {
+  const res: number = await addSmt("Plats_Ingredients", data);
+  return res;
 }
-export async function addMenus_Plats(data : boolean | any =false,all=false): Promise<number> {
-  const res:number = await addSmt("Menus_Plats",data);
-  return res ;
+export async function addMenus_Plats(
+  data: boolean | any = false,
+  all = false
+): Promise<number> {
+  const res: number = await addSmt("Menus_Plats", data);
+  return res;
+}
+
+export async function addRestaurants_Historique(
+  data: boolean | any = false,
+  all = false
+): Promise<number> {
+  const res: number = await addSmt("Restaurants_Historique", data);
+  return res;
+}
+
+export async function addMenus_Historique(
+  data: boolean | any = false,
+  all = false
+): Promise<number> {
+  const res: number = await addSmt("Menus_Historique", data);
+  return res;
+}
+
+export async function addRecherches_Historique(
+  data: boolean | any = false,
+  all = false
+): Promise<number> {
+  const res: number = await addSmt("Recherches_Historique", data);
+  return res;
 }
 /**
  * DELETE PAR TABLE
  */
-export async function deleteIngredients(data : any): Promise<number> {
+export async function deleteIngredients(data: any): Promise<number> {
   const query = `idCD = '${data.ID_ingredient}'`;
-  const res:number = await deleteSmt("Ingredients",query);
-  return res ;
+  const res: number = await deleteSmt("Ingredients", query);
+  return res;
 }
-export async function deletePlats(data : any): Promise<number> {
+export async function deletePlats(data: any): Promise<number> {
   const query = `idCD = '${data.Ciqual_AGB}'`;
-  const res:number = await deleteSmt("Plats",query);
-  return res ;
+  const res: number = await deleteSmt("Plats", query);
+  return res;
 }
-export async function deleteSous_Groupes(data : any): Promise<number> {
+export async function deleteSous_Groupes(data: any): Promise<number> {
   const query = `idCD = '${data.ID_sous_groupe}'`;
-  const res:number = await deleteSmt("Sous_Groupes",query);
-  return res ;
+  const res: number = await deleteSmt("Sous_Groupes", query);
+  return res;
 }
-export async function deleteGroupes(data : any): Promise<number> {
+export async function deleteGroupes(data: any): Promise<number> {
   const query = `idCD = '${data.ID_groupe}'`;
-  const res:number = await deleteSmt("Groupes",query);
-  return res ;
+  const res: number = await deleteSmt("Groupes", query);
+  return res;
 }
-export async function deleteRecherche(data : any): Promise<number> {
+export async function deleteRecherche(data: any): Promise<number> {
   const query = `idCD = '${data.ID_recherche}'`;
-  const res:number = await deleteSmt("Recherche",query);
-  return res ;
+  const res: number = await deleteSmt("Recherche", query);
+  return res;
 }
-export async function deleteMenu(data : any): Promise<number> {
+export async function deleteMenu(data: any): Promise<number> {
   const query = `idCD = '${data.ID_menu}'`;
-  const res:number = await deleteSmt("Menu",query);
-  return res ;
+  const res: number = await deleteSmt("Menu", query);
+  return res;
 }
-export async function deleteRestaurants(data : any): Promise<number> {
+export async function deleteRestaurants(data: any): Promise<number> {
   const query = `idCD = '${data.ID_menu}'`;
-  const res:number = await deleteSmt("Restaurants",query);
-  return res ;
+  const res: number = await deleteSmt("Restaurants", query);
+  return res;
 }
-export async function deletePlats_Ingredients(data : any): Promise<number> {
+export async function deletePlats_Ingredients(data: any): Promise<number> {
   const query = `idCD = '${data.ID_menu}'`;
-  const res:number = await deleteSmt("Plats_Ingredients",query);
-  return res ;
+  const res: number = await deleteSmt("Plats_Ingredients", query);
+  return res;
 }
-export async function deleteMenus_Plats(data : any): Promise<number> {
+export async function deleteMenus_Plats(data: any): Promise<number> {
   const query = `idCD = '${data.ID_menu}'`;
-  const res:number = await deleteSmt("Menus_Plats",query);
-  return res ;
+  const res: number = await deleteSmt("Menus_Plats", query);
+  return res;
 }

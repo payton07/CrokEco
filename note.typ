@@ -1,9 +1,7 @@
-Moderation nous mm ? : 
+Moderation nous mm ? : *OUI on le gere en backend*
 - Des qu'il y a ajout , attente de validation : 
-- Des que 5 validation du mec c'est good pour lui 
-- 
 
-Un compte pour ajouter un menu et autre . 
+*Un compte pour ajouter un menu et autre . :* Euh pour l'instant Non 
 
 = => Search , Menu  deroulante 
 On peut cliquer sur le plat passer par la Realité Augmenter 
@@ -38,4 +36,25 @@ le reste c'est sur xcode , autre possibilité : je verrais plus tard
 = Test 
 == Mettre en place des tests au moins 
 
-==== (Prise des notes de ewen )peut-être avoir un mécanisme clé privé/publique ou équivalent pour s'assurer que les clients qui envoient des données au serveurs soient bien nos applis.
+==== (Prise des notes de ewen ) peut-être avoir un mécanisme clé privé/publique ou équivalent pour s'assurer que les clients qui envoient des données au serveurs soient bien nos applis. Fait ()
+
+====== Pour la localisation : localisation ou adresse ?,
+====== Liste deroulante pour chosir 
+====== Ajouter sinon donc faut add sur la page de add .
+
+* A chaque ouverture de l'appli , on demande au serveur sa version de la bdd actuel, si elle est differente de celle de l'appli , on effectue une mise à jour de la bd. *
+
+Frontend : faut add  resto , gerer mise à jour 
+
+== Faut que lors de l'ajout des plats par le script de mallo , ce soit en autoincrement 
+
+
+""" ➡️ Description à copier-coller :
+
+Génére un logo vectoriel plat avec :
+Un C stylisé et légèrement allongé (main levée, organique, artistique, en vert foncé),
+Une feuille verte intégrée dans le C, bien visible et moderne,
+Une fourchette bleue foncée à droite du C, légèrement rapprochée mais pas collée (laisse un petit espace visuel propre),
+Le tout sur un fond vert clair doux.
+Le logo doit rester équilibré, minimaliste, et bien espacé entre chaque élément.
+"""

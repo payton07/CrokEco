@@ -1,0 +1,11 @@
+services:
+  backend:
+    build: .  # Utilise le Dockerfile du répertoire courant pour construire l'image du coup backend/ quoi
+    ports:
+      - "3000:3000"  # Mappe le port 3000 du conteneur au port 3000 de l'hôte
+    networks:
+      - backend-network  # Connecte le backend au réseau Docker personnalisé qu'il crée automatiquement avec les lignes ci-dessous
+
+networks:
+  backend-network:  # Crée un réseau Docker
+    driver: bridge  # Utilise le driver 'bridge' par défaut ?? 

@@ -40,16 +40,16 @@ CREATE TABLE "Ingredients" (
 
 
 CREATE TABLE "Plats" (
-  "ID_plat" VARCHAR(10),
+  "ID_plat" INTEGER PRIMARY KEY AUTOINCREMENT,
   "Nom_plat" VARCHAR(50),
   "Certified" INTEGER,
-  "Vote" INTEGER,
-  CONSTRAINT PK_PLATS PRIMARY KEY("ID_plat")
+  "Like" INTEGER,
+  "DisLike" INTEGER
 );
 
 
 CREATE TABLE "Restaurants" (
-  "ID_restaurant" INT(6),
+  "ID_restaurant" INTEGER,
   "NomResto" VARCHAR(20),
   "Longitude" DECIMAL(10,8),
   "Latitude" DECIMAL(10,8),
@@ -58,10 +58,10 @@ CREATE TABLE "Restaurants" (
 
 
 CREATE TABLE "Menus" (
-  "ID_menu" INT(6),
+  "ID_menu" INTEGER,
   "NomMenu" VARCHAR(20),
-  "ID_restaurant" INT(6),
-  CONSTRAINT PK_MENUS PRIMARY KEY("ID_menu")
+  "ID_restaurant" INTEGER,
+  CONSTRAINT PK_MENUS PRIMARY KEY("ID_menu"),
   CONSTRAINT FK_MENUS_RESTAURANTS FOREIGN KEY ("ID_restaurant") REFERENCES Restaurants("ID_restaurant")
 );
 
@@ -77,8 +77,8 @@ CREATE TABLE "Plats_Ingredients" (
 
 
 CREATE TABLE "Menus_Plats" (
-  "ID_menu" INT(6),
-  "ID_plat" INT(6),
+  "ID_menu" INTEGER,
+  "ID_plat" INTEGER,
   CONSTRAINT PK_MENUS_PLATS PRIMARY KEY("ID_menu", "ID_plat"),
   CONSTRAINT FK_MENUS_PLATS_MENUS FOREIGN KEY ("ID_menu") REFERENCES Menus("ID_menu"),
   CONSTRAINT FK_MENUS_PLATS_PLATS FOREIGN KEY ("ID_plat") REFERENCES Plats("ID_plat")
@@ -86,20 +86,11 @@ CREATE TABLE "Menus_Plats" (
 
 
 CREATE TABLE "Plats_Client" (
-  "ID_plat" INTEGER AUTOINCREMENT,
+  "ID_plat" INTEGER PRIMARY KEY AUTOINCREMENT,
   "Nom_plat" VARCHAR(50),
   "Certified" INTEGER,
-  "Vote" INTEGER,
-  CONSTRAINT PK_PLATS_CLIENT PRIMARY KEY("ID_plat")
-);
-
-
-CREATE TABLE "Restaurants_Client" (
-  "ID_restaurant" INT(6),
-  "NomResto" VARCHAR(20),
-  "Longitude" DECIMAL(10,8),
-  "Latitude" DECIMAL(10,8),
-  CONSTRAINT PK_RESTAURANTS_CLIENT PRIMARY KEY("ID_restaurant")
+  "Like" INTEGER,
+  "DisLike" INTEGER
 );
 
 
@@ -107,7 +98,41 @@ CREATE TABLE "Plats_Ingredients_Client" (
   "ID_plat" INTEGER ,
   "ID_ingredient"  VARCHAR(10),
   "Quantite" DECIMAL(5,3),
-  CONSTRAINT PK_PLATS_INGREDIENTS_CLIENT PRIMARY KEY("ID_plat", "ID_ingredient"),
+  CONSTRAINT PK_PLATS_INGREDIENTS_CLIENT PRIMARY KEY("ID_plat", "ID_ingredient") ,
   CONSTRAINT FK_PLATS_INGREDIENTS_CLIENT_PLATS_CLIENT FOREIGN KEY ("ID_plat") REFERENCES Plats_Clients("ID_plat"),
   CONSTRAINT FK_PLATS_INGREDIENTS_CLIENT_INGREDIENTS FOREIGN KEY ("ID_ingredient") REFERENCES Ingredients("Code_AGB")
 );
+
+-- // AUTRE 
+CREATE TABLE "Restaurants_Client" (
+  "ID_restaurant" INTEGER PRIMARY KEY AUTOINCREMENT,
+  "NomResto" VARCHAR(20),
+  "Longitude" DECIMAL(10,8),
+  "Latitude" DECIMAL(10,8),
+  "Adresse" VARCHAR(30)
+);
+
+CREATE TABLE "Menus_Client" (
+  "ID_menu" INTEGER PRIMARY KEY AUTOINCREMENT,
+  "NomMenu" VARCHAR(20),
+  "ID_restaurant" INT(6),
+  CONSTRAINT FK_MENUS_RESTAURANTS FOREIGN KEY ("ID_restaurant") REFERENCES Restaurants_Client("ID_restaurant")
+);
+
+CREATE TABLE "Recherches_Client" (
+  "ID_Recherche" INTEGER PRIMARY KEY AUTOINCREMENT,
+  "Text_request" VARCHAR(30),
+  "ID_menu" INT(6),
+  "Date" VARCHAR(10),
+  CONSTRAINT FK_RECHERCHES_MENUS FOREIGN KEY ("ID_menu") REFERENCES Menus_Client("ID_menu")
+);
+
+CREATE TABLE "Users"(
+  "Nom" VARCHAR(30),
+  "Mdp" VARCHAR(60),
+  CONSTRAINT PK_NOM PRIMARY KEY ("Nom")
+);
+  
+  -- CONSTRAINT PK_RESTAURANTS_CLIENT PRIMARY KEY("ID_restaurant") 
+    -- CONSTRAINT PK_MENUS PRIMARY KEY("ID_menu") 
+    -- CONSTRAINT PK_RECHERCHES PRIMARY KEY("ID_Recherche") ,

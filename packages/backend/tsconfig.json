@@ -1,17 +1,42 @@
+// {
+//   "compilerOptions": {
+//     "module": "NodeNext",
+//     "moduleResolution": "NodeNext",
+//     "target": "ESNext",             
+//     "strict": true,                          
+//     "esModuleInterop": true,                 
+//     "skipLibCheck": true,                    
+//     "forceConsistentCasingInFileNames": true,
+//     "outDir": "./dist",
+//     "allowImportingTsExtensions": true,
+//     "emitDeclarationOnly": true,
+//     "declaration": true,
+//   },
+//   "include": ["src/**/*.ts", "src/server.ts","utils/*.ts","utils/*","./utils/others.ts"],                 
+//   "exclude": ["node_modules"]                 
+// }
+
 {
   "compilerOptions": {
-    "target": "ESNext",                     
-    "module": "ESNext",                                            
-    "moduleResolution": "node",              
-    "strict": true,                          
-    "esModuleInterop": true,                 
-    "skipLibCheck": true,                    
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ESNext",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
-    "allowImportingTsExtensions": true,
-    "emitDeclarationOnly": true,
-    "declaration": true
+    "declaration": false,  // Enlève cette ligne si tu ne veux pas de déclaration .d.ts
+    "allowImportingTsExtensions": false // Désactive si tu veux compiler proprement
   },
-  "include": ["src/**/*.ts", "server.ts"],                 
-  "exclude": ["node_modules"]                 
+  "include": [
+    "src/**/*.ts",
+    "src/server.ts",
+    "utils/*.ts",
+    "utils/*",
+    "./utils/others.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

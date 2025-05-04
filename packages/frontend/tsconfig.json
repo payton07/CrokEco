@@ -1,5 +1,5 @@
 {
-  "extends": "expo/tsconfig.base",
+  "extends": "./node_modules/expo/tsconfig.base",
   "compilerOptions": {
     "jsx": "react",
     "strict": true,
@@ -12,8 +12,10 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
+    "nativewind-env.d.ts",
+    "utils/bdd.ts",
+    "babel.config.js",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts",
-    "nativewind-env.d.ts"
-, "utils/bdd.ts"  ]
+    "expo-env.d.ts"
+  ]
 }

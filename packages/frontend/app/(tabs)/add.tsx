@@ -2,22 +2,24 @@ import { StyleSheet } from "react-native";
 import React from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import AddDishForm from "@/components/AddPlatForm";
+import { Fond_vert_clair } from "@/utils/constants";
 
 export default function Add() {
   return (
     <SafeAreaProvider>
-    <AddDishForm />
+      <AddDishForm />
     </SafeAreaProvider>
   );
 }
 
 const styles = StyleSheet.create({
-container:{
+  container: {
     paddingTop: 10,
-    backgroundColor: "white",
+    // backgroundColor: "white",
+    backgroundColor: `${Fond_vert_clair}`,
     // marginBottom: "73%",
     // paddingBottom: "83%",
-},
+  },
   text: {
     fontSize: 22,
     fontWeight: "bold",

@@ -1,109 +1,132 @@
-import { View, Text, TextInput, TouchableOpacity, Alert, Pressable, StyleSheet, FlatList, TouchableWithoutFeedback } from 'react-native';
-import { useForm, Controller } from 'react-hook-form';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import React, { useState } from 'react';
-import { getIngredients } from '@/utils/bdd';
-import { FormData , Ingredient, ajouterPlat } from '@/utils/other';
-
-const schema = yup.object({
-  name: yup.string().required("Le nom du plat est obligatoire"),
-  ingredients: yup.array().of(
-    yup.object({
-      name: yup.string().required("Le nom de l'ingrédient est obligatoire"),
-      weight: yup.string().required("Le poids est obligatoire"),
-    })
-  ).min(1, "Veuillez ajouter au moins un ingrédient")
-  .default([]),
-});
-  
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+  Pressable,
+  StyleSheet,
+  FlatList,
+  TouchableWithoutFeedback,
+} from "react-native";
+import { useForm, Controller, set } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import React, { useState } from "react";
+import { getIngredients } from "@/utils/bdd";
+import { Ping, PostPlatClient } from "@/utils/routes";
+import { Ingredient, FormData, schema } from "@/utils/type";
+import { Fond_vert_clair, Fourchette, Vert_feuille } from "@/utils/constants";
 
 export default function AddDishForm() {
-  const { control, handleSubmit, reset,setValue, formState: { errors } } = useForm<FormData>({
+  const {
+    control,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm<FormData>({
     resolver: yupResolver(schema),
     defaultValues: {
-        name: "",
-        ingredients: [],
-      },
+      name: "",
+      ingredients: [],
+    },
   });
-  const forms : FormData[] = [];
   const [loading, setLoading] = useState(false);
-  const [ingredient, setIngredient] = useState(''); 
-  const [quantite, setQuantite] = useState(''); 
+  const [ingredient, setIngredient] = useState("");
+  const [quantite, setQuantite] = useState("");
   const [ingredientsList, setIngredientsList] = useState<Ingredient[]>([]);
   const [filteredIngredients, setFilteredIngredients] = useState<any[]>([]);
-  const [ingredientsData, setIngredientsData ]= useState<string[]>([]);
-  
+  const [ingredientsData, setIngredientsData] = useState<string[]>([]);
 
-  async function Alter_IngredientFromBdd(text:string){
+  async function Alter_IngredientFromBdd(text: string) {
     const query = `%${text}%`;
-    const data = await getIngredients({Nom_Francais : query},true,true,30); 
-    console.log("J'ai eu la data", data?.length);
-    if(data !== undefined){
-      const Ing : string[]= [];
+    const data = await getIngredients({ Nom_Francais: query }, true, true, 30);
+
+    if (data !== undefined) {
+      const Ing: string[] = [];
       for (const ele of data) {
-        if(!Ing.includes(ele.Nom_Francais)) Ing.push(ele.Nom_Francais);
+        if (!Ing.includes(ele.Nom_Francais)) Ing.push(ele.Nom_Francais);
       }
       setIngredientsData(Ing);
     }
-    
   }
-  function Alterquantite(text:string){
+  function Alterquantite(text: string) {
     setQuantite(text);
   }
 
-  function inter(ingredient: string){
+  function inter(ingredient: string) {
     if (ingredient.trim()) {
       setIngredient(ingredient.trim());
-      setFilteredIngredients([]); 
+      setFilteredIngredients([]);
     }
   }
 
-  function addIngredient(){
+  function addIngredient() {
     if (ingredient.trim() && quantite.trim()) {
-        const newdata = [...ingredientsList, {name: ingredient.trim(), weight: quantite.trim()}];
-        setIngredientsList(newdata);
-        setValue("ingredients", newdata);
-        setIngredient('');
-        setQuantite('');
-      }
-  };
+      const newdata = [
+        ...ingredientsList,
+        { name: ingredient.trim(), weight: quantite.trim() },
+      ];
+      setIngredientsList(newdata);
+      setValue("ingredients", newdata);
+      setIngredient("");
+      setQuantite("");
+    }
+  }
 
-  function deleteIngredient(index: number){
-    const newdata = ingredientsList.filter((_, i) => i !== index)
+  function deleteIngredient(index: number) {
+    const newdata = ingredientsList.filter((_, i) => i !== index);
     setIngredientsList(newdata);
     setValue("ingredients", newdata);
-  };
-  
-  async function filterIngredients(text: string){
-      setIngredient(text);
-      await Alter_IngredientFromBdd(text);
-      if (text.trim() === '') {
-          setFilteredIngredients([]);
-        } else {
-            const filtered = ingredientsData.filter(Element =>
-                Element.toLowerCase().startsWith(text.toLowerCase())
-            );
-            setFilteredIngredients(filtered);
-        }
-    };
-    
-  async function onSubmit(data: FormData){
-      setLoading(true);
-      console.log("la data du form",data);
-      // Insertion dans la bd de la backend
+  }
 
-      // await ajouterPlat(data);
-      //
-      Alert.alert("Plat ajouté !", `Nom: ${data.name}\nNombre : ${data.ingredients.length} ingrédients`);
-      reset();
-      setLoading(false);
-      setIngredient('');
-      setQuantite('');
-      setIngredientsList([]);
+  async function filterIngredients(text: string) {
+    if(text.trim() === "") {
       setFilteredIngredients([]);
+      setIngredient("");
       setIngredientsData([]);
-    };
+      return;
+    }
+    setIngredient(text);
+    await Alter_IngredientFromBdd(text);
+    if (text.trim() === "") {
+      setFilteredIngredients([]);
+    } else {
+      const filtered = ingredientsData.filter((Element) =>
+        Element.toLowerCase().startsWith(text.toLowerCase()),
+      );
+      setFilteredIngredients(filtered);
+    }
+  }
+
+  async function onSubmit(data: FormData) {
+    setLoading(true);
+    // console.log("la data du form",data);
+
+    // Insertion dans la bd de la backends
+    const resultat = await Ping();
+    if (resultat == 201) {
+      const re = await PostPlatClient(data);
+      //
+      Alert.alert(
+        re.message,
+        `Nom: ${data.name}\nNombre : ${data.ingredients.length} ingrédients`,
+      );
+    }
+    else {
+      Alert.alert(
+        "Erreur de connexion",
+        "Veuillez verifier votre connexion au serveur et reessayer",
+      );
+    }
+    reset();
+    setLoading(false);
+    setIngredient("");
+    setQuantite("");
+    setIngredientsList([]);
+    setFilteredIngredients([]);
+    setIngredientsData([]);
+  }
 
   return (
     <View style={styles.container}>
@@ -123,11 +146,10 @@ export default function AddDishForm() {
             />
           )}
         />
-      </View>
-      {errors.name && <Text style={styles.errorText}>{errors.name.message}</Text>}
+        {errors.name && (
+          <Text style={styles.errorText}>{errors.name.message}</Text>
+        )}
 
-
-      <View style={styles.inputContainer}>
         <Text style={styles.label}>Ingrédients :</Text>
         <TextInput
           style={styles.input2}
@@ -135,6 +157,7 @@ export default function AddDishForm() {
           value={ingredient}
           onChangeText={filterIngredients}
         />
+        <View style={styles.flottante}>
         {filteredIngredients.length > 0 && (
           <View style={styles.suggestionsBox}>
             <FlatList
@@ -150,8 +173,9 @@ export default function AddDishForm() {
             />
           </View>
         )}
+        </View>
         <TextInput
-          style={[styles.input, { width: "80%" }]}
+          style={[styles.input, { width: "100%" }]}
           placeholder="quantite en grammes"
           value={quantite}
           onChangeText={Alterquantite}
@@ -166,8 +190,13 @@ export default function AddDishForm() {
           data={ingredientsList}
           renderItem={({ item, index }) => (
             <View style={styles.ingredientItem}>
-              <Text style={styles.ingredientText}>{item.name} {item.weight} {"g"}</Text>
-              <TouchableOpacity onPress={() => deleteIngredient(index)} style={styles.removeButton}>
+              <Text style={styles.ingredientText}>
+                {item.name} {item.weight} {"g"}
+              </Text>
+              <TouchableOpacity
+                onPress={() => deleteIngredient(index)}
+                style={styles.removeButton}
+              >
                 <Text style={styles.removeButtonText}>Supprimer</Text>
               </TouchableOpacity>
             </View>
@@ -176,7 +205,9 @@ export default function AddDishForm() {
         />
       )}
 
-      {errors.ingredients && <Text style={styles.errorText}>{errors.ingredients.message}</Text>}
+      {errors.ingredients && (
+        <Text style={styles.errorText}>{errors.ingredients.message}</Text>
+      )}
 
       <Pressable
         style={[styles.button, { opacity: loading ? 0.5 : 1 }]}
@@ -194,114 +225,132 @@ export default function AddDishForm() {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    backgroundColor: 'white',
-    borderRadius: 12,
-    shadowColor: '#000',
+    // backgroundColor: 'white',
+    backgroundColor: `${Fond_vert_clair}`,
+    // borderRadius: 8,
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
     height: "100%",
+    borderWidth: 4,
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: "bold",
+    color: Fourchette,
     marginBottom: 16,
-    textAlign: 'center',
-    alignSelf: 'center',
+    textAlign: "center",
+    alignSelf: "center",
+    left: -100,
   },
   inputContainer: {
-    backgroundColor: '#f7f7f7',
+    backgroundColor: Fond_vert_clair,
     padding: 12,
     borderRadius: 8,
     marginBottom: 12,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    // flexDirection: 'row',
+    borderWidth: 4,
+    borderColor: Fourchette,
+    height: "50%",
+    // justifyContent : "center"
   },
   label: {
-    color: '#666',
-    marginBottom: 8,
+    color: Fourchette,
+    marginBottom: 20,
+    marginTop: 20,
+    fontSize: 18,
   },
   input: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     padding: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
+    bottom: "2%",
   },
   input2: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     padding: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
+    bottom: "3%",
     // width:"60%"
   },
   errorText: {
-    color: '#e74c3c',
+    color: "#e74c3c",
     fontSize: 14,
     marginBottom: 12,
   },
   button: {
-    backgroundColor: '#3498db',
+    backgroundColor: Fourchette,
     padding: 12,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: "center",
   },
   buttonText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    // color: Fourchette,
+    fontWeight: "bold",
     fontSize: 16,
   },
 
   addButton: {
-    backgroundColor: '#2ecc71',
+    backgroundColor: Fourchette,
     padding: 8,
     borderRadius: 8,
-    marginTop: 8,
-    alignItems: 'center',
+    marginTop: 20,
+    alignItems: "center",
   },
   addButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
   },
   ingredientItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginVertical: 4,
   },
   ingredientText: {
     fontSize: 16,
-    color: '#333',
+    color: "#333",
   },
   removeButton: {
-    backgroundColor: '#e74c3c',
+    backgroundColor: Vert_feuille,
     padding: 4,
     borderRadius: 4,
   },
   removeButtonText: {
-    color: 'white',
+    color: Fourchette,
     fontSize: 12,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   suggestionsBox: {
-    backgroundColor: '#f7f7f7',
+    backgroundColor: "#f7f7f7",
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
     marginTop: 8,
     maxHeight: 200,
+    zIndex: 1,
     // width: '45%',
   },
   suggestionItem: {
     padding: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
+    borderBottomColor: "#ddd",
   },
   suggestionText: {
-    color: '#333',
+    color: "#333",
   },
+  flottante :{
+    position : "absolute",
+    zIndex : 10,
+    width : "100%",
+    top : 227,
+    left : 12,
+    backgroundColor : "transparent",
+  }
 });
