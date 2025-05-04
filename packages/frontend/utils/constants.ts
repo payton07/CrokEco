@@ -1,8 +1,8 @@
 import Constants from "expo-constants";
-export const port = Constants.expoConfig?.extra?.PORT ;
-export const IP = Constants.expoConfig?.extra?.HOST ;
+export const port = Constants.expoConfig?.extra?.PORT;
+export const IP = Constants.expoConfig?.extra?.HOST;
 
-export const SECRET_KEY = Constants.expoConfig?.extra?.SECRET_KEY ;
+export const SECRET_KEY = Constants.expoConfig?.extra?.SECRET_KEY;
 export const url = `http://${IP}:${port}/api/`;
 export const DO_MAJ_CODE = "3333DOMAJ";
 export const good = "#4CAF50";
@@ -10,7 +10,7 @@ export const bad = "red";
 export const ok = "orange";
 export const blue = "blue";
 
-export const LAST_UPDATE_KEY = 'lastUpdateDate';
+export const LAST_UPDATE_KEY = "lastUpdateDate";
 
 // code couleurs
 export const couleur1 = "#153243";

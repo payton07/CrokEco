@@ -6,7 +6,7 @@ import { FormData } from "@/utils/type";
 
 // const SECRET_KEY='913580834d7f3d1235c2761b7e20a52ceea8cb864df4f3993ffda91417cb3829';
 /**
- * 
+ *
  * @param method Décrit le type de la requête (GET, POST)
  * @param table Le nom de la table sur laquelle effectuer la requête
  * @param data Les données à envoyer dans le corps de la requête
@@ -27,7 +27,7 @@ function genereHMACSignature(method: string, table: string, data: any) {
   return { signature, timestamp };
 }
 /**
- * 
+ *
  * @param table Nom de la table sur laquelle effectuer la requête
  * @param id identifiant de l'élément à récupérer (ou false pour récupérer tous les éléments)
  * @description Effectue une requête GET sur l'API
@@ -42,7 +42,7 @@ export async function GET(table: string, id: string | boolean) {
     });
 
     // console.log("url de get");
-    
+
     if (!response.ok) {
       throw new Error(`Erreur ${response.status}: ${response.statusText}`);
     }
@@ -51,7 +51,7 @@ export async function GET(table: string, id: string | boolean) {
   } catch (error) {
     // console.error("Erreur lors de la récupération du plat:", error);
     console.log("Erreur lors de la récupération du plat:", error);
-    
+
     return null;
   }
 }
@@ -83,7 +83,6 @@ async function POST(table: string, data: any) {
   return res;
 }
 
-
 export async function PostPlatClient(data: FormData) {
   console.log("appel à ajoutPlat");
   const res = await POST("platsClient", data);
@@ -95,7 +94,6 @@ export async function GetPlatClient(id: string | boolean) {
   const res = await GET("platsClient", id);
   console.log("Plat récupéré:", res);
 }
-
 
 export async function PostResto(data: resto) {
   console.log("appel à ajoutResto");
@@ -141,7 +139,7 @@ export async function GetPlat_a_Vote(id: string | boolean) {
 export async function Ping() {
   const urll = `http://${IP}:${port}/ping`;
   // console.log(urll);
-  
+
   try {
     const response = await fetch(urll, {
       method: "GET",
@@ -156,7 +154,7 @@ export async function Ping() {
   } catch (error) {
     // console.error("Erreur lors du ping:", error);
     console.log("Erreur lors du ping:", error);
-    
+
     return null;
   }
 }

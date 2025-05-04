@@ -26,8 +26,12 @@ import {
 } from "@/utils/bdd";
 import Textshow from "@/components/Textshow";
 import * as Location from "expo-location";
-import { FormatDataPlatReconnu, DoSomethingWhenServerReady,sortRecognizedText,
-  getLocation, } from "@/utils/other";
+import {
+  FormatDataPlatReconnu,
+  DoSomethingWhenServerReady,
+  sortRecognizedText,
+  getLocation,
+} from "@/utils/other";
 import { Ping, PostResto, PostMenu, PostRecherche } from "@/utils/routes";
 import { TextBlock } from "@/utils/type";
 import Button from "@/components/Button";
@@ -37,7 +41,6 @@ import {
   Vert_C,
   Vert_feuille,
 } from "@/utils/constants";
-
 
 export default function Index() {
   const [data, setData] = useState<any[]>([]);
@@ -59,9 +62,9 @@ export default function Index() {
   );
   const [loc, setLoc] = useState(false);
 
-  async function setterLocation(){
+  async function setterLocation() {
     const loc = await getLocation();
-    if(loc !==undefined){
+    if (loc !== undefined) {
       setLocation(loc);
       setLoc(true);
     }
@@ -128,16 +131,16 @@ export default function Index() {
       await addRecherches_Historique(recherche);
 
       setNomResto("");
-      const res1 = await DoSomethingWhenServerReady(resto,PostResto);
+      const res1 = await DoSomethingWhenServerReady(resto, PostResto);
       const menuPost = { NomMenu: nomResto, ID_restaurant: res1.code };
-      const res2 = await DoSomethingWhenServerReady(menuPost,PostMenu);
+      const res2 = await DoSomethingWhenServerReady(menuPost, PostMenu);
       const recherchePost = {
         Text_request: textReconnu,
         ID_menu: res2.code,
         Date: new Date().toLocaleDateString("fr-FR"),
       };
       // Envoi des données au serveur si la connexion est ok sinon on attend la reconnexion puis l'envoie
-      await DoSomethingWhenServerReady(recherchePost,PostRecherche);
+      await DoSomethingWhenServerReady(recherchePost, PostRecherche);
     }
   }
 

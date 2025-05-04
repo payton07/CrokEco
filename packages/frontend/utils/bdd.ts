@@ -75,9 +75,8 @@ export async function initDB(reload = false): Promise<void> {
  * Foncttions d'Operation Basique CRUD
  */
 
-
 /**
- * 
+ *
  * @param table Le nom de la table dans laquelle insérer les données
  * @param data Les données à insérer sous forme d'objet
  * @returns L'ID de la dernière ligne insérée
@@ -108,7 +107,7 @@ export async function addSmt(table: string, data: any): Promise<number> {
 }
 
 /**
- * 
+ *
  * @param table_name Le nom de la table à interroger
  * @param data Les données à filtrer (sous forme d'objet ou false)
  * @param all Si true, retourne toutes les lignes correspondantes
@@ -179,9 +178,8 @@ export async function getSmt(
   return res;
 }
 
-
 /**
- * 
+ *
  * @param table Le nom de la table à mettre à jour
  * @param query La condition WHERE pour cibler les lignes à mettre à jour
  * @param set Les données à mettre à jour sous forme d'objet
@@ -222,7 +220,7 @@ export async function updateSmt(
 }
 
 /**
- * 
+ *
  * @param table Le nom de la table à supprimer
  * @param query La condition WHERE pour cibler les lignes à supprimer
  * @returns Le nombre de lignes supprimées
