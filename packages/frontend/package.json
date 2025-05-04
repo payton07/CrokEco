@@ -3,9 +3,9 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "start": "expo start --dev-client",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
+    "start": "npx expo run:android",
+    "android": "npx expo run:android",
+    "ios": "npx expo run:ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
     "build-android": "npx expo export --platform android && expo run:android && cd android && ./gradlew assembleRelease && cd .. && mkdir -p Releases/ && cp android/app/build/outputs/apk/release/app-release.apk Releases/app-release.apk"
