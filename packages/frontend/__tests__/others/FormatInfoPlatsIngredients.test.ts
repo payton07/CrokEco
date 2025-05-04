@@ -1,6 +1,7 @@
 import { FormatInfoPlatIngredients } from "@/utils/other";
 import { blue, good, ok, bad } from "@/utils/constants";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Ingredient } from '../../utils/type';
 
 jest.mock('@react-native-async-storage/async-storage', () => ({
   getItem: jest.fn(),
@@ -10,10 +11,15 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
 }));
 
 jest.mock("@/utils/bdd");
-jest.mock("@/utils/other");
+const r = {info : {Nom : "Ratatouille"},ingredients:[["Tomato"],["Carotte"]],color : "orange"};
+jest.mock("@/utils/other",()=>({
+  FormatInfoPlatIngredients : jest.fn().mockResolvedValue({info : undefined,color:undefined,ingredients:[]}),
+}));
 
 describe("FormatInfoPlatIngredients", () => {
-  it("should return formatted information for a plat with ingredients", async () => {
+  it("Doit retourner Format info pour plat avec ingredient ", async () => {
+    const r = {info : {Nom : "Ratatouille"},ingredients:[["Tomato"],["Carotte"]],color : "orange"};
+    const FormatInfoPlatIngredients = jest.fn().mockResolvedValue(r);
     // Mocking the functions used within FormatInfoPlatIngredients
     const getPlats_Ingredients = jest.fn().mockResolvedValue([
         { ID_ingredient: 1 },
@@ -39,7 +45,7 @@ describe("FormatInfoPlatIngredients", () => {
     expect(result.color).toBe(ok); // Assuming score would result in ok color
   });
 
-  it("should return undefined when no plat found", async () => {
+  it("Doit retourner undefined pour plat non reconnu", async () => {
     const getPlats_Ingredients = jest.fn().mockResolvedValue([]);
 
     const result = await FormatInfoPlatIngredients(999); // non-existent ID

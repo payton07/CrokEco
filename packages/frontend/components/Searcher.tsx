@@ -31,7 +31,7 @@ export default function Searcher() {
   }
   async function search(e: string) {
     let s = `%${e}%`;
-    console.log("la query :", s);
+    // console.log("la query :", s);
 
     const Plats = await getPlats({ Nom_plat: s }, true, true, 5);
 
@@ -42,15 +42,15 @@ export default function Searcher() {
 
     const filtered: any[] = Plats.filter((Element) => {
       if (Element.Nom_plat.toLowerCase().startsWith(e.toLowerCase())) {
-        console.log(
-          Element.Nom_plat.toLowerCase(),
-          "le text :",
-          e.toLowerCase(),
-        );
+        // console.log(
+        //   Element.Nom_plat.toLowerCase(),
+        //   "le text :",
+        //   e.toLowerCase(),
+        // );
         return Element;
       }
     });
-    console.log("filtered taille", "query :", s, filtered.length);
+    // console.log("filtered taille", "query :", s, filtered.length);
 
     setFilteredPlats(filtered);
   }

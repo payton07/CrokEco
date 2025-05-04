@@ -26,7 +26,8 @@ import {
 } from "@/utils/bdd";
 import Textshow from "@/components/Textshow";
 import * as Location from "expo-location";
-import { FormatDataPlatReconnu, DoSomethingWhenServerReady } from "@/utils/other";
+import { FormatDataPlatReconnu, DoSomethingWhenServerReady,sortRecognizedText,
+  getLocation, } from "@/utils/other";
 import { Ping, PostResto, PostMenu, PostRecherche } from "@/utils/routes";
 import { TextBlock } from "@/utils/type";
 import Button from "@/components/Button";
@@ -37,22 +38,6 @@ import {
   Vert_feuille,
 } from "@/utils/constants";
 
-// Permet de trier les blocs de texte reconnus
-// en fonction de leur position sur l'image
-// pour obtenir un texte ordonné
-function sortRecognizedText(blocks: TextBlock[]): string {
-  return blocks
-    .filter((block) => block.frame)
-    .sort((a, b) => {
-      if (!a.frame || !b.frame) return 0;
-      if (Math.abs(a.frame.y - b.frame.y) > 20) {
-        return a.frame.y - b.frame.y;
-      }
-      return a.frame.x - b.frame.x;
-    })
-    .map((block) => block.text)
-    .join("\n");
-}
 
 export default function Index() {
   const [data, setData] = useState<any[]>([]);
@@ -74,21 +59,16 @@ export default function Index() {
   );
   const [loc, setLoc] = useState(false);
 
-  async function getLocation() {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== "granted") {
-      Alert.alert("Erreur", "Autorisez la localisation pour continuer");
-      return;
+  async function setterLocation(){
+    const loc = await getLocation();
+    if(loc !==undefined){
+      setLocation(loc);
+      setLoc(true);
     }
-
-    // Recuperer la position actuelle de l'utilisateur
-    let loc = await Location.getCurrentPositionAsync({});
-    setLocation(loc);
-    setLoc(true);
   }
 
   useEffect(() => {
-    getLocation();
+    setterLocation();
   }, []);
 
   // Choisir une image depuis la galerie de l'utilisateur

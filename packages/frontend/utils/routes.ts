@@ -2,6 +2,7 @@ import hmac from "crypto-js/hmac-sha256";
 import { resto, menu, recherche } from "./type";
 import { IP, port, SECRET_KEY, url } from "./constants";
 import { FormData } from "@/utils/type";
+// import * as HmacSHA256 from 'crypto-js/hmac-sha256';
 
 // const SECRET_KEY='913580834d7f3d1235c2761b7e20a52ceea8cb864df4f3993ffda91417cb3829';
 /**
@@ -32,7 +33,7 @@ function genereHMACSignature(method: string, table: string, data: any) {
  * @description Effectue une requête GET sur l'API
  * @returns la réponse de l'API au format JSON ou null en cas d'erreur
  */
-async function GET(table: string, id: string | boolean) {
+export async function GET(table: string, id: string | boolean) {
   const url1 = id ? `${url}${table}/${id}` : `${url}${table}`;
   try {
     const response = await fetch(url1, {

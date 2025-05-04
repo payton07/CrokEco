@@ -274,6 +274,9 @@ export async function checkForDailyUpdate (UpdateFonction : Function ){
   }
 };
 
+// Permet de trier les blocs de texte reconnus
+// en fonction de leur position sur l'image
+// pour obtenir un texte ordonné
 export function sortRecognizedText(blocks: TextBlock[]): string {
   return blocks
     .filter((block) => block.frame)

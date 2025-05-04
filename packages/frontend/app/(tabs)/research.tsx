@@ -190,10 +190,10 @@ export default function Research() {
       <SafeAreaProvider>
         <View style={styles.container}>
           <View style={styles.header}>
-            <TouchableOpacity onPress={() => setMenuVisible(!menuVisible)}>
+            <TouchableOpacity  onPress={() => setMenuVisible(!menuVisible)}>
               <Ionicons name="menu" size={30} color={Fourchette} />
             </TouchableOpacity>
-            <Text style={styles.text}>Research</Text>
+            <Text testID={"menu-button"} style={styles.text}>Research</Text>
           </View>
           <View
             style={styles.separator}

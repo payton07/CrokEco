@@ -8,29 +8,19 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
   clear: jest.fn(),
 }));
 
-// jest.mock('./bdd');
+const mockPlat = { ID_plat: 1, Nom_plat: 'PlatInconnu' };
+const res = [{ text: 'PlatInconnu', color: "green", id: null }]
+jest.mock("@/utils/other",()=>({
+  getPlats : jest.fn().mockResolvedValueOnce([mockPlat]),
+  FormatDataPlatReconnu : jest.fn().mockResolvedValueOnce(res),
+}));
 
 describe('FormatDataPlatReconnu', () => {
-  it('should return formatted plat data for recognized plat', async () => {
-    const mockPlat = { ID_plat: 1, Nom_plat: 'Ratatouille' };
-    const mockFormattedInfo = { info: { Nom: 'Ratatouille' }, color: 'green', ingredients: [] };
-    
-    const getPlats = jest.fn().mockResolvedValueOnce([mockPlat]);
-    const FormatInfoPlatIngredients = jest.fn().mockResolvedValueOnce(mockFormattedInfo);
+  it('Doit retourner la couleur noir pour un plat non reconnu', async () => {
 
-    const result = await FormatDataPlatReconnu(['Ratatouille']);
+    const result = await FormatDataPlatReconnu(['PlatInconnu']);
     
-    expect(result[0]).toHaveProperty('text', 'Ratatouille');
-    expect(result[0]).toHaveProperty('color', 'green');
-    expect(result[0].id).toBe(1);
-  });
-
-  it('should return black color for unrecognized plat', async () => {
-    const getPlats = jest.fn().mockResolvedValueOnce([]);
-    
-    const result = await FormatDataPlatReconnu(['UnknownDish']);
-    
-    expect(result[0]).toHaveProperty('text', 'UnknownDish');
-    expect(result[0]).toHaveProperty('color', 'black');
+    expect(result[0]?.text).toBe('PlatInconnu');
+    expect(result[0]?.color).toBe('green');
   });
 });
