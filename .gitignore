@@ -3,7 +3,6 @@
 *.DS_Store*
 packages/frontend/*
 !packages/frontend/package.json
-!packages/frontend/package-lock.json
 !packages/frontend/.prettierignore
 !packages/frontend/.prettierrc
 !packages/frontend/tsconfig.json
@@ -17,3 +16,9 @@ packages/frontend/*
 !packages/frontend/global.css 
 *.db
 !*.typ
+packages/backend/*
+!packages/backend/bdd_doc
+!packages/backend/ingImages
+!packages/backend/index.js
+packages/backend/package.json
+!packages/backend/serve.js
