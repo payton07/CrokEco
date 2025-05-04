@@ -1,6 +1,6 @@
 import { PostUpdatePlatsRequest } from "@/utils/routes";
 import { AntDesign } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 
@@ -27,6 +27,7 @@ export default function Vote_display({
     if (ligne.ID_plat === null) return;
   }
   async function dislike() {
+    const router = useRouter();
     call();
     if(!isDone) {
       setIsDone(true);
@@ -37,6 +38,7 @@ export default function Vote_display({
     }
   }
   async function like() {
+    const router = useRouter();
     call();
     if(!isDone) {
       setIsDone(true);
@@ -48,6 +50,7 @@ export default function Vote_display({
   }
 
   function goDetails() {
+    const router = useRouter();
     call();
     if (ligne.ID_plat == null ||ligne.ID_plat === null) {return;}
     else{

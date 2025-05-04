@@ -1,10 +1,11 @@
 import { Fourchette } from "@/utils/constants";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { router } from "expo-router";
+import { useRouter} from 'expo-router';
 import React, { useState } from "react";
 import { StyleSheet, View, TouchableOpacity, Text, Alert } from "react-native";
 
 function switchToDetails(ide: number) {
+  const router = useRouter();
   router.push({ pathname: `/(hidden)/details/[id]`, params: { id: ide } });
 }
 

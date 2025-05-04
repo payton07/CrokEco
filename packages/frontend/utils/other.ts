@@ -1,10 +1,11 @@
 import { getIngredients, getPlats, getPlats_Ingredients } from "./bdd";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { info_t } from "../utils/type";
+import { info_t, TextBlock } from "../utils/type";
 import { blue, good, ok, bad, LAST_UPDATE_KEY } from "./constants";
 import { Ping } from "./routes";
 import NetInfo from '@react-native-community/netinfo';
-
+import { Alert } from "react-native";
+import * as Location from "expo-location";
 /**
  * 
  * @param idplat : number
@@ -272,3 +273,26 @@ export async function checkForDailyUpdate (UpdateFonction : Function ){
     console.log("Erreur pendant la mise à jour automatique :", error);
   }
 };
+
+export function sortRecognizedText(blocks: TextBlock[]): string {
+  return blocks
+    .filter((block) => block.frame)
+    .sort((a, b) => {
+      if (!a.frame || !b.frame) return 0;
+      if (Math.abs(a.frame.y - b.frame.y) > 20) {
+        return a.frame.y - b.frame.y;
+      }
+      return a.frame.x - b.frame.x;
+    })
+    .map((block) => block.text)
+    .join("\n");
+}
+
+export async function getLocation() {
+  let { status } = await Location.requestForegroundPermissionsAsync();
+  if (status !== "granted") {
+    Alert.alert("Erreur", "Autorisez la localisation pour continuer");
+    return;
+  }
+  return await Location.getCurrentPositionAsync();
+}
