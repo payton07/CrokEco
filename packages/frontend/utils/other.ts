@@ -3,11 +3,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { info_t, TextBlock } from "../utils/type";
 import { blue, good, ok, bad, LAST_UPDATE_KEY } from "./constants";
 import { Ping } from "./routes";
-import NetInfo from '@react-native-community/netinfo';
+import NetInfo from "@react-native-community/netinfo";
 import { Alert } from "react-native";
 import * as Location from "expo-location";
 /**
- * 
+ *
  * @param idplat : number
  * @param plat : any
  * @param Assocs : any[]
@@ -15,21 +15,28 @@ import * as Location from "expo-location";
  *  et de ses ingredients
  * @returns un objet contenant les informations du plat, la couleur et les ingredients
  */
-export async function FormatInfoPlatIngredients(idplat: number,plat=null,Assocs=null) : Promise<{info : info_t | undefined, color : string | undefined, ingredients : any[]}> {
+export async function FormatInfoPlatIngredients(
+  idplat: number,
+  plat = null,
+  Assocs = null
+): Promise<{
+  info: info_t | undefined;
+  color: string | undefined;
+  ingredients: any[];
+}> {
   if (idplat != undefined) {
     // on recupere les lignes de l'association entre les plats et les ingredients
-    let plat_ingredients: any[]|undefined = [];
+    let plat_ingredients: any[] | undefined = [];
     // Si on a deja les associations, on les utilise
     // sinon on les recupere de la base de données
-    if(Assocs != null) {
+    if (Assocs != null) {
       plat_ingredients = Assocs;
-    }
-    else{
+    } else {
       plat_ingredients = await getPlats_Ingredients(
         { ID_plat: idplat },
         true,
         false,
-        false,
+        false
       );
     }
     // Definition des variables score et ingredients_data
@@ -50,7 +57,7 @@ export async function FormatInfoPlatIngredients(idplat: number,plat=null,Assocs=
         score += res?.at(0).Score_unique_EF;
       }
 
-      // Pour chaque ingredient, on recupere le nom et on calcule le pourcentage dans le plat et la couleur 
+      // Pour chaque ingredient, on recupere le nom et on calcule le pourcentage dans le plat et la couleur
       // on les stocke dans un tableau
       const obj_ingredient_out = [];
       for (const ingredient of ingredients_data) {
@@ -67,8 +74,11 @@ export async function FormatInfoPlatIngredients(idplat: number,plat=null,Assocs=
       // Si le plat est null, on le recupere de la base de données
       // sinon on le prend tel quel
       let objetPlat: any[] | undefined = [];
-      if(plat != null) { objetPlat = [plat];}
-      else {objetPlat = await getPlats({ ID_plat: idplat }, false, false, 1);}
+      if (plat != null) {
+        objetPlat = [plat];
+      } else {
+        objetPlat = await getPlats({ ID_plat: idplat }, false, false, 1);
+      }
 
       // on cree l'objet qui contient les infos du plat qui seront affichés
       const info: info_t = {
@@ -93,14 +103,14 @@ export async function FormatInfoPlatIngredients(idplat: number,plat=null,Assocs=
 }
 
 /**
- * 
+ *
  * @param score : number
- * @returns 
- * @description Fonction qui retourne la couleur en fonction du score, 
+ * @returns
+ * @description Fonction qui retourne la couleur en fonction du score,
  * 0 : bleu ,
  * < 1 : vert ,
  * 1-5 : orange ,
- * sinon : rouge 
+ * sinon : rouge
  */
 export function Qualite_color(score: number) {
   if (score == 0) {
@@ -116,7 +126,7 @@ export function Qualite_color(score: number) {
 }
 
 /**
- * 
+ *
  * @param key : string
  * @param CallFunction : () => {}
  * @param expirationTimeInMinutes : number par défaut 30 minutes
@@ -153,7 +163,7 @@ export async function getDataWithCacheExpiration(
 }
 
 /**
- * 
+ *
  * @param data : string[]
  * @description Fonction qui permet de formater les données des plats reconnus
  *  en appelant la fonction getPlats et FormatInfoPlatIngredients
@@ -182,7 +192,7 @@ export async function FormatDataPlatReconnu(data: string[]) {
 }
 
 /**
- * 
+ *
  * @param strings : string[]
  * @description Fonction qui permet de trouver la chaîne de caractères la plus fréquente
  *  dans un tableau de chaînes de caractères
@@ -210,32 +220,41 @@ export function MostOccurent(strings: string[]): string | null {
 }
 
 /**
- * 
+ *
  * @param data : any , c'est les données à envoyer au serveur
  * @param SendFunction : Function , c'est la fonction qui va envoyer les données au serveur
  * @description Fonction qui permet d'envoyer des données au serveur
  *  lorsque le serveur est prêt ou que l'utilisateur est connecté , sinon elle attend la reconnexion
  * @returns Promise<any>
  */
-export async function DoSomethingWhenServerReady(data: any,SendFunction : Function): Promise<any> {
-  const isConnected = await NetInfo.fetch().then(state => state.isConnected);
+export async function DoSomethingWhenServerReady(
+  data: any,
+  SendFunction: Function
+): Promise<any> {
+  const isConnected = await NetInfo.fetch().then((state) => state.isConnected);
 
-  if (isConnected && await Ping()) {
-    if (data == null) {return await SendFunction();}
-    else {return await SendFunction(data);}
+  if (isConnected && (await Ping())) {
+    if (data == null) {
+      return await SendFunction();
+    } else {
+      return await SendFunction(data);
+    }
   } else {
-    console.log('Serveur ou réseau indisponible. En attente de reconnexion...');
+    console.log("Serveur ou réseau indisponible. En attente de reconnexion...");
 
     return new Promise<any>((resolve) => {
       const interval = setInterval(async () => {
-        const online = await NetInfo.fetch().then(state => state.isConnected);
+        const online = await NetInfo.fetch().then((state) => state.isConnected);
         const serverUp = await Ping();
 
         if (online && serverUp) {
           clearInterval(interval);
-          let res ;
-          if (data == null) {res = await SendFunction();}
-          else {res = await SendFunction(data);}
+          let res;
+          if (data == null) {
+            res = await SendFunction();
+          } else {
+            res = await SendFunction(data);
+          }
           resolve(res);
         }
       }, 5000);
@@ -244,7 +263,7 @@ export async function DoSomethingWhenServerReady(data: any,SendFunction : Functi
 }
 
 /**
- * 
+ *
  * @param UpdateFonction : Function
  * @description Fonction qui permet de vérifier si la mise à jour a été effectuée aujourd'hui
  *  Si ce n'est pas le cas, elle appelle la fonction UpdateFonction
@@ -252,19 +271,19 @@ export async function DoSomethingWhenServerReady(data: any,SendFunction : Functi
  * @returns Promise<void>
  * @throws Erreur si la mise à jour échoue
  */
-export async function checkForDailyUpdate (UpdateFonction : Function ){
-  const today = new Date().toISOString().split('T')[0]; // format YYYY-MM-DD
-  
+export async function checkForDailyUpdate(UpdateFonction: Function) {
+  const today = new Date().toISOString().split("T")[0]; // format YYYY-MM-DD
+
   try {
     const lastUpdate = await AsyncStorage.getItem(LAST_UPDATE_KEY);
 
     if (lastUpdate !== today) {
       // Appelle ton backend ici
-      await DoSomethingWhenServerReady(null,UpdateFonction);
+      await DoSomethingWhenServerReady(null, UpdateFonction);
 
       // Mets à jour la date locale
       await AsyncStorage.setItem(LAST_UPDATE_KEY, today);
-      console.log('Données mises à jour automatiquement.');
+      console.log("Données mises à jour automatiquement.");
     } else {
       console.log("Mise à jour déjà effectuée aujourd'hui.");
     }
@@ -272,7 +291,7 @@ export async function checkForDailyUpdate (UpdateFonction : Function ){
     // console.error('Erreur pendant la mise à jour automatique :', error);
     console.log("Erreur pendant la mise à jour automatique :", error);
   }
-};
+}
 
 // Permet de trier les blocs de texte reconnus
 // en fonction de leur position sur l'image
