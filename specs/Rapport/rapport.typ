@@ -17,7 +17,7 @@ KEGLO Partice",), abstract: "", date: "2024 - 2025", department: [Informatique],
 
 #pagebreak()
 
-*Introduction*
+= Introduction
 
 Nous réalisons ce projet dans le cadre de notre 3e en Licence Informatique. Le projet a débuté en décembre 2024 et nous a accompagné tout au long de notre 2e semestres. Ce projet s'incrit dans la continuité de celui commencé l'année précedente par des étudiants de Cursus Master en Ingénierie (CMI) Informatique en 3e année. Le sujet que nous avons choisi est celui de Monsieur Bourreau. Le but du projet est de créer une application permettant de noté l'impact écologique avec une couleur. Celle-ci peut etre de couleur Verte, Orange ou Rouge respectivement d'une empreinte carbonne faible a élevé.
 
@@ -54,7 +54,6 @@ Cette solution avait déjà était enviqagé l'année derniere mais sans succès
 Nous avons donc choisi de faire une application collaborative qui calcule l'impact écologique de tous les plats en scannant leurs noms sur le menu. Le but de cette derniere methode est de permettre a tout le monde de participer a amielorer l'ecologie en rendant l'application collaborative. Cette méthode peut fonctionner dans n'importe quelle restaurant traditionnel et peut etre étendu au self et cantine scolaire.
 
 
-#pagebreak()
 
 = Gestion du projet
 
@@ -80,14 +79,12 @@ Nous avons utilisé GitHub comme plateforme de gestion de version tout au long d
 
 Les données que nous utilisons pour notre base donné proviennte toutes du programme de collecte de donnée AGRIBALYSE 2.0. 
 
-#pagebreak()
 
 = Architectures
 
 == Modele Statique
-
-UML
-Entité association
+A detailler
+#figure(image("Images/Modele statique.png"))
 
 == Architectures de l'application
 
@@ -126,21 +123,21 @@ Pour l'application nous avions besoin d'une base de données regroupant d'une pa
 
 Nous avons donc défnini un modèle Entité-Association qui sert à initialiser notre base de données. La @EA représente les différentes tables que comporte la base ainsi que les liaison entre ces dernières.
 
+Après avoir modéliser les deux bases de données, on rédige leur structure dans un fichier .sql qui servira pour leurs implémentations (voir @Implémentation).
+
 === Implémentation <Implémentation>
 
 Afin de convertir les données d'AGRIBALYSE dans notre base de données décrites dans la partie précedente, nous avons choisi de coder un programme Python. Le but du programme est de créer à partir de 0 la base de données.
 
-Pour cela, on commence par créer le fichier qui contiendra la base de données. Ce fichier aura une extension .db et s'il était déjà existant, il est remplacé. Ensuite on importe le fichier .sql contenant l'agencement des tables décrit dans la partie Modélisation(voir @Modelisation. Cela permet d'initialiser toutes les tables.
+Pour cela, on commence par créer le fichier qui contiendra la base de données. Ce fichier aura une extension .db et s'il était déjà existant, il est remplacé. Ensuite on importe le fichier .sql contenant l'agencement des tables décrit dans la partie Modélisation(voir @Modelisation). Cela permet d'initialiser toutes les tables mais elles sont encores vides.
 
-Ensuite, 
+Ensuite, il faut remplir trois tables avec les données fournies par AGRIBALYSE. Les tables à remplir sont les groupes, les sous-groupes et les ingredients. Les données sont dans un tableau Excel comportant plusieurs pages. On commence donc par extraire la bonne page du Excel. Après cela, on commence le remplissage des trois tables par celle des groupes à cause des contraintes de clé étrangère. Pour remplir la deuxième table, parce qu'on a besoin de la clé primaires de la tables des groupes qui viennent d'être ajouté à la base de données, on doit d'abord faire une requete à la base de données. On range les indices et le nom du groupe dans un dictionnaire. Avec les informations du tableau Excel, on associe le noms des sous-groupes avec l'indice de son groupe correspondant. Enfin on ajoute le dictionnaire résultant à la base de données. On recommence ensuite la meme opération afin d'associer les indices des sous-groupes avec les ingredients.
 
-Pour remplir la base de données on extrait les information du fichier Excel d'AGRIBALYSE.
+Ce programme permet à la fois de créer la base de données pour l'application de l'utilisateur et pour le serveur. La seule différence entre les deux tables et qu'on utilise pas le même fichier .sql.
 
-Au moment de remplir la base de données il est important de respecter les contraintes de clé etrangere. Pour cela il est impératif de 
-Programme python
+Avec ce programme Python, si la base de données d'AGRIBALYSE venait à être mise à jour, il suffirait d'exucter le programme pour obtenir la nouvelle base. Une amélioration possible pour ce programme serait de récupérer les autres données des anciennes bases pour les rajouter aux nouvelles.
 
-== Application utilisateur <userAapp>
-
+== Application utilisateur <userApp>
 
 === Analyse d'un menu <Scan>
 
@@ -163,6 +160,7 @@ Compte user
 Amélioration des suggestions ~
 
 == Statistiques
+
 
 
 #pagebreak()
