@@ -50,9 +50,10 @@ Follow these steps to set up the project locally:
    ```
 
 ### Running the application
+    
     ```bash
-  npm start or npm run android
-  ```
+    npm start or npm run android
+    ```
 
 ## Licence :
 This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
