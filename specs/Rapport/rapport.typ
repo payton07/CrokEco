@@ -1,6 +1,6 @@
 #import "@preview/modern-report-umfds:0.1.2": umfds
-
-
+// #let wi = "60pt" ;
+// #let he = "150pt";
 #show : umfds.with(lang: "fr", title: "Crok'eco
 Projet de Programmation 2", authors: ("BATATAY Mallory
 KEGLO Partice",), abstract: "Crok'eco est une application collaborative permettant à chacun de s'informer sur l'imapct écologique d'un plat.", date: "2024 - 2025", department: [Informatique], img: image("Images/logo_vf.png", width: 60%))
@@ -31,7 +31,7 @@ Enfin, j'aimerais remercier chaleureusement toutes les personnes qui m'ont aidé
 
 = Introduction
 
-Nous réalisons ce projet dans le cadre de notre 3e en Licence Informatique. Le projet a débuté en décembre 2024 et nous a accompagné tout au long de notre 2e semestres. Ce projet s'incrit dans la continuité de celui commencé l'année précedente par des étudiants de Cursus Master en Ingénierie (CMI) Informatique en 3e année. Le sujet que nous avons choisi est celui de Monsieur Bourreau. Le but du projet est de créer une application permettant de noté l'impact écologique avec une couleur. Celle-ci peut etre de couleur Verte, Orange ou Rouge respectivement d'une empreinte carbonne faible a élevé.
+Nous réalisons ce projet dans le cadre de notre 3e en Licence Informatique. Le projet a débuté en décembre 2024 et nous a accompagné tout au long de notre 2e semestre. Ce projet s'incrit dans la continuité de celui commencé l'année précedente par des étudiants de Cursus Master en Ingénierie (CMI) Informatique en 3e année. Le sujet que nous avons choisi est celui de Monsieur Bourreau. Le but du projet est de créer une application permettant de noté l'impact écologique avec une couleur. Celle-ci peut etre de couleur Verte, Orange ou Rouge respectivement d'une empreinte carbonne faible a élevé.
 
 Ce projet a été réalisé avec KEGLO Patrice, BARATAY Mallory et PHILIPOT Ewen. PHILIPOT Ewen ayant arrêté la Licence avant les vacances de février, nous avons réalisé la majeure partie du projet à deux. 
 
@@ -41,57 +41,70 @@ Ce projet a été réalisé avec KEGLO Patrice, BARATAY Mallory et PHILIPOT Ewen
 
 == Enjeux climatiques
 
-Selon l'INSEE, en 2018, l'alimentation representé 22% de l'empreinte carbonne de la France. Que ce soit lié au transport de la nourriture, à l’élevage des animaux, à la quantité d’eau utilisée tout au long de la production, il y a beaucoup de facteurs polluants pour amener la nourriture dans nos assiettes. Une majorité de la population n’est pas informée sur ce sujet et ne pense pas à l’impact que sa nourriture à sur la planète.
+Selon l'INSEE, en 2018, l'alimentation a representé 22% de l'empreinte carbonne de la France. Que ce soit lié au transport de la nourriture, à l'élevage des animaux, à la quantité d'eau utilisée tout au long de la production, il y a beaucoup de facteurs polluants pour amener la nourriture dans nos assiettes. Une majorité de la population n'est pas informée sur ce sujet et ne pense pas à l'impact que sa nourriture à sur la planète.
 
-Des solutions sont déjà présentes pour réduire l'émission de gaz à effet de serre qu'en notre nourriture. Effectivement, tous les aliments ne se valent en matière de pollution. Certains aliment tel que la viandes et le poisson ont un impact écologique bien plus important, que les fruits, légumes ou céréales. Le fait de consommer des produits de saison et locales permet aussi de réduire l'emission du à notre alimentation.
+Des solutions existent déjà pour réduire l'émission de gaz à effet de serre liée à notre alimentation. En effet, tous les aliments ne se valent pas en matière d'impact environnemental. Certains aliments tels que la viande et le poisson ont un impact écologique bien plus important, que les fruits, légumes ou céréales. Le fait de consommer des produits de saison et locales permet aussi de réduire l'emission du à notre alimentation.
 
-Entre 2009 et 2019, la quantité de viande consommée baisse de 5 % en France métropolitaine selon l'INSEE. On constate donc une volonté en France de vouloir consommer plus écologiquement et la demande concernant des applications permettant de se renseigner devient de plus en plus grande. On note également une augmentation de projets allant dans ce sens, que ce soit avec la nourriture mais également d’autres produits du quotidien comme les cosmétiques et les textiles qui sont des domaines eux aussi très polluants.
+Entre 2009 et 2019, la quantité de viande consommée à baissée de 5 % en France métropolitaine selon l'INSEE. On constate donc une volonté en France de vouloir consommer plus écologiquement et la demande concernant des applications permettant de se renseigner devient de plus en plus grande. On note également une augmentation de projets allant dans ce sens, que ce soit avec la nourriture mais également d'autres produits du quotidien comme les cosmétiques et les textiles qui sont des domaines eux aussi très polluants.
 
 
 #figure(image("Images/repas.png", width: 80%), caption: "Emission de kg de CO2 en fonction du type de rapas 
 Source: ADEME")
 
-
+#pagebreak()
 == Approche du sujet
+\
 
-Afin d'aider la population a faire des geste ecologique il est important de lui donner les outils permettant d'atteidre ses objectifs. La composition d'un plat étant la première cause de l'impact écologique du plat, il serait interessant de pouvoir etre informé sur l'empreinte écologique du plat que l'on souhaite mangé.
-Afin de pallier a ce problème nous avons imaginé plusieurs solition : 
+Afin d'aider la population à faire des gestes écologiques, il est important de lui donner les outils permettant d'attenidre ses objectifs. La composition d'un plat étant la première cause de l'impact écologique du plat, il serait interessant de pouvoir etre informer de l'empreinte écologique du plat que l'on souhaite manger.
+Afin de pallier à ce problème nous avons imaginé plusieurs solutions : 
 
-Afin de faire profiter une solution au étudiant dans un premier, il sreait possible de s'accorder avec le Crous ou les gérant des restaurants de la Faculté des Sciences pour faire afficher sur les televiseurs du crous l'impact écologique de chaque plat. L'affichage pourrait ce faire à l'aide d'une pastille de couleur.
+Afin de proposer une solution au étudiant, dans un premier, il serait possible de s'accorder avec le Crous ou les gérant des restaurants de la Faculté des Sciences pour faire afficher sur les téléviseurs du l'impact écologique de chaque plat. L'affichage pourrait ce faire à l'aide d'une pastille de couleur correspondant au degré de pollution.
 
 Sinon, nous pourrions afficher le résultat à l'aide d'un QR Code. Le QR Code redirigerai vers une page qui détaillerai l'empreinte carbonne de chaque plat.
 
-Cette solution avait déjà était enviqagé l'année derniere mais sans succès car, comme la première, elle possède un problème. En effet, elle nécessite un accord avec les gérant des restaurant qui sont assez retissant a voir l'impact écologique de leurs plats révélé. De plus, mais s'il avait était possible d'avoir l'accord pour les restaurants de la Faculté des Sciences, ces solutions demanderait énormement d'effort pour etre deployer à l'echelle de la France Car il nécessiterait l'accord de chaque restaurants. 
+Cette solution avait déjà était envisagé l'année derniere, mais sans succès, car, comme la première, elle presente un problème. En effet, elle nécessite un accord avec les gérants des restaurants qui sont assez rétissant à voir l'impact écologique de leurs plats révélé.#text(red)[ De plus, même s'il avait été possible d'avoir l'accord pour les restaurants de la Faculté des Sciences, ces solutions demanderait énormement d'effort pour etre deployer à l'echelle de la France Car il nécessiterait l'accord de chaque restaurants.]
 
-Nous avons donc choisi de faire une application collaborative qui calcule l'impact écologique de tous les plats en scannant leurs noms sur le menu. Le but de cette derniere methode est de permettre a tout le monde de participer a amielorer l'ecologie en rendant l'application collaborative. Cette méthode peut fonctionner dans n'importe quelle restaurant traditionnel et peut etre étendu au self et cantine scolaire.
+Nous avons donc choisi de faire une application collaborative qui calcule l'impact écologique de tous les plats en scannant leurs noms sur un menu. Le but de cette derniere methode est de permettre à tout le monde de participer à ameliorer l'ecologie en rendant l'application collaborative. Cette méthode peut fonctionner dans n'importe quelle restaurant traditionnel et peut être étendu au self et cantine scolaire.
 
-
+#pagebreak()
 
 = Gestion du projet
 
-Le projet c'est déroulé en autour 4 étapes qui ont été la base de données, le dévellopement des fonctionnalités de l'application, la création du serveur distant et enfin le design de l'application.
+#h(1em) Le projet s'est déroulé en 4 grandes étapes, comme le decrit la @diagGant ci dessous, qui sont, la mise en place de la base de données, le développement des différentes fonctionnalités de l'application, la création du serveur distant ainsi qu'une base de données permettant de stocker et d'effectuer des mises à jour de données et enfin l'Implémentation complete et finition du design de l'application ainsi que les tests de fonctinonalités.
 
-Globalement, le temps estimé pour chaque étapes du projet a été respecté selon nos prévisions, à part pour la base données que nous du retravaillé au cours du projet a cause de changement imprévu.
+Globalement, le temps estimé pour chaque étapes du projet a été respecté selon nos prévisions, à part pour la base données que nous avons dû retravailler au cours du projet à cause du manque de pertinence des données, ce qui a necessité une réadaptation du code de différentes parties de l'application.
 
-#figure(image("Images/Diagramme de Gantt.png"), caption: "Diagramme de Gantt")
+#figure(image("Images/Diagramme de Gantt.png",height: 40%, width: 90%), caption: "Diagramme de Gantt")
+<diagGant>
 
 #pagebreak()
 
 = Choix technique
+\
 
-Le développement de l’application a été réalisé en TypeScript, un sur-ensemble typé de JavaScript, afin de bénéficier d’un typage statique, d’une meilleure lisibilité du code et d’une maintenance facilitée.
+Le développement de l'application a été réalisé avec Expo, un framework open-source basé sur React Native et TypeScript, un sur-ensemble typé de JavaScript, afin de bénéficier d'un typage statique, d'une meilleure lisibilité du code et d'une maintenance facilitée.
 
-Nous avons utilisé le framework React Native, couplé à Expo, pour accélérer le processus de développement multi-plateformes (Android et iOS).
-Outils et bibliothèques principaux :
-- Pandas(Python) pour la gestion de données en CSV
+Le dévéloppement avec Expo nous permet d'avoir une application multi-plateformes (Android et iOS) et même en version web. \
 
-L’application a été testée à la fois sur simulateurs Android via Android Studio et sur appareils physiques pour s’assurer d’une bonne compatibilité et d’une expérience utilisateur fluide.
+#h(-1em)*Outils et bibliothèques principaux :*
 
-Nous avons utilisé GitHub comme plateforme de gestion de version tout au long du projet afin de collaborer efficacement, et d'avoir un historique clair des modifications. Les branches ont été utilisées pour séparer le dévellopement des différentes fonctionnalités, ce qui a facilité l’intégration progressive des différentes parties de l’application dans la branche principale.
+- Pandas(Python) pour la gestion de données en CSV \
+- Text-recognition de react-native-ml-kit , pour la reconnaissance de text sur une image\
+- Crypto-js pour encrypter les messages et assurer une sécurite dans le transfert de données vers 
+#h(1em) notre serveur \
+- Netinfo de react-native-community pour mettre en place des mise à jour automatique de données entre l'application de notre serveur, en permettant de connaitre l'etat de l'utilisateur (Connecté ou non Connecté)\
+- fastify pour mettre en place une api pour notre backend.\
+- Yup qui permet de verifier les formulaires \
+- Jest pour tester les différentes fonctinonalités de notre application \
+- ainsi que d'autres librairies d'expo et de react-native. \
 
-Les données que nous utilisons pour notre base donné proviennte toutes du programme de collecte de données AGRIBALYSE 2.0. 
+L'application a été testé à la fois sur simulateurs Android via Android Studio et sur appareils physiques pour s'assurer d'une bonne compatibilité et d'une expérience utilisateur fluide. 
 
+Nous avons utilisé GitHub comme plateforme de gestion de version tout au long du projet afin de collaborer efficacement, et d'avoir un historique clair des modifications. Les branches ont été utilisées pour séparer le développement des différentes fonctionnalités, ce qui a facilité l'intégration progressive des différentes parties de l'application dans la branche principale (Branche MAIN).
 
+Les données que nous utilisons pour notre base de données proviennent toutes du programme de collecte de données #link("https://doc.agribalyse.fr/documentation")[AGRIBALYSE 2.0.]
+
+#pagebreak()
 = Architectures
 
 == Modele Statique
@@ -103,9 +116,9 @@ A detailler
 #figure(image("Images/Architecture de l'application.png"), caption: "Architecture de l'application") <Architecture>
 
 La @Architecture illustre l'architecture de notre application du point de vue de l'utilisateur.
-L'application s'organise autour de la barre de recherche qui permet d'atteindre les 5 pages principales (Scan, Historique, Recherche, Votes, add). Ces 5 pages peuvent être redivisé en 2 catégories. Les pages permettant de rechercher et d'afficher la composition d'un plat et la partie permettant d'ajouterun plat à la base de données.
+L'application s'organise autour de la barre de navigation qui permet d'atteindre les 5 pages principales (Scan, Historique, Recherche, Votes, add). Ces 5 pages peuvent être redivisé en 2 catégories. Les pages permettant de rechercher et d'afficher la composition d'un plat et la partie permettant d'ajouter un plat à la base de données .
 
-Dans la partie de recherche et d'affichage de plat on retrouve dans un premier temps la page scan(index). Cette page est la première qui s'ouvre lorsque l'on ouvre l'application. Elle a pour but de lancer l'analyse d'une image. Elle se compose de deux boutons. Le premier bouton, "Choisir une image", ouvre la médiathèque du téléphone pour que l'utilisateur sélectionne une image. Quand une image est choisit un menu s'ouvre pour proposé à l'utilisateur de modifier l'iamge en la rognant par exemple. Ensuite, l'image selectionné apparait sur la page scan. L'utilisateur peut ensuite appuyer sur le bouton analyser.  
+Dans la partie de recherche et d'affichage de plat on retrouve dans un premier temps la page scan(index). Cette page est la première qui s'ouvre lorsque l'on ouvre l'application. Elle a pour but de lancer l'analyse d'une image. Elle se compose de deux boutons. Le premier bouton, "Choisir une image", ouvre la médiathèque du téléphone pour que l'utilisateur sélectionne une image. Quand une image est choisit un menu s'ouvre pour proposé à l'utilisateur de modifier l'image en la rognant par exemple. Ensuite, l'image selectionné apparait sur la page scan. L'utilisateur peut ensuite appuyer sur le bouton analyser.  
 
 
 #pagebreak()
@@ -151,8 +164,33 @@ Avec ce programme Python, si la base de données d'AGRIBALYSE venait à être mi
 
 == Application utilisateur <userApp>
 
+Dans cette partie, nous allons decrire et expliquer les différentes parties ainsi que les différentes fonctionnalités implementées tout en montrant leur fonctionnement avec des images. 
+
 === Analyse d'un menu <Scan>
 
+Cette fonctionnalité est visible sur la premiere page de notre application, elle consiste, dans un premier temps, à reconnaitre le text contenu sur une image choisie par l'utilisateur depuis sa galerie decrit par la figure @2. Pour cela l'utilisateur appuis sur le bouton *Choisir une image*. Par defaut, il y a une image d'un menu du restaurant administratif, confer @1. Les images de sa galerie s'affichent puis il clique sur celle qu'il veut analyser. Si une fois les images de la galerie affichées, il (l'utilisateur) ne clique sur aucune image et referme l'affichage, un message d'alert s'affiche indiquant qu'aucune image n'a été selectionné confer @3, sinon l'image est mise à jour confer @4.
+
+*A revoir (update l'image)*
+
+L'utilisateur, peut rentrer le nom du restaurant dont il va analyser le menu ainsi que l'adresse s'il l'a. Ces deux informations ne sont pas obligatoires.
+
+#figure(table(columns: 3)[#figure(image("Images/scanpage.png",width: auto,height: 300pt),caption: "page scan")<1>][#figure(image("Images/selectImage.png",width: auto,height: 300pt),caption: "Choisir une photo")<2>][#figure(image("Images/ImageNotselected.png",width: auto,height: 300pt),caption: "image non selectionné")<3>],caption: "Analyse menu")
+
+Une fois ceci fait, il peut cliquer sur le bouton *Analyser*. On effectue l'analyse textuelle de l'image et on recupere le nom des plats du menu ou du moins le texte reconnu. Une fois les noms recuperés, on verifie pour chaque plat, s'il existe dans notre base de données pour pouvoir ensuite recuperer la liste des ingredients, leurs quantités dans le plat et effectuer le calcule de score. En fonction du score du plat, on lui attribue une couleur qui sera la même que celle de la pastille qui sera affiche pour ce plat, comme l'indique le @couleur.
+
+
+Le score d'un plat est la somme des #link("https://ec.europa.eu/environment/eussd/smgp/index.htm")[Score unique EF] (EF = Environmental Footprint) = Somme (impact catégorie $*$ facteur de pondération) de chacun de ses ingredients.
+
+#figure(table(columns: 3,
+table.header([*Intervale de score*],[*Couleur*],[*Niveau d'Impact*]))[score >=0 et score <= 1][#text(green)[Verte]][Faible][score > 1 et score <= 5][#text(orange)[Orange]][Moyen][score >5][#text(red)[Rouge]][Elevé],caption: "Tableau descriptif de l'attribution des couleurs")<couleur>
+\
+Apres l'analyse, on affiche la liste des plats avec une pastille en forme d'etoile juste devant le nom ayant une couleur descriptif de l'impact ecologique du plat comme l'indique la @5. 
+\
+\
+
+#figure(table(columns: 2)[#figure(image("Images/platReconnu.png",width:auto,height: 300pt),caption: "Mise à jour de l'image")<4>][#figure(image("Images/platReconnu.png",width:auto,height: 300pt),caption: "Apres analyse d'un menu")<5>],caption: "Update image et resultat de l'analyse")
+
+#pagebreak()
 === Recherche <Recherche>
 
 === Ajout de plat et vote <add>
@@ -193,7 +231,7 @@ base ademe : #link("https://base-empreinte.ademe.fr/") \
 site AGRIBALYSE : https://doc.agribalyse.fr/documentation \
 2009/2019 : https://www.insee.fr/fr/statistiques/7728873?sommaire=7728903 \
 22% : https://www.insee.fr/fr/statistiques/7728883?sommaire=7728903 \
-
+Score unique EF : https://ec.europa.eu/environment/eussd/smgp/index.htm \
 #outline(
   title: [Tables des figures],
   target: figure,
