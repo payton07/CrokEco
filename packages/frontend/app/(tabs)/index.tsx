@@ -92,7 +92,7 @@ export default function Index() {
     if (!result.canceled) {
       setImageUri(result.assets[0].uri);
     } else {
-      alert("Vous n'avez selectionner aucune image.");
+      Alert.alert("","Vous n'avez selectionner aucune image.");
     }
   }
 
