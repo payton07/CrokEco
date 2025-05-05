@@ -47,7 +47,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Index",
+          title: "scan",
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="line-scan" size={24} color={color} />
           ),

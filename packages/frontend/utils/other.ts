@@ -113,10 +113,7 @@ export async function FormatInfoPlatIngredients(
  * sinon : rouge
  */
 export function Qualite_color(score: number) {
-  if (score == 0) {
-    return blue;
-  }
-  if (score <= 1) {
+  if (score >=0 && score <= 1) {
     return good;
   }
   if (score > 1 && score <= 5) {

@@ -5,8 +5,8 @@ import os
 
 INPUT_FILE = "../assets/AGRIBALYSE_v2.xlsx"
 COMPARE_FILE = "../assets/Agribalyse_Detail_ingredient.csv"
-INPUT_SQL_FRONTEND = "../specs/CodeE_A4.sql"
-INPUT_SQL_BACKEND = "../specs/CodeE_A_Backend.sql"
+INPUT_SQL_FRONTEND = "CodeE_A4.sql"
+INPUT_SQL_BACKEND = "CodeE_A_Backend.sql"
 OUTPUT_DB_FRONTEND = "../packages/frontend/assets/ingredient_carbon_score.db"
 OUTPUT_DB_BACKEND = "../packages/backend/bdd_doc/ingredient_carbon_score.db"
 # On ne prend pas en compte la 2e colonne
@@ -137,38 +137,35 @@ if __name__ == '__main__':
     pd.DataFrame(data_ingredient2).to_csv("data_ingredient2.csv", index=False)
     print("Fin de l'export des données")
 
-    con = sqlite3.connect(OUTPUT_DB_FRONTEND)
-    cur = con.cursor()
-    cur.execute("SELECT * FROM Ingredients;")
-    res = cur.fetchall()
-    d = ["pate",0,0,0]
-    d3 = [1,"11084",320]
-    d4 = [1,"20998",320]
+    # con = sqlite3.connect(OUTPUT_DB_FRONTEND)
+    # cur = con.cursor()
+    # cur.execute("SELECT * FROM Ingredients;")
+    # res = cur.fetchall()
+    # d = ["pate",0,0,0]
+    # d3 = [1,"11084",320]
+    # d4 = [1,"20998",320]
 
-    cur.execute(""" INSERT INTO Plats(Nom_plat,Certified,Like,DisLike) VALUES(?,?,?,?)""",d)
-    cur.execute(""" INSERT INTO Plats_Ingredients(ID_plat,ID_ingredient,Quantite) VALUES(?,?,?)""",d3)
-    cur.execute(""" INSERT INTO Plats_Ingredients(ID_plat,ID_ingredient,Quantite) VALUES(?,?,?)""",d4)
-    print(res)
-    con.commit()
-    con.close()
+    # cur.execute(""" INSERT INTO Plats(Nom_plat,Certified,Like,DisLike) VALUES(?,?,?,?)""",d)
+    # cur.execute(""" INSERT INTO Plats_Ingredients(ID_plat,ID_ingredient,Quantite) VALUES(?,?,?)""",d3)
+    # cur.execute(""" INSERT INTO Plats_Ingredients(ID_plat,ID_ingredient,Quantite) VALUES(?,?,?)""",d4)
+    # print(res)
+    # con.commit()
+    # con.close()
 
-    con = sqlite3.connect(OUTPUT_DB_BACKEND)
-    cur = con.cursor()
-    d1 = [1,"pate",0,0,0]
-    d2 = [2,"riz",0,0,0]
-    d3 = [1,"11084",320]
-    d4 = [1,"20998",320]
-    cur.execute(""" INSERT INTO Plats(ID_plat,Nom_plat,Certified,Like,DisLike) VALUES(?,?,?,?,?)""",d1)
-    cur.execute(""" INSERT INTO Plats(ID_plat,Nom_plat,Certified,Like,DisLike) VALUES(?,?,?,?,?)""",d2)
+    # con = sqlite3.connect(OUTPUT_DB_BACKEND)
+    # cur = con.cursor()
+    # d1 = [1,"pate",0,0,0]
+    # d2 = [2,"riz",0,0,0]
+    # d3 = [1,"11084",320]
+    # d4 = [1,"20998",320]
+    # cur.execute(""" INSERT INTO Plats(ID_plat,Nom_plat,Certified,Like,DisLike) VALUES(?,?,?,?,?)""",d1)
+    # cur.execute(""" INSERT INTO Plats(ID_plat,Nom_plat,Certified,Like,DisLike) VALUES(?,?,?,?,?)""",d2)
     
-    cur.execute(""" INSERT INTO Plats_Ingredients(ID_plat,ID_ingredient,Quantite) VALUES(?,?,?)""",d3)
-    cur.execute(""" INSERT INTO Plats_Ingredients(ID_plat,ID_ingredient,Quantite) VALUES(?,?,?)""",d4)
-    d3[0]= 2
-    d4[0]= 2
-    cur.execute(""" INSERT INTO Plats_Ingredients(ID_plat,ID_ingredient,Quantite) VALUES(?,?,?)""",d3)
-    cur.execute(""" INSERT INTO Plats_Ingredients(ID_plat,ID_ingredient,Quantite) VALUES(?,?,?)""",d4)
-    con.commit()
-    con.close()
-
-
-# Plats_Ingredients
+    # cur.execute(""" INSERT INTO Plats_Ingredients(ID_plat,ID_ingredient,Quantite) VALUES(?,?,?)""",d3)
+    # cur.execute(""" INSERT INTO Plats_Ingredients(ID_plat,ID_ingredient,Quantite) VALUES(?,?,?)""",d4)
+    # d3[0]= 2
+    # d4[0]= 2
+    # cur.execute(""" INSERT INTO Plats_Ingredients(ID_plat,ID_ingredient,Quantite) VALUES(?,?,?)""",d3)
+    # cur.execute(""" INSERT INTO Plats_Ingredients(ID_plat,ID_ingredient,Quantite) VALUES(?,?,?)""",d4)
+    # con.commit()
+    # con.close()
