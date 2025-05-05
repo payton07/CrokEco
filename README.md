@@ -40,13 +40,20 @@ Follow these steps to set up the project locally:
    git clone https://github.com/Yvaniak/projet-Co2Score.git
    ```
 2. Navigate to the project directory:
+    ```bash
    cd projet-Co2Score/frontend
+   ```
 
 3. Install dependencies:
+    ```bash
    npm install
+   ```
 
 ### Running the application
-  npm start or npm run android
+    
+    ```bash
+    npm start or npm run android
+    ```
 
 ## Licence :
 This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
