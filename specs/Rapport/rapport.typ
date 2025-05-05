@@ -236,7 +236,7 @@ Pour conclure, l'application Crok'eco répond efficacement aux objectifs fixés 
 
 Cependant, certaines fonctionnalités prévues n'ont pas pu être implémentées, comme l'intégration de la caméra ou la gestion des comptes utilisateurs. Ces éléments représentent des pistes d'amélioration pour les futures versions de l'application. Malgré ces limitations, le projet a permis de développer des compétences techniques variées, allant de la gestion de bases de données à l'utilisation de frameworks modernes comme Expo.
 
-En somme, ce projet constitue une étape importante dans la sensibilisation écologique et ouvre la voie à de nouvelles opportunités pour améliorer l'impact environnemental de nos choix alimentaires.
+Enfin, ce projet nous a permis de mettre en pratique nos connaissances acquises en Licence Informatique mais aussi de développer de nouvelles compétences essentielles pour la suite de notre parcours.
 
 #pagebreak()
 
@@ -244,9 +244,6 @@ En somme, ce projet constitue une étape importante dans la sensibilisation éco
 
 
 #bibliography("works.bib", style: "american-institute-of-aeronautics-and-astronautics")
-
-Score unique EF : https://ec.europa.eu/environment/eussd/smgp/index.htm \
-
 
 #outline(
   title: [Tables des figures],
