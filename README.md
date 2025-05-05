@@ -50,7 +50,9 @@ Follow these steps to set up the project locally:
    ```
 
 ### Running the application
-    
+- Run command : 
+
+    1. android : 
     ```bash
     npm start or npm run android
     ```
