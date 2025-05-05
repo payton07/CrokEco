@@ -133,7 +133,7 @@ Les différentes requêtes présentes sur ce diagramme sont détaillés dans le 
 == Base de données <BDD>
 
 === Recherche <Recherchebdd>
-#let fig1 = figure(image("logo.e3e348f6.png", width: 45%), caption: "Logo AGRIBALYSE")
+#let fig1 = figure(image("Images/logoAGRIBALISE.png", width: 45%), caption: "Logo AGRIBALYSE")
 #let body = [
 Afin de connaitre l'impact ecologique d'un plat nous avons choisi dans un premier temps de se servir de la base de données fournie par l'ADEME. La base de l'ADEME sur la consommation CO2 est une immense base regroupant tout les types d'emission de gaz à effet de serre tel que celle du au textiles, à l'industrie ou autres, ainsi que toute les emissions liee à l'alimentation.
 
