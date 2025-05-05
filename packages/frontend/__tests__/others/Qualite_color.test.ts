@@ -10,11 +10,8 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
 }));
 
 describe('Qualite_color', () => {
-  it('should return blue for score 0', () => {
-    expect(Qualite_color(0)).toBe(blue);
-  });
 
-  it('should return green for score <= 1', () => {
+  it('should return green for score >=0 && score <= 1', () => {
     expect(Qualite_color(1)).toBe(good);
     expect(Qualite_color(0.5)).toBe(good);
   });

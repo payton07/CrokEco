@@ -251,7 +251,7 @@ export default function Index() {
             <View style={styles.inputContainer}>
               {done ? (
                 <View style={styles.RecongnitionContainer}>
-                  <Text style={styles.title1}>Text Reconnu :</Text>
+                  <Text style={styles.title1}>Text (Plats) Reconnu(s) :</Text>
                   {data ? (
                     data.map((ligne, i) => <Textshow key={i} ligne={ligne} />)
                   ) : (

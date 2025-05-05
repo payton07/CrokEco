@@ -16,6 +16,7 @@ export default function Vote_display({
   };
   associations:any[];
 }) {
+  const router = useRouter();
   // console.log("dans vote display");
   const [isloaded, setIsloaded] = useState(false);
   const [Liked, setLiked] = useState(ligne.Like);
@@ -27,7 +28,7 @@ export default function Vote_display({
     if (ligne.ID_plat === null) return;
   }
   async function dislike() {
-    const router = useRouter();
+    // const router = useRouter();
     call();
     if(!isDone) {
       setIsDone(true);
@@ -38,7 +39,7 @@ export default function Vote_display({
     }
   }
   async function like() {
-    const router = useRouter();
+    // const router = useRouter();
     call();
     if(!isDone) {
       setIsDone(true);
@@ -50,7 +51,6 @@ export default function Vote_display({
   }
 
   function goDetails() {
-    const router = useRouter();
     call();
     if (ligne.ID_plat == null ||ligne.ID_plat === null) {return;}
     else{

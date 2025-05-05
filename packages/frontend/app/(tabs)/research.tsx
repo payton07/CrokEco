@@ -104,7 +104,7 @@ export default function Research() {
   // des plats et des associations plat - ingredients
   async function DoUpdates(data: {
     message: string;
-    code: number;
+    code: number | string;
     last: string;
   }) {
     console.log("Lance la MAJ");
@@ -145,7 +145,7 @@ export default function Research() {
 
   // Fonction pour vérifier les mises à jour
   // et effectuer la mise à jour si nécessaire
-  async function CheckForUpdates() {
+  async function CheckForUpdates2() {
     console.log("Demande de maj");
     const el = await getPlats(false, true, false);
     const ele = await getLastElementPlats();
@@ -153,11 +153,17 @@ export default function Research() {
       const data = { ID_plat: ele?.ID_plat };
       const laMaj = await PostUpdateRequest(data);
       if (laMaj.code == DO_MAJ_CODE) await DoUpdates(laMaj);
+      else {
+        console.log("Pas de mise à jour disponible");}
       await loadData();
     } else {
       // TODO : Voir les cas de merde
       console.log("Y a pas de plats dans ta BD !");
     }
+  }
+
+  async function CheckForUpdates() {
+    await checkForDailyUpdate(CheckForUpdates2);
   }
 
   // Fonction pour charger les données soit depuis le cache
@@ -178,7 +184,7 @@ export default function Research() {
   }
   async function LoadAndCheckUpadate(){
     await loadData();
-    await checkForDailyUpdate(CheckForUpdates);
+    await CheckForUpdates();
   }
 
   useEffect(() => {
@@ -204,22 +210,20 @@ export default function Research() {
             <View style={styles.absoluteContainer}>
               <View style={styles.overlay}>
                 <View style={styles.menu}>
-                  <Text style={styles.menuText}>Menu</Text>
-                  <Text style={styles.menuText}>Option 1</Text>
-                  <TouchableOpacity style={styles.ResetButton} onPress={reset}>
+                  {/* <TouchableOpacity style={styles.ResetButton} onPress={reset}>
                     <Text style={styles.clearButtonText}>Reset BD</Text>
+                  </TouchableOpacity> */}
+                  <TouchableOpacity
+                    style={styles.clearButton}
+                    onPress={clearAllCache}
+                  >
+                    <Text style={styles.clearButtonText}>Vider le cache</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={styles.MaJButton}
                     onPress={CheckForUpdates}
                   >
                     <Text style={styles.clearButtonText}>Demande MàJ</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.clearButton}
-                    onPress={clearAllCache}
-                  >
-                    <Text style={styles.clearButtonText}>Vider le cache</Text>
                   </TouchableOpacity>
                 </View>
               </View>

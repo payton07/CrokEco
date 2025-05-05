@@ -56,7 +56,7 @@ describe('Textshow', () => {
 
     fireEvent.press(getByText('Plat inconnu'));
 
-    expect(Alert.alert).toHaveBeenCalledWith("Ce plat n'existe pas dans nos données");
+    expect(Alert.alert).toHaveBeenCalledWith("Ce plat n'existe pas dans nos données.\nVeuillez l'ajouter sur la page d'ajout");
     expect(mockPush).not.toHaveBeenCalled();
   });
 });
