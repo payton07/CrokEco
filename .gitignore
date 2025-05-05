@@ -20,6 +20,7 @@ packages/frontend/*
 !packages/frontend/__tests__
 *.db
 !*.typ
+!*.md
 packages/backend/*
 !packages/backend/package.json
 !packages/backend/src
