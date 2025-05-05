@@ -1,6 +1,8 @@
 #import "@preview/modern-report-umfds:0.1.2": umfds
+#import "@preview/wrap-it:0.1.1": wrap-content
 // #let wi = "60pt" ;
 // #let he = "150pt";
+
 #show : umfds.with(lang: "fr", title: "Crok'eco
 Projet de Programmation 2", authors: ("BATATAY Mallory
 KEGLO Partice",), abstract: "Crok'eco est une application collaborative permettant à chacun de s'informer sur l'imapct écologique d'un plat.", date: "2024 - 2025", department: [Informatique], img: image("Images/logo_vf.png", width: 60%))
@@ -90,26 +92,22 @@ Le dévéloppement avec Expo nous permet d'avoir une application multi-plateform
 
 - Pandas(Python) pour la gestion de données en CSV \
 - Text-recognition de react-native-ml-kit , pour la reconnaissance de text sur une image\
-- Crypto-js pour encrypter les messages et assurer une sécurite dans le transfert de données vers 
-#h(1em) notre serveur \
+- Crypto-js pour encrypter les messages et assurer une sécurité dans le transfert de données entre notre serveur et l'application\
 - Netinfo de react-native-community pour mettre en place des mise à jour automatique de données entre l'application de notre serveur, en permettant de connaitre l'etat de l'utilisateur (Connecté ou non Connecté)\
 - fastify pour mettre en place une api pour notre backend.\
 - Yup qui permet de verifier les formulaires \
 - Jest pour tester les différentes fonctinonalités de notre application \
-- ainsi que d'autres librairies d'expo et de react-native. \
+- ainsi que d'autres librairies d'expo et de react-native.
 
-L'application a été testé à la fois sur simulateurs Android via Android Studio et sur appareils physiques pour s'assurer d'une bonne compatibilité et d'une expérience utilisateur fluide. 
+#h(1em) L'application a été testé à la fois sur simulateurs Android via Android Studio et sur appareils physiques pour s'assurer d'une bonne compatibilité et d'une expérience utilisateur fluide. 
 
 Nous avons utilisé GitHub comme plateforme de gestion de version tout au long du projet afin de collaborer efficacement, et d'avoir un historique clair des modifications. Les branches ont été utilisées pour séparer le développement des différentes fonctionnalités, ce qui a facilité l'intégration progressive des différentes parties de l'application dans la branche principale (Branche MAIN).
 
 Les données que nous utilisons pour notre base de données proviennent toutes du programme de collecte de données #link("https://doc.agribalyse.fr/documentation")[AGRIBALYSE 2.0.]
 
 #pagebreak()
-= Architectures
 
-== Modele Statique
-A detailler
-#figure(image("Images/Modele statique.png"))
+= Architectures
 
 == Architectures de l'application
 
@@ -120,6 +118,13 @@ L'application s'organise autour de la barre de navigation qui permet d'atteindre
 
 Dans la partie de recherche et d'affichage de plat on retrouve dans un premier temps la page scan(index). Cette page est la première qui s'ouvre lorsque l'on ouvre l'application. Elle a pour but de lancer l'analyse d'une image. Elle se compose de deux boutons. Le premier bouton, "Choisir une image", ouvre la médiathèque du téléphone pour que l'utilisateur sélectionne une image. Quand une image est choisit un menu s'ouvre pour proposé à l'utilisateur de modifier l'image en la rognant par exemple. Ensuite, l'image selectionné apparait sur la page scan. L'utilisateur peut ensuite appuyer sur le bouton analyser.  
 
+== Modele Dynamique
+
+Lorsque l'utilisateur se sert de l'application, celle-ci communique avec le serveur afin de traiter les requêtes émises. Le diagramme de séquence(@diagramme) ci-dessous illustre les échanges entre l'application et le serveur en fonction des actions réalisé par l'utilisateur.
+
+#figure(image("Images/Diagramme de séquence.png"), caption:"Diagramme de séquence") <diagramme>
+
+Les différentes requêtes présentes sur ce diagramme sont détaillés dans le @userApp.
 
 #pagebreak()
 
@@ -128,25 +133,33 @@ Dans la partie de recherche et d'affichage de plat on retrouve dans un premier t
 == Base de données <BDD>
 
 === Recherche <Recherchebdd>
+#let fig1 = figure(image("logo.e3e348f6.png", width: 45%), caption: "Logo AGRIBALYSE")
+#let body = [
 Afin de connaitre l'impact ecologique d'un plat nous avons choisi dans un premier temps de se servir de la base de données fournie par l'ADEME. La base de l'ADEME sur la consommation CO2 est une immense base regroupant tout les types d'emission de gaz à effet de serre tel que celle du au textiles, à l'industrie ou autres, ainsi que toute les emissions liee à l'alimentation.
 
-En inspectant la base de données nous avons remarqué que toutes les informations liée à la nourriture provenait de deux bases de données qui sont AGRIBALYSE et AGRIBALYSE 2.0. AGRIBALYSE est un programme collectif et innovant qui met à disposition des données de référence sur les impacts environnementaux des produits agricoles et alimentaires à travers une base de données construite selon la méthodologie des Analyses du Cycle de Vie. Il est possible de se servir du site web d'AGRIBALYSE pour connaitre l'impact environnemental d'un aliment ou bien de télécharger leur base de données.
+En inspectant la base de données nous avons remarqué que toutes les informations liée à la nourriture provenait de deux bases de données qui sont AGRIBALYSE et AGRIBALYSE 2.0. AGRIBALYSE est un programme collectif et innovant qui met à disposition des données de référence sur les impacts environnementaux des produits agricoles et alimentaires à travers une base de données construite selon la méthodologie des Analyses du Cycle de Vie. Il est possible de se servir du site web d'AGRIBALYSE pour connaitre l'impact environnemental d'un aliment ou bien de télécharger leur base de données.]
+
+#wrap-content(fig1, body, align: top+right)
 
 Nous avons donc télécharger la base de données concernant dans un premier temps uniquement les plats ayant nécessité une transformation. Cette base de données etait disponible au format CSV. Afin de traiter de rendre les données utilisable nous avons coder un programme python servant à initialiser une base de données en sql comportant tous les plats décrit dans le CSV.
 
 Le CSV etait construit de la maniere suivante : par plat présent dans la base, il y avait une ligne pour chaque ingredient. Cela signifie qu'on retrouve l'impact écologique d'un ingredient pour que dans chaque plats comportant cette ingredient, mais l'impact différé en fonction de la proportion de cette aliment dans le plat.
-En analysant plus precisement nos besoin nous avons remarqué qu'il manqué trop de plats dans la base de données actuel. Afin de pallier a ce probleme nous avons changé une nouvelle fois de base de données pour prendre finalement celle comportant uniquement les ingredients avec l'impact associé par kilo d'aliment.
-Pour connaitre l'impact ecologique d'un plat, on doit donc realisé la somme de l'impact de chaque plat et faire un produit en croix pour le ramener à un kilo de nourriture.
 
-Pour connaitre le poids de chaque aliment dans un plat et pour remplir la table sql des plat nous avons choisi de faire confiance au utilisateur de l'application. Une page de l'application permet d'enregistrer la composition d'un plat *voir partie*. Chaque plat nouvellement creer peut etre voter par un utilisateur afin d'etre ajouter par les modérateurs à la base de données comportant tous les plats.
+En analysant plus precisement nos besoins, nous avons remarqué un manque de plats trop important dans la base de données actuelle. Pour résoudre ce problème, nous avons changé une nouvelle fois de base de données, cette fois-ci comportant uniquement les ingredients avec l'impact écologique associé par kilo d'aliment. Les données étaient fournies sous forme d'un fichier Excel comportant plusieurs onglets, dont un dédié uniquement aux ingrédients. Chaque ingredient est associé vers un code Ciqual qui sert d'indetifiant unique. 
+
+Pour connaitre le poids de chaque aliment dans un plat et pour remplir la table sql des plats nous avons choisi de faire confiance au utilisateur de l'application. Une page de l'application permet d'enregistrer la composition d'un plat (voir @add). Connaissant le poids de chaque aliment et son impact écologique, il devient alors possible de calculer l’impact environnemental de chaque ingrédient au sein d’un plat, mais également l’impact écologique global du plat lui-même. Pour cela, on doit donc realisé la somme de l'impact de chaque ingredient dans le palt et faire un produit en croix pour le ramener à un kilogramme de nourriture.
 
 === Modélisation <Modelisation>
 
-Pour l'application nous avions besoin d'une base de données regroupant d'une part les informations du CSV fournit par AGRIBALYSE ainsi que les nouvelles données tel que les plats, les menus, etc...
+Pour l'application nous avions besoin d'une base de données regroupant d'une part les informations du CSV fournit par AGRIBALYSE ainsi que les nouvelles données tel que les plats ou les menus.
 
 #figure(image("Images/E_A.png"), caption: "Schéma du modèle Entité Association de la base de données final") <EA>
 
-Nous avons donc défnini un modèle Entité-Association qui sert à initialiser notre base de données. La @EA représente les différentes tables que comporte la base ainsi que les liaison entre ces dernières.
+Nous avons donc défnini un modèle Entité-Association (E-A) afin de représenter la structure de notre base de données. La @EA met en évidence les différentes tables que comporte la base ainsi que les liaisons entre elles.
+
+Les données que nous récupérons via la le fichier Excel sont rangés dans la table ingredients. Afin de trier les ingredients par catégories on retrouve les tables groupes et sous-groupes. Chaque ingredient a une clé étrangère qui mène vers un sous groupes lequel possédant à son tour une clé étrangère menant vers la tables des groupes.
+
+Ensuite, les plats sont composé de plusieurs ingredients et un ingredient peut être présent dans plusieurs plat. On a donc une table intermediaire entre les plats et les ingredients. Cette table est composé d'une clé étrangère menant vers l'ID des ingredients 
 
 Après avoir modéliser les deux bases de données, on rédige leur structure dans un fichier .sql qui servira pour leurs implémentations (voir @Implémentation).
 
@@ -156,7 +169,7 @@ Afin de convertir les données d'AGRIBALYSE dans notre base de données décrite
 
 Pour cela, on commence par créer le fichier qui contiendra la base de données. Ce fichier aura une extension .db et s'il était déjà existant, il est remplacé. Ensuite on importe le fichier .sql contenant l'agencement des tables décrit dans la partie Modélisation(voir @Modelisation). Cela permet d'initialiser toutes les tables mais elles sont encores vides.
 
-Ensuite, il faut remplir trois tables avec les données fournies par AGRIBALYSE. Les tables à remplir sont les groupes, les sous-groupes et les ingredients. Les données sont dans un tableau Excel comportant plusieurs pages. On commence donc par extraire la bonne page du Excel. Après cela, on commence le remplissage des trois tables par celle des groupes à cause des contraintes de clé étrangère. Pour remplir la deuxième table, parce qu'on a besoin de la clé primaires de la tables des groupes qui viennent d'être ajouté à la base de données, on doit d'abord faire une requete à la base de données. On range les indices et le nom du groupe dans un dictionnaire. Avec les informations du tableau Excel, on associe le noms des sous-groupes avec l'indice de son groupe correspondant. Enfin on ajoute le dictionnaire résultant à la base de données. On recommence ensuite la meme opération afin d'associer les indices des sous-groupes avec les ingredients.
+Ensuite, il faut remplir trois tables avec les données fournies par AGRIBALYSE. Les tables à remplir sont les groupes, les sous-groupes et les ingredients. Les données sont dans un tableau Excel comportant plusieurs pages. On commence donc par extraire la bonne page du Excel. Après cela, on commence le remplissage des trois tables par celle des groupes à cause des contraintes de clé étrangère. Pour remplir la deuxième table, parce qu'on a besoin de la clé primaires de la tables des groupes qui viennent d'être ajouté à la base de données, on doit d'abord faire une requête à la base de données. On range les indices et le nom du groupe dans un dictionnaire. Avec les informations du tableau Excel, on associe le noms des sous-groupes avec l'indice de son groupe correspondant. Enfin on ajoute le dictionnaire résultant à la base de données. On recommence ensuite la meme opération afin d'associer les indices des sous-groupes avec les ingredients.
 
 Ce programme permet à la fois de créer la base de données pour l'application de l'utilisateur et pour le serveur. La seule différence entre les deux tables et qu'on utilise pas le même fichier .sql.
 
@@ -227,13 +240,37 @@ Amélioration des suggestions ~
 
 = Bibliographie
 
+#cite(<ademe>)
+
+#bibliography("works.bib", style: "american-institute-of-aeronautics-and-astronautics")
+
 base ademe : #link("https://base-empreinte.ademe.fr/") \
 site AGRIBALYSE : https://doc.agribalyse.fr/documentation \
 2009/2019 : https://www.insee.fr/fr/statistiques/7728873?sommaire=7728903 \
 22% : https://www.insee.fr/fr/statistiques/7728883?sommaire=7728903 \
 Score unique EF : https://ec.europa.eu/environment/eussd/smgp/index.htm \
+Code ciqual : https://ciqual.anses.fr/
+
+
+
 #outline(
   title: [Tables des figures],
-  target: figure,
+  target: figure.where(kind: image),
 )
 
+
+#pagebreak()
+
+enlever le numero de la pgae d'entete \
+refaire la bibliographie \
+CORRIGER L'ORTHOGRAPHE \
+si on en a besoin
+#footnote[test] \
+partie a finir : 
++ conclusion
++ statistiques
++ fonctinonalités non implementé
++ design
++ recherche
++ ajout de plat et vote
++ Modele dynamique
