@@ -7,19 +7,17 @@
 Projet de Programmation 2", authors: ("BATATAY Mallory
 KEGLO Partice",), abstract: "Crok'eco est une application collaborative permettant à chacun de s'informer sur l'imapct écologique d'un plat.", date: "2024 - 2025", department: [Informatique], img: image("Images/logo_vf.png", width: 60%))
 
-#text(1.5em)[*Remerciement*]
+#text(1.5em)[*Remerciements*]
 
-Nous tenons à exprimer notre sincère gratitude envers toutes les personnes qui ont contribué à la
-réussite de ce projet. Leur soutien et leur encadrement ont été d'une importance capitale tout au long de la création de cette application.
+Nous tenons à exprimer notre sincère gratitude envers toutes les personnes qui ont contribué à la réussite de ce projet. Leur soutien et leur encadrement ont été d'une importance capitale tout au long de la création de cette application.
 
-Nous souhaitons exprimer nos sincères remerciements à M. Eric Bourreau pour nous avoir permis de travailler sur ce sujet. Sa confiance et son soutien nous ont permis de le réaliser avec succès. Nous lui sommes reconnaissant pour cette opportunité qui nous a permis d'acquérir une expérience en génie logiciel.
+Nous souhaitons exprimer nos sincères remerciements à M. Eric Bourreau pour nous avoir permis de travailler sur ce sujet. Sa confiance et son soutien nous ont permis de le réaliser avec succès. Nous lui sommes reconnaissants pour cette opportunité qui nous a permis d'acquérir une expérience en génie logiciel.
 
-Nous souhaitons tout particulièrement remercier Ewen PHILIPOT, pour nous avoir aider à initier le projet malgré qu'il soit parti au cours de cette année  scolaire. Ses connaissances approfondies nous ont permis d'avoir une base solide pour l'application.
+Nous souhaitons tout particulièrement remercier Ewen PHILIPOT, pour nous avoir aidés à initier le projet malgré qu'il soit parti au cours de cette année scolaire. Ses connaissances approfondies nous ont permis d'avoir une base solide pour l'application.
 
-Je tiens également à exprimer ma gratitude envers Mme Elisabeth BAERT, responsable de la licence 3 Informatique, pour nous avoir permis de réaliser ces projets durant le second semestre. 
+Je tiens également à exprimer ma gratitude envers Mme Elisabeth BAERT, responsable de la licence 3 Informatique, pour nous avoir permis de réaliser ces projets durant le second semestre.
 
 Enfin, j'aimerais remercier chaleureusement toutes les personnes qui m'ont aidé dans la création de l'application ainsi que dans la rédaction de ce rapport et qui ont relu ce dernier. Leur soutien et leurs précieux commentaires ont grandement amélioré la qualité de ce travail.
-
 
 #pagebreak()
 
@@ -33,9 +31,9 @@ Enfin, j'aimerais remercier chaleureusement toutes les personnes qui m'ont aidé
 
 = Introduction
 
-Nous réalisons ce projet dans le cadre de notre 3e en Licence Informatique. Le projet a débuté en décembre 2024 et nous a accompagné tout au long de notre 2e semestre. Ce projet s'incrit dans la continuité de celui commencé l'année précedente par des étudiants de Cursus Master en Ingénierie (CMI) Informatique en 3e année. Le sujet que nous avons choisi est celui de Monsieur Bourreau. Le but du projet est de créer une application permettant de noté l'impact écologique avec une couleur. Celle-ci peut etre de couleur Verte, Orange ou Rouge respectivement d'une empreinte carbonne faible a élevé.
+Nous réalisons ce projet dans le cadre de notre troisième année en Licence Informatique. Le projet a débuté en décembre 2024 et nous a accompagnés tout au long de notre 2e semestre. Le sujet que nous avons choisi est celui de Monsieur Bourreau. Le but du projet est de créer une application permettant de noter l'impact écologique avec une couleur. Celle-ci peut être de couleur Verte, Orange ou Rouge, respectivement d'une empreinte carbone faible à élevée.
 
-Ce projet a été réalisé avec KEGLO Patrice, BARATAY Mallory et PHILIPOT Ewen. PHILIPOT Ewen ayant arrêté la Licence avant les vacances de février, nous avons réalisé la majeure partie du projet à deux. 
+Ce projet a été réalisé avec KEGLO Patrice, BARATAY Mallory et PHILIPOT Ewen. PHILIPOT Ewen ayant arrêté la Licence avant les vacances de février, nous avons réalisé la majeure partie du projet à deux.
 
 #pagebreak()
 
@@ -43,30 +41,32 @@ Ce projet a été réalisé avec KEGLO Patrice, BARATAY Mallory et PHILIPOT Ewen
 
 == Enjeux climatiques
 
-Selon l'INSEE, en 2018, l'alimentation a representé 22% de l'empreinte carbonne de la France. Que ce soit lié au transport de la nourriture, à l'élevage des animaux, à la quantité d'eau utilisée tout au long de la production, il y a beaucoup de facteurs polluants pour amener la nourriture dans nos assiettes. Une majorité de la population n'est pas informée sur ce sujet et ne pense pas à l'impact que sa nourriture à sur la planète.
+Selon l'INSEE, en 2018, l'alimentation a représenté 22% de l'empreinte carbone de la France
+#cite(<insee2>)
+. Que ce soit lié au transport de la nourriture, à l'élevage des animaux, à la quantité d'eau utilisée tout au long de la production, il y a beaucoup de facteurs polluants pour amener la nourriture dans nos assiettes. Une majorité de la population n'est pas informée sur ce sujet et ne pense pas à l'impact que sa nourriture a sur la planète.
 
-Des solutions existent déjà pour réduire l'émission de gaz à effet de serre liée à notre alimentation. En effet, tous les aliments ne se valent pas en matière d'impact environnemental. Certains aliments tels que la viande et le poisson ont un impact écologique bien plus important, que les fruits, légumes ou céréales. Le fait de consommer des produits de saison et locales permet aussi de réduire l'emission du à notre alimentation.
+Des solutions existent déjà pour réduire l'émission de gaz à effet de serre liée à notre alimentation. En effet, tous les aliments ne se valent pas en matière d'impact environnemental. Certains aliments tels que la viande et le poisson ont un impact écologique bien plus important que les fruits, légumes ou céréales. Le fait de consommer des produits de saison et locaux permet aussi de réduire l'émission due à notre alimentation.
 
-Entre 2009 et 2019, la quantité de viande consommée à baissée de 5 % en France métropolitaine selon l'INSEE. On constate donc une volonté en France de vouloir consommer plus écologiquement et la demande concernant des applications permettant de se renseigner devient de plus en plus grande. On note également une augmentation de projets allant dans ce sens, que ce soit avec la nourriture mais également d'autres produits du quotidien comme les cosmétiques et les textiles qui sont des domaines eux aussi très polluants.
+Entre 2009 et 2019, la quantité de viande consommée a baissé de 5 % en France métropolitaine selon l'INSEE
+#cite(<insee1>)
+. On constate donc une volonté en France de consommer plus écologiquement, et la demande concernant des applications permettant de se renseigner devient de plus en plus grande. On note également une augmentation de projets allant dans ce sens, que ce soit avec la nourriture mais également d'autres produits du quotidien comme les cosmétiques et les textiles, qui sont des domaines eux aussi très polluants.
 
+#figure(image("Images/repas.png", width: 90%), caption: [Emission de kg de CO2 en fonction du type de rapas\ 
+Source: ADEME #cite(<ademe>)])
 
-#figure(image("Images/repas.png", width: 80%), caption: "Emission de kg de CO2 en fonction du type de rapas 
-Source: ADEME")
-
-#pagebreak()
 == Approche du sujet
 \
 
-Afin d'aider la population à faire des gestes écologiques, il est important de lui donner les outils permettant d'attenidre ses objectifs. La composition d'un plat étant la première cause de l'impact écologique du plat, il serait interessant de pouvoir etre informer de l'empreinte écologique du plat que l'on souhaite manger.
-Afin de pallier à ce problème nous avons imaginé plusieurs solutions : 
+Afin d'aider la population à faire des gestes écologiques, il est important de lui donner les outils permettant d'atteindre ses objectifs. La composition d'un plat étant la première cause de l'impact écologique du plat, il serait intéressant de pouvoir être informé de l'empreinte écologique du plat que l'on souhaite manger.
+Afin de pallier ce problème, nous avons imaginé plusieurs solutions : 
 
-Afin de proposer une solution au étudiant, dans un premier, il serait possible de s'accorder avec le Crous ou les gérant des restaurants de la Faculté des Sciences pour faire afficher sur les téléviseurs du l'impact écologique de chaque plat. L'affichage pourrait ce faire à l'aide d'une pastille de couleur correspondant au degré de pollution.
+Afin de proposer une solution aux étudiants, dans un premier temps, il serait possible de s'accorder avec le Crous ou les gérants des restaurants de la Faculté des Sciences pour faire afficher sur les téléviseurs l'impact écologique de chaque plat. L'affichage pourrait se faire à l'aide d'une pastille de couleur correspondant au degré de pollution.
 
-Sinon, nous pourrions afficher le résultat à l'aide d'un QR Code. Le QR Code redirigerai vers une page qui détaillerai l'empreinte carbonne de chaque plat.
+Sinon, nous pourrions afficher le résultat à l'aide d'un QR Code. Le QR Code redirigerait vers une page qui détaillerait l'empreinte carbone de chaque plat.
 
-Cette solution avait déjà était envisagé l'année derniere, mais sans succès, car, comme la première, elle presente un problème. En effet, elle nécessite un accord avec les gérants des restaurants qui sont assez rétissant à voir l'impact écologique de leurs plats révélé.#text(red)[ De plus, même s'il avait été possible d'avoir l'accord pour les restaurants de la Faculté des Sciences, ces solutions demanderait énormement d'effort pour etre deployer à l'echelle de la France Car il nécessiterait l'accord de chaque restaurants.]
+Cette solution avait déjà été envisagée l'année dernière, mais sans succès, car, comme la première, elle présente un problème. En effet, elle nécessite un accord avec les gérants des restaurants qui sont assez réticents à voir l'impact écologique de leurs plats révélé. #text(red)[De plus, même s'il avait été possible d'avoir l'accord pour les restaurants de la Faculté des Sciences, ces solutions demanderaient énormément d'efforts pour être déployées à l'échelle de la France, car elles nécessiteraient l'accord de chaque restaurant.]
 
-Nous avons donc choisi de faire une application collaborative qui calcule l'impact écologique de tous les plats en scannant leurs noms sur un menu. Le but de cette derniere methode est de permettre à tout le monde de participer à ameliorer l'ecologie en rendant l'application collaborative. Cette méthode peut fonctionner dans n'importe quelle restaurant traditionnel et peut être étendu au self et cantine scolaire.
+Nous avons donc choisi de faire une application collaborative qui calcule l'impact écologique de tous les plats en scannant leurs noms sur un menu. Le but de cette dernière méthode est de permettre à tout le monde de participer à améliorer l'écologie en rendant l'application collaborative. Cette méthode peut fonctionner dans n'importe quel restaurant traditionnel et peut être étendue au self et cantine scolaire.
 
 #pagebreak()
 
@@ -145,7 +145,9 @@ Nous avons donc télécharger la base de données concernant dans un premier tem
 
 Le CSV etait construit de la maniere suivante : par plat présent dans la base, il y avait une ligne pour chaque ingredient. Cela signifie qu'on retrouve l'impact écologique d'un ingredient pour que dans chaque plats comportant cette ingredient, mais l'impact différé en fonction de la proportion de cette aliment dans le plat.
 
-En analysant plus precisement nos besoins, nous avons remarqué un manque de plats trop important dans la base de données actuelle. Pour résoudre ce problème, nous avons changé une nouvelle fois de base de données, cette fois-ci comportant uniquement les ingredients avec l'impact écologique associé par kilo d'aliment. Les données étaient fournies sous forme d'un fichier Excel comportant plusieurs onglets, dont un dédié uniquement aux ingrédients. Chaque ingredient est associé vers un code Ciqual qui sert d'indetifiant unique. 
+En analysant plus precisement nos besoins, nous avons remarqué un manque de plats trop important dans la base de données actuelle. Pour résoudre ce problème, nous avons changé une nouvelle fois de base de données, cette fois-ci comportant uniquement les ingredients avec l'impact écologique associé par kilo d'aliment. Les données étaient fournies sous forme d'un fichier Excel comportant plusieurs onglets, dont un dédié uniquement aux ingrédients. Chaque ingredient est associé vers un code Ciqual
+#cite(<ciqual>)
+qui sert d'indetifiant unique. 
 
 Pour connaitre le poids de chaque aliment dans un plat et pour remplir la table sql des plats nous avons choisi de faire confiance au utilisateur de l'application. Une page de l'application permet d'enregistrer la composition d'un plat (voir @add). Connaissant le poids de chaque aliment et son impact écologique, il devient alors possible de calculer l’impact environnemental de chaque ingrédient au sein d’un plat, mais également l’impact écologique global du plat lui-même. Pour cela, on doit donc realisé la somme de l'impact de chaque ingredient dans le palt et faire un produit en croix pour le ramener à un kilogramme de nourriture.
 
@@ -192,7 +194,9 @@ L'utilisateur, peut rentrer le nom du restaurant dont il va analyser le menu ain
 Une fois ceci fait, il peut cliquer sur le bouton *Analyser*. On effectue l'analyse textuelle de l'image et on recupere le nom des plats du menu ou du moins le texte reconnu. Une fois les noms recuperés, on verifie pour chaque plat, s'il existe dans notre base de données pour pouvoir ensuite recuperer la liste des ingredients, leurs quantités dans le plat et effectuer le calcule de score. En fonction du score du plat, on lui attribue une couleur qui sera la même que celle de la pastille qui sera affiche pour ce plat, comme l'indique le @couleur.
 
 
-Le score d'un plat est la somme des #link("https://ec.europa.eu/environment/eussd/smgp/index.htm")[Score unique EF] (EF = Environmental Footprint) = Somme (impact catégorie $*$ facteur de pondération) de chacun de ses ingredients.
+Le score d'un plat est la somme des Score unique EF
+#cite(<ef>)
+(EF = Environmental Footprint) = Somme (impact catégorie $*$ facteur de pondération) de chacun de ses ingredients.
 
 #figure(table(columns: 3,
 table.header([*Intervale de score*],[*Couleur*],[*Niveau d'Impact*]))[score >=0 et score <= 1][#text(green)[Verte]][Faible][score > 1 et score <= 5][#text(orange)[Orange]][Moyen][score >5][#text(red)[Rouge]][Elevé],caption: "Tableau descriptif de l'attribution des couleurs")<couleur>
@@ -224,53 +228,41 @@ Amélioration des suggestions ~
 
 == Statistiques
 
-
-
-#pagebreak()
-
-= Algorithmes (Si il y en a 1 ou 2 d'intéressants)
-
-
 #pagebreak()
 
 = Conclusion
 
+Pour conclure, l'application Crok'eco répond efficacement aux objectifs fixés en permettant aux utilisateurs de s'informer sur l'impact écologique des plats qu'ils consomment. Grâce à son approche collaborative et à l'utilisation de bases de données fiables comme AGRIBALYSE, elle offre une solution innovante et accessible pour sensibiliser le public à l'empreinte carbone de leur alimentation.
+
+Cependant, certaines fonctionnalités prévues n'ont pas pu être implémentées, comme l'intégration de la caméra ou la gestion des comptes utilisateurs. Ces éléments représentent des pistes d'amélioration pour les futures versions de l'application. Malgré ces limitations, le projet a permis de développer des compétences techniques variées, allant de la gestion de bases de données à l'utilisation de frameworks modernes comme Expo.
+
+En somme, ce projet constitue une étape importante dans la sensibilisation écologique et ouvre la voie à de nouvelles opportunités pour améliorer l'impact environnemental de nos choix alimentaires.
 
 #pagebreak()
 
 = Bibliographie
 
-#cite(<ademe>)
 
 #bibliography("works.bib", style: "american-institute-of-aeronautics-and-astronautics")
 
-base ademe : #link("https://base-empreinte.ademe.fr/") \
-site AGRIBALYSE : https://doc.agribalyse.fr/documentation \
-2009/2019 : https://www.insee.fr/fr/statistiques/7728873?sommaire=7728903 \
-22% : https://www.insee.fr/fr/statistiques/7728883?sommaire=7728903 \
 Score unique EF : https://ec.europa.eu/environment/eussd/smgp/index.htm \
-Code ciqual : https://ciqual.anses.fr/
-
 
 
 #outline(
   title: [Tables des figures],
-  target: figure.where(kind: image),
+  target: figure,
 )
 
 
 #pagebreak()
 
 enlever le numero de la pgae d'entete \
-refaire la bibliographie \
 CORRIGER L'ORTHOGRAPHE \
 si on en a besoin
 #footnote[test] \
 partie a finir : 
-+ conclusion
 + statistiques
 + fonctinonalités non implementé
 + design
 + recherche
 + ajout de plat et vote
-+ Modele dynamique
