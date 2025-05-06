@@ -23,7 +23,7 @@ import {
   getRestaurant_Client,
   getUsers,
   updatePlats_Client,
-} from "../utils/acces_bdd.ts";
+} from "../utils/acces_bdd.js";
 import crypto from "crypto";
 import dotenv from "dotenv";
 import path, { dirname } from "path";
@@ -48,9 +48,8 @@ const DO_MAJ_CODE = "3333DOMAJ";
 dotenv.config();
 
 const SECRET_KEY = process.env.SECRET_KEY ?? "";
-// const HOST = '0.0.0.0';
+const HOST = '0.0.0.0';
 // const HOST = '172.24.10.219';
-const HOST = "192.168.1.129";
 const PORT: number = process?.env?.PORT ? parseInt(process.env.PORT) : 3000;
 
 function verifyHMACSignature(
@@ -400,7 +399,6 @@ fastify.post("/api/platsDelete", async (request, reply) => {
 
   try {
     const plats = await getPlats_Client(obj, true, true, 1);
-    const assoc = await getPlats_Ingredients_Client(obj, true, true, false);
     const plat = plats?.at(0);
     const id = plats?.at(0).ID_plat;
     delete plat.ID_plat;
