@@ -187,7 +187,7 @@ Dans cette partie, nous allons decrire et expliquer les différentes parties ain
 
 === Analyse d'un menu <Scan>
 
-Cette fonctionnalité est visible sur la premiere page de notre application, elle consiste, dans un premier temps, à reconnaitre le text contenu sur une image choisie par l'utilisateur depuis sa galerie decrit par la figure @2. Pour cela l'utilisateur appuis sur le bouton *Choisir une image*. Par defaut, il y a une image d'un menu du restaurant administratif, (voir @1). Les images de sa galerie s'affichent puis il clique sur celle qu'il veut analyser. Si une fois les images de la galerie affichées, il (l'utilisateur) ne clique sur aucune image et referme l'affichage, un message d'alert s'affiche indiquant qu'aucune image n'a été selectionné (voir @3), sinon l'image est mise à jour (voir @4).
+Cette fonctionnalité est visible sur la premiere page de notre application, elle consiste, dans un premier temps, à reconnaitre le text contenu sur une image choisie par l'utilisateur depuis sa galerie decrit par la figure @2. Pour cela l'utilisateur appuis sur le bouton *Choisir une image*. Par defaut, il y a une image (voir @1). Les images de sa galerie s'affichent puis il clique sur celle qu'il veut analyser. Si une fois les images de la galerie affichées, il (l'utilisateur) ne clique sur aucune image et referme l'affichage, un message d'alert s'affiche indiquant qu'aucune image n'a été selectionné (voir @3), sinon l'image est mise à jour (voir @4).
 
 *A revoir (update l'image)*
 
@@ -247,14 +247,20 @@ Cette fonctionnalité est implémentée par l'algorithme <algo2> dans la partie 
 === Ajout de plat et vote <add>
 \
 
-Cette page permet à l'utilisateur d'ajouter un plat à la base de données. Pour cela, il doit remplir un formulaire avec le nom du plat, chaque ingredient et la quantité de chaque ingredient dans le plat. Pour ajouter un ingredient, il suffit de commencer par entrer le nom de l'ingredient et une liste deroulante s'affiche avec des ingredients de notre base de données, qui correspondent au nom entré (voir @ing) et il choisit .
+Cette page permet à l'utilisateur d'ajouter un plat à la base de données. Pour cela, il doit remplir un formulaire avec le nom du plat, chaque ingredient et la quantité de chaque ingredient dans le plat. Pour ajouter un ingredient, il suffit de commencer par entrer le nom de l'ingredient et une liste déroulante s'affiche avec des ingredients de notre base de données, qui correspondent au nom entré (voir @ing) et il choisit. Ensuite, il doit entrer la quantité de l'ingredient dans le plat. Une fois cela fait, il doit appuyer sur le bouton *+* pour ajouter l'ingredient à la liste des ingredients du plat. Cette operation est répétable pour chaque ingredient du plat. Chaque ingredient ajouté est affiché avec son nom et sa quantité dans le plat, sur la page. On a la possibilité de supprimer un ingredient en cliquant sur le bouton *Supprimer* à droite de chaque ingredient de la liste (voir @inglist).
 
+#figure(table(columns: 4)[#figure(image("Images/ingredient.png"),caption: "liste ingredient")<ing>][#figure(image("Images/ingredientliste.png"),caption: "Ajout d'un ingredient")<inglist>][#figure(image("Images/addplat.png"),caption: "ajout d'un plat")<ajout>][#figure(image("Images/vote.png"),caption: "ajout d'un plat")<vote>],caption: "Liste des ingredients, ajout d'un ingredient et d'un plat + vote")
+\
 
+Une fois le formulaire rempli, il peut cliquer sur le bouton *Ajouter* pour envoyer les données au serveur. Avant l'envoie des données, on verifie la connection au serveur en fesant un ping. Et si on est connecté, les données sont envoyé et on affiche un message avec le nom du palt et le nombre d'ingredient ajouté (voir @ajout). Sinon, on affiche un message d'erreur : "Erreur de connexion : Veuillez verifier votre connexion au serveur et reessayer".
 
-Il peut aussi ajouter une image du plat. Une fois le formulaire rempli, il peut cliquer sur le bouton *Ajouter* pour envoyer les données au serveur. Le serveur va alors ajouter le plat à la base de données et renvoyer une réponse à l'application pour dire que tout s'est bien passé ou pas. Cette fonctionnalité est implémentée par l'algorithme <algo3> dans la partie <algo> #text(red)[algos].
+Les plats ajoutés et envoyés au serveur sont stockés sur le serveur et sont visibles par tous les utilisateurs de l'application en allant sur la page vote. Ils peuvent aussi voter positivement pour le plat en cliquant sur le pouce bleu ou voter negativement en cliquant sur le pouce rouge (voir @vote). Chaque utilisateur peut voter pour un plat une seule fois. Et il peut voir le nombre de vote qu'a eu un plat (il est affiché. Si l'utilisateur a déjà voté pour le plat, il ne peut plus voter. Le vote est stocké dans la base de données du serveur.
 
-#figure(image("Images/ingredient.png"),caption: "liste ingredient")<ing>
+En cliquant sur le nom du plat, on est redirigé vers la page de détails du plat comme pour les plats depuis la page research (voir @detailsP).
 
+Les plats ajoutés par les utilisateurs pourront être ajoutés à la base de données de l'application si le plat est validé par un administrateur depuis le serveur, de la table des plats ajoutés par les utilisateurs vers la tables de plats definitif de l'application. Une fois cette action effectuée, lors de la mise à jour journaliére, la base de données de l'application sera mise à jour avec les nouveaux plats.
+
+#pagebreak()
 
 === Design <design>
 Nous avons commencé par faire des croquis de l'application sur figma afin de réflechir à quelle fonctinonalité nous allions implémenté. ...
