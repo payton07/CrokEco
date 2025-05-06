@@ -137,8 +137,8 @@ export async function GetPlat_a_Vote(id: string | boolean) {
  * @returns null si erreur, sinon le code de la réponse du fetch (201)
  */
 export async function Ping() {
-  const urll = `http://${IP}:${port}/ping`;
-  // console.log(urll);
+  const urll = `https://${IP}/ping`;
+  console.log(urll);
 
   try {
     const response = await fetch(urll, {
@@ -152,7 +152,6 @@ export async function Ping() {
     const data = await response.json();
     return data.code;
   } catch (error) {
-    // console.error("Erreur lors du ping:", error);
     console.log("Erreur lors du ping:", error);
 
     return null;

@@ -3,7 +3,7 @@ export const port = Constants.expoConfig?.extra?.PORT;
 export const IP = Constants.expoConfig?.extra?.HOST;
 
 export const SECRET_KEY = Constants.expoConfig?.extra?.SECRET_KEY;
-export const url = `http://${IP}:${port}/api/`;
+export const url = `https://${IP}/api/`;
 export const DO_MAJ_CODE = "3333DOMAJ";
 export const good = "#4CAF50";
 export const bad = "red";
