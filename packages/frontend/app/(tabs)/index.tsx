@@ -44,7 +44,7 @@ import {
 
 export default function Index() {
   const [data, setData] = useState<any[]>([]);
-  const imagePath = require("../../assets/ingImages/image12.jpg");
+  const imagePath = require("../../assets/ingImages/imageDefault.jpg");
   const [filled, setFilled] = useState(false);
   const [done, setDone] = useState(false);
   const [imageUri, setImageUri] = useState(

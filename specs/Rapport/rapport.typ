@@ -258,12 +258,16 @@ Nous avons commencé par faire des croquis de l'application sur figma afin de r�
 
 Malgré que l'application soit fonctionnel, plusieurs fonctinonalités non pas pu être implémenté. Ces fonctionnalités non pas été implementé par manque de temps, ou par lacune technique. Nous allons présenter les pistes les plus intéressantes sur lesquels nous pourrions travailler pour une future version de l'application.
 
-Dans la première page du menu, nous souhaitions dans un premier que l'utilisateur puisse choisir entre prendre une photo directement dans l'application ou la séléctionné dans la galerie de son appareil.
+Dans la première page du menu, nous avions envisagé que l'utilisateur puisse choisir entre prendre une photo directement dans l'application ou la séléctionné dans la galerie de son appareil.
+
+Ensuite, il serait vraiment intéressant que les utilisateurs puissent se créer un compte. Cette ajout serait très important avant la publication de l'application pour pouvoir modérer les ajouts de plat ou pour limiter le nombre de vote par plat par utilisateur. Les autres fonctionnalités seraient toujours accesibles sans se créer de compte.
+
+
 
 Caméra
 Localisation
 Compte user
-Amélioration des suggestions 
+Amélioration des suggestions
 
 == Statistiques
 
