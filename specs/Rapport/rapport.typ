@@ -5,7 +5,8 @@
 
 #show : umfds.with(lang: "fr", title: "Crok'eco
 Projet de Programmation 2", authors: ("BATATAY Mallory
-KEGLO Partice",), abstract: "Crok'eco est une application collaborative permettant à chacun de s'informer sur l'imapct écologique d'un plat.", date: "2024 - 2025", department: [Informatique], img: image("Images/logo_vf.png", width: 60%))
+KEGLO Partice",), abstract: "Crok'eco est une application collaborative permettant à chacun de s'informer sur l'imapct écologique d'un plat.", date: "2024 - 2025", department: [Informatique], img: block(clip:true,
+  radius: 20pt, image("Images/logo_vf.png", width: 60%)))
 
 #text(1.5em)[*Remerciements*]
 
@@ -64,7 +65,7 @@ Afin de proposer une solution aux étudiants, dans un premier temps, il serait p
 
 Sinon, nous pourrions afficher le résultat à l'aide d'un QR Code. Le QR Code redirigerait vers une page qui détaillerait l'empreinte carbone de chaque plat.
 
-Cette solution avait déjà été envisagée l'année dernière, mais sans succès, car, comme la première, elle présente un problème. En effet, elle nécessite un accord avec les gérants des restaurants qui sont assez réticents à voir l'impact écologique de leurs plats révélé. #text(red)[De plus, même s'il avait été possible d'avoir l'accord pour les restaurants de la Faculté des Sciences, ces solutions demanderaient énormément d'efforts pour être déployées à l'échelle de la France, car elles nécessiteraient l'accord de chaque restaurant.]
+Ces deux solutions avaient déjà été envisagées l'année dernière, mais sans succès, car, comme la première, elle présente un problème. En effet, elle nécessite un accord avec les gérants des restaurants qui sont assez réticents à voir l'impact écologique de leurs plats révélé. De plus, même s'il avait été possible d'avoir l'accord pour les restaurants de la Faculté des Sciences, ces solutions demanderaient énormément d'efforts pour être déployées à l'échelle de la France, car elles nécessiteraient l'accord de chaque restaurant.
 
 Nous avons donc choisi de faire une application collaborative qui calcule l'impact écologique de tous les plats en scannant leurs noms sur un menu. Le but de cette dernière méthode est de permettre à tout le monde de participer à améliorer l'écologie en rendant l'application collaborative. Cette méthode peut fonctionner dans n'importe quel restaurant traditionnel et peut être étendue au self et cantine scolaire.
 
@@ -133,9 +134,10 @@ Les différentes requêtes présentes sur ce diagramme sont détaillés dans le 
 == Base de données <BDD>
 
 === Recherche <Recherchebdd>
-#let fig1 = figure(image("Images/logoAGRIBALISE.png", width: 45%), caption: "Logo AGRIBALYSE")
+\
+#let fig1 = figure(image("Images/logoAGRIBALISE.png", width: 40%), caption: "Logo AGRIBALYSE")
 #let body = [
-Afin de connaitre l'impact ecologique d'un plat nous avons choisi dans un premier temps de se servir de la base de données fournie par l'ADEME. La base de l'ADEME sur la consommation CO2 est une immense base regroupant tout les types d'emission de gaz à effet de serre tel que celle du au textiles, à l'industrie ou autres, ainsi que toute les emissions liee à l'alimentation.
+Afin de connaitre l'impact ecologique d'un plat nous avons choisi dans un premier temps de se servir de la base de données fournie par l'ADEME. La base de l'ADEME sur la consommation CO2 est une immense base regroupant tout les types d'emission de gaz à effet de serre tel que celle du au textiles, à l'industrie ou autres, ainsi que toute les emissions liée à l'alimentation.
 
 En inspectant la base de données nous avons remarqué que toutes les informations liée à la nourriture provenait de deux bases de données qui sont AGRIBALYSE et AGRIBALYSE 2.0. AGRIBALYSE est un programme collectif et innovant qui met à disposition des données de référence sur les impacts environnementaux des produits agricoles et alimentaires à travers une base de données construite selon la méthodologie des Analyses du Cycle de Vie. Il est possible de se servir du site web d'AGRIBALYSE pour connaitre l'impact environnemental d'un aliment ou bien de télécharger leur base de données.]
 
@@ -151,11 +153,13 @@ qui sert d'indetifiant unique.
 
 Pour connaitre le poids de chaque aliment dans un plat et pour remplir la table sql des plats nous avons choisi de faire confiance au utilisateur de l'application. Une page de l'application permet d'enregistrer la composition d'un plat (voir @add). Connaissant le poids de chaque aliment et son impact écologique, il devient alors possible de calculer l’impact environnemental de chaque ingrédient au sein d’un plat, mais également l’impact écologique global du plat lui-même. Pour cela, on doit donc realisé la somme de l'impact de chaque ingredient dans le palt et faire un produit en croix pour le ramener à un kilogramme de nourriture.
 
-=== Modélisation <Modelisation>
+#pagebreak()
 
+=== Modélisation <Modelisation>
+\
 Pour l'application nous avions besoin d'une base de données regroupant d'une part les informations du CSV fournit par AGRIBALYSE ainsi que les nouvelles données tel que les plats ou les menus.
 
-#figure(image("Images/E_A.png"), caption: "Schéma du modèle Entité Association de la base de données final") <EA>
+#figure(image("Images/EA.svg", width:100%), caption: "Schéma du modèle Entité Association de la base de données final") <EA>
 
 Nous avons donc défnini un modèle Entité-Association (E-A) afin de représenter la structure de notre base de données. La @EA met en évidence les différentes tables que comporte la base ainsi que les liaisons entre elles.
 
@@ -164,9 +168,9 @@ Les données que nous récupérons via la le fichier Excel sont rangés dans la 
 Ensuite, les plats sont composé de plusieurs ingredients et un ingredient peut être présent dans plusieurs plat. On a donc une table intermediaire entre les plats et les ingredients. Cette table est composé d'une clé étrangère menant vers l'ID des ingredients 
 
 Après avoir modéliser les deux bases de données, on rédige leur structure dans un fichier .sql qui servira pour leurs implémentations (voir @Implémentation).
-
+#pagebreak()
 === Implémentation <Implémentation>
-
+\
 Afin de convertir les données d'AGRIBALYSE dans notre base de données décrites dans la partie précedente, nous avons choisi de coder un programme Python. Le but du programme est de créer à partir de 0 la base de données.
 
 Pour cela, on commence par créer le fichier qui contiendra la base de données. Ce fichier aura une extension .db et s'il était déjà existant, il est remplacé. Ensuite on importe le fichier .sql contenant l'agencement des tables décrit dans la partie Modélisation(voir @Modelisation). Cela permet d'initialiser toutes les tables mais elles sont encores vides.
@@ -176,7 +180,7 @@ Ensuite, il faut remplir trois tables avec les données fournies par AGRIBALYSE.
 Ce programme permet à la fois de créer la base de données pour l'application de l'utilisateur et pour le serveur. La seule différence entre les deux tables et qu'on utilise pas le même fichier .sql.
 
 Avec ce programme Python, si la base de données d'AGRIBALYSE venait à être mise à jour, il suffirait d'exucter le programme pour obtenir la nouvelle base. Une amélioration possible pour ce programme serait de récupérer les autres données des anciennes bases pour les rajouter aux nouvelles.
-
+#pagebreak()
 == Application utilisateur <userApp>
 
 Dans cette partie, nous allons decrire et expliquer les différentes parties ainsi que les différentes fonctionnalités implementées tout en montrant leur fonctionnement avec des images. 
@@ -187,10 +191,11 @@ Cette fonctionnalité est visible sur la premiere page de notre application, ell
 
 *A revoir (update l'image)*
 
-L'utilisateur, peut rentrer le nom du restaurant dont il va analyser le menu ainsi que l'adresse s'il l'a. Ces deux informations ne sont pas obligatoires.
 
 #figure(table(columns: 3)[#figure(image("Images/scanpage.png",width: auto,height: 300pt),caption: "page scan")<1>][#figure(image("Images/selectImage.png",width: auto,height: 300pt),caption: "Choisir une photo")<2>][#figure(image("Images/ImageNotselected.png",width: auto,height: 300pt),caption: "image non selectionné")<3>],caption: "Analyse menu")
 \
+L'utilisateur, peut rentrer le nom du restaurant dont il va analyser le menu ainsi que l'adresse s'il l'a. Ces deux informations ne sont pas obligatoires.
+
 Une fois ceci fait, il peut cliquer sur le bouton *Analyser*. On effectue l'analyse textuelle de l'image et on recupere le nom des plats du menu ou du moins le texte reconnu. Une fois les noms recuperés, on verifie pour chaque plat, s'il existe dans notre base de données pour pouvoir ensuite recuperer la liste des ingredients, leurs quantités dans le plat et effectuer le calcule de score. En fonction du score du plat, on lui attribue une couleur qui sera la même que celle de la pastille qui sera affiche pour ce plat, comme l'indique le @couleur.
 
 
@@ -212,7 +217,7 @@ Avant l'affichage du texte ou des plats reconnu(s), les informations renseignée
 
 Après l'analyse, on affiche la liste des plats avec une pastille en forme d'etoile juste devant le nom ayant une couleur descriptif de l'impact ecologique du plat comme l'indique la @5. Quand un plat n'existe pas dans notre base de données, l'etoile est de couleur noire.
 
-On peut cliquer sur chaque ligne ou plat. Et si le plat existe dans notre base de données, on est reconduit sur une autre page affichant les informations du plat ainsi que les differents ingredients qui le composent avec leur pourcentage comme decrit la @detailsP. Si Le plat n'existe pas, alors le message : "Ce plat n'existe pas dans nos données. Vous pouvez l'ajouter en allant sur la page d'ajout" dont nous parlons plus tard dans la partie @add, est affiché (voir @alert).
+On peut cliquer sur chaque ligne ou plat. Et si le plat existe dans notre base de données, on est reconduit sur une autre page affichant les informations du plat ainsi que les differents ingredients qui le composent avec leur pourcentage comme decrit la @detailsP. Si Le plat n'existe pas, alors le message : "Ce plat n'existe pas dans nos données. Vous pouvez l'ajouter en allant sur la page d'ajout" dont nous parlons plus tard dans le @add, est affiché (voir @alert).
 \
 
 #figure(table(columns: 2)[#figure(image("Images/AlertImage.png"),caption: "Page avec infos sur le plat")<detailsP>][#figure(image("Images/AlertImage.png"),caption: "Message ")<alert>],caption: "Page de details d'un plat et alert si le plat n'existe pas dans la base de données")
@@ -288,7 +293,6 @@ Enfin, ce projet nous a permis de mettre en pratique nos connaissances acquises 
 
 #pagebreak()
 
-enlever le numero de la pgae d'entete \
 CORRIGER L'ORTHOGRAPHE \
 si on en a besoin
 #footnote[test] \
@@ -298,3 +302,9 @@ partie a finir :
 + design
 + recherche
 + ajout de plat et vote
+
+
+#grid(columns: 2, gutter: -30pt)[Afin de connaitre l'impact ecologique d'un plat nous avons choisi dans un premier temps de se servir de la base de données fournie par l'ADEME. La base de l'ADEME sur la consommation CO2 est une immense base regroupant tout les types d'emission de gaz à effet de serre tel que celle du au textiles, à l'industrie ou autres, ainsi que toute les emissions liee à l'alimentation.
+][#figure(image("Images/logoAGRIBALISE.png", width: 50%), caption: "Logo AGRIBALYSE")]
+
+En inspectant la base de données nous avons remarqué que toutes les informations liée à la nourriture provenait de deux bases de données qui sont AGRIBALYSE et AGRIBALYSE 2.0. AGRIBALYSE est un programme collectif et innovant qui met à disposition des données de référence sur les impacts environnementaux des produits agricoles et alimentaires à travers une base de données construite selon la méthodologie des Analyses du Cycle de Vie. Il est possible de se servir du site web d'AGRIBALYSE pour connaitre l'impact environnemental d'un aliment ou bien de télécharger leur base de données.
