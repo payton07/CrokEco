@@ -2,6 +2,7 @@ import pandas as pd
 from math import isnan
 import sqlite3
 import os
+import bcrypt
 
 INPUT_FILE = "../assets/AGRIBALYSE_v2.xlsx"
 COMPARE_FILE = "../assets/Agribalyse_Detail_ingredient.csv"

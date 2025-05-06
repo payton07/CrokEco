@@ -240,7 +240,15 @@ On a aussi tout en haut à gauche de la page, un bouton de menu qui permet d'aff
 Cette fonctionnalité est implémentée par l'algorithme <algo2> dans la partie <algo> #text(red)[algos].
 
 === Ajout de plat et vote <add>
+\
 
+Cette page permet à l'utilisateur d'ajouter un plat à la base de données. Pour cela, il doit remplir un formulaire avec le nom du plat, chaque ingredient et la quantité de chaque ingredient dans le plat. Pour ajouter un ingredient, il suffit de commencer par entrer le nom de l'ingredient et une liste deroulante s'affiche avec des ingredients de notre base de données, qui correspondent au nom entré (voir @ing) et il choisit .
+
+
+
+Il peut aussi ajouter une image du plat. Une fois le formulaire rempli, il peut cliquer sur le bouton *Ajouter* pour envoyer les données au serveur. Le serveur va alors ajouter le plat à la base de données et renvoyer une réponse à l'application pour dire que tout s'est bien passé ou pas. Cette fonctionnalité est implémentée par l'algorithme <algo3> dans la partie <algo> #text(red)[algos].
+
+#figure(image("Images/ingredient.png"),caption: "liste ingredient")<ing>
 
 
 === Design <design>
