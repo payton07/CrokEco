@@ -189,8 +189,6 @@ Dans cette partie, nous allons decrire et expliquer les différentes parties ain
 
 Cette fonctionnalité est visible sur la premiere page de notre application, elle consiste, dans un premier temps, à reconnaitre le text contenu sur une image choisie par l'utilisateur depuis sa galerie decrit par la figure @2. Pour cela l'utilisateur appuis sur le bouton *Choisir une image*. Par defaut, il y a une image (voir @1). Les images de sa galerie s'affichent puis il clique sur celle qu'il veut analyser. Si une fois les images de la galerie affichées, il (l'utilisateur) ne clique sur aucune image et referme l'affichage, un message d'alert s'affiche indiquant qu'aucune image n'a été selectionné (voir @3), sinon l'image est mise à jour (voir @4).
 
-*A revoir (update l'image)*
-
 
 #figure(table(columns: 3)[#figure(image("Images/scanpage.png",width: auto,height: 300pt),caption: "page scan")<1>][#figure(image("Images/selectImage.png",width: auto,height: 300pt),caption: "Choisir une photo")<2>][#figure(image("Images/ImageNotselected.png",width: auto,height: 300pt),caption: "image non selectionné")<3>],caption: "Analyse menu")
 \
@@ -208,6 +206,7 @@ Le score d'un plat est la somme des Score unique EF
 #figure(table(columns: 3,
 table.header([*Intervale de score*],[*Couleur*],[*Niveau d'Impact*]))[score >=0 et score <= 1][#text(green)[Verte]][Faible][score > 1 et score <= 5][#text(orange)[Orange]][Moyen][score >5][#text(red)[Rouge]][Elevé][Plat non reconnu][Noire][-],caption: "Tableau descriptif de l'attribution des couleurs")<couleur>
 \
+*A revoir (update l'image de maj image)*
 
 #figure(table(columns: 2)[#figure(image("Images/platReconnu.png",width:auto,height: 300pt),caption: "Mise à jour de l'image")<4>][#figure(image("Images/platReconnu.png",width:auto,height: 300pt),caption: "Après analyse d'un menu")<5>],caption: "Update image et resultat de l'analyse")
 
@@ -219,6 +218,8 @@ Après l'analyse, on affiche la liste des plats avec une pastille en forme d'eto
 
 On peut cliquer sur chaque ligne ou plat. Et si le plat existe dans notre base de données, on est reconduit sur une autre page affichant les informations du plat ainsi que les differents ingredients qui le composent avec leur pourcentage comme decrit la @detailsP. Si Le plat n'existe pas, alors le message : "Ce plat n'existe pas dans nos données. Vous pouvez l'ajouter en allant sur la page d'ajout" dont nous parlons plus tard dans le @add, est affiché (voir @alert).
 \
+
+*ICI image de infos sur plats à modif*
 
 #figure(table(columns: 2)[#figure(image("Images/AlertImage.png"),caption: "Page avec infos sur le plat")<detailsP>][#figure(image("Images/AlertImage.png"),caption: "Message ")<alert>],caption: "Page de details d'un plat et alert si le plat n'existe pas dans la base de données")
 
@@ -239,15 +240,18 @@ La deuxième partie (Favoris) est une liste de plats existant dans notre base de
 
 La troisième partie (Suggestions) est une liste de plats existant dans notre base de donnée et qui sont les moins polluants (voir @list). En cliquant sur un plat, on est redirigé vers la page de détails du plat (voir @detailsP).
 
-#figure(table(columns: 3)[#figure(image("Images/recherche.png",width: auto,height: 300pt),caption: "Page de recherche")<rech>][#figure(image("Images/Fav-suggest.png",width: auto,height: 300pt),caption: "Liste déroulante")<list>][#figure(image("Images/side-menu.png"),caption:"Side-menu")],caption: "Page de recherche et liste déroulante et side-menu")
+#figure(table(columns: 3)[#figure(image("Images/recherche.png",width: auto,height: 300pt),caption: "Liste déroulante")<rech>][#figure(image("Images/Fav-suggest.png",width: auto,height: 300pt),caption: "Page de recherche")<list>][#figure(image("Images/side-menu.png"),caption:"Side-menu")],caption: "Page de recherche et liste déroulante et side-menu")
 
 On a aussi tout en haut à gauche de la page, un bouton de menu qui permet d'afficher un side-menu. Ce menu permet d'avoir accès deux fonctinonalités de l'application. La première est la possibilité de vider le cache de l'application grace au bouton *Vider le cache*. En effet, l'application stocke les données permettant de faire l'affiche de cette page, dans le cache de l'appareil, pour permettre la fluidité de l'affichage et d'eviter de nombreuses requetes à la base de données. Il est donc possible de vider le cache pour libérer de la place sur l'appareil. La deuxième fonctionnalité est la possibilité de faire une demande de mise à jour des données de l'application manuellement grace à un bouton *Demande de MàJ*, même si la mise à jour se fait automatiquement une fois par jour, lorsque l'utilisateur est connecté à internet. En cliquant sur ce bouton, on envoie une requête au serveur pour lui demander de mettre à jour les données de l'application. Le serveur va alors envoyer une réponse à l'application avec les données qui manquent s'il y en a. Sinon, juste une réponse pour dire que tout est à jour.
 Cette fonctionnalité est implémentée par l'algorithme <algo2> dans la partie <algo> #text(red)[algos].
 
 === Ajout de plat et vote <add>
+
+Cette page permet à l'utilisateur d'ajouter un plat à la base de données. Pour cela, il doit remplir un formulaire avec le nom du plat, chaque ingredient et la quantité de chaque ingredient dans le plat. Pour ajouter un ingredient, il suffit de commencer par entrer le nom de l'ingredient et une liste déroulante s'affiche avec des ingredients de notre base de données, qui correspondent au nom entré (voir @ing) et il choisit. Ensuite, il doit entrer la quantité de l'ingredient dans le plat. Une fois cela fait, il doit appuyer sur le bouton *+* pour ajouter l'ingredient à la liste des ingredients du plat. Cette operation est répétable pour chaque ingredient du plat. 
 \
 
-Cette page permet à l'utilisateur d'ajouter un plat à la base de données. Pour cela, il doit remplir un formulaire avec le nom du plat, chaque ingredient et la quantité de chaque ingredient dans le plat. Pour ajouter un ingredient, il suffit de commencer par entrer le nom de l'ingredient et une liste déroulante s'affiche avec des ingredients de notre base de données, qui correspondent au nom entré (voir @ing) et il choisit. Ensuite, il doit entrer la quantité de l'ingredient dans le plat. Une fois cela fait, il doit appuyer sur le bouton *+* pour ajouter l'ingredient à la liste des ingredients du plat. Cette operation est répétable pour chaque ingredient du plat. Chaque ingredient ajouté est affiché avec son nom et sa quantité dans le plat, sur la page. On a la possibilité de supprimer un ingredient en cliquant sur le bouton *Supprimer* à droite de chaque ingredient de la liste (voir @inglist).
+Chaque ingredient ajouté est affiché avec son nom et sa quantité dans le plat, sur la page. On a la possibilité de supprimer un ingredient en cliquant sur le bouton *Supprimer* à droite de chaque ingredient de la liste (voir @inglist).
+\
 
 #figure(table(columns: 4)[#figure(image("Images/ingredient.png"),caption: "liste ingredient")<ing>][#figure(image("Images/ingredientliste.png"),caption: "Ajout d'un ingredient")<inglist>][#figure(image("Images/addplat.png"),caption: "ajout d'un plat")<ajout>][#figure(image("Images/vote.png"),caption: "ajout d'un plat")<vote>],caption: "Liste des ingredients, ajout d'un ingredient et d'un plat + vote")
 \
