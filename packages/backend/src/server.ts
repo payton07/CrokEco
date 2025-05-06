@@ -23,7 +23,7 @@ import {
   getRestaurant_Client,
   getUsers,
   updatePlats_Client,
-} from "../utils/acces_bdd.js";
+} from "../utils/acces_bdd.ts";
 import crypto from "crypto";
 import dotenv from "dotenv";
 import path, { dirname } from "path";
@@ -49,7 +49,6 @@ dotenv.config();
 
 const SECRET_KEY = process.env.SECRET_KEY ?? "";
 const HOST = '0.0.0.0';
-// const HOST = '172.24.10.219';
 const PORT: number = process?.env?.PORT ? parseInt(process.env.PORT) : 3000;
 
 function verifyHMACSignature(
@@ -124,7 +123,8 @@ fastify.post("/login", async (request, reply) => {
   try {
     // Récupère les utilisateurs (supposons que getUsers() retourne une liste d'objets utilisateurs)
     const res1 = await getUsers(false, true, true, false);
-
+    console.log(res1);
+    
     // Si l'utilisateur est trouvé et que le nom correspond
     if (res1 !== undefined && nom === res1.at(0).Nom) {
       // Utilisation de la version asynchrone de bcrypt.compare avec await
@@ -193,7 +193,7 @@ fastify.get("/api/platsClient", async (request, reply) => {
     }
 
     if (data == undefined || data.length == 0) {
-      return reply.status(404).send({ error: "Pas de plats client" });
+      return reply.status(404).send({plats:JSON.stringify([])});  
     }
     return reply.send({plats:JSON.stringify(data),assocs : JSON.stringify(dico_assoc)});
   } catch (err) {

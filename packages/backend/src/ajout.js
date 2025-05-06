@@ -1,19 +1,24 @@
 
-const HOST = '0.0.0.0';
+const HOST = '127.0.0.1';
 const PORT = 3000;
 const IP = HOST;
 const port = PORT;
 const url = `http://${IP}:${port}/api/platsClient`;
 async function fetchPlats() {
-    const response = await fetch(url);
+    const response = await fetch(url,{
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
     const plats = await response.json();
+    const Obj = JSON.parse(plats)
     console.log("les plats",plats);
     
     
     const tableBody = document.getElementById("platsTable");
     tableBody.innerHTML = "";
 
-    plats.forEach(plat => {
+    if(Obj?.plats?.length !== 0) {
+    Obj.plats.forEach(plat => {
         console.log(plat);
         
         const row = document.createElement("tr");
@@ -26,6 +31,7 @@ async function fetchPlats() {
         `;
         tableBody.appendChild(row);
     });
+    }
 }
 
 async function ajouterPlat(id) {

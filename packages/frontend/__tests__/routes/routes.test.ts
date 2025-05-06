@@ -175,7 +175,6 @@ describe('Fonctions API', () => {
 
   it('doit retourner null si la requête Ping échoue', async () => {
     (fetch as jest.Mock).mockRejectedValueOnce(new Error('Erreur réseau'));
-    // const Ping = jest.fn().mockResolvedValue(null);
     const result = await Ping();
     expect(result).toBeNull();
   });
