@@ -31,6 +31,12 @@ RUN npm install --only=production
 # Copier les fichiers buildés depuis l'étape précédente
 COPY --from=build /backend/dist ./dist
 
+COPY ./src/accueil.html ./dist/src/accueil.html
+COPY ./src/ajout.html ./dist/src/ajout.html
+
+COPY ./src/connect.js ./dist/src/connect.js
+COPY ./src/ajout.js ./dist/src/ajout.js
+
 # Copier la base de données SQLite dans le conteneur
 COPY ./bdd_doc/ingredient_carbon_score.db ./dist/bdd_doc/ingredient_carbon_score.db
 

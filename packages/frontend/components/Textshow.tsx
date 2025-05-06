@@ -16,7 +16,7 @@ export default function Textshow({
 }) {
   function call() {
     if (ligne.id === null) {
-      Alert.alert("Ce plat n'existe pas dans nos données");
+      Alert.alert("Ce plat n'existe pas dans nos données.\nVeuillez l'ajouter sur la page d'ajout",);
       return;
     }
     switchToDetails(ligne.id);

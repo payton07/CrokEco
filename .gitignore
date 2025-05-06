@@ -17,7 +17,7 @@ packages/frontend/*
 !packages/frontend/app.config.js
 !packages/frontend/metro.config.js
 !packages/frontend/__tests__
-*.db
+!*.db
 !*.typ
 !*.md
 packages/backend/*

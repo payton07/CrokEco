@@ -183,14 +183,14 @@ Dans cette partie, nous allons decrire et expliquer les différentes parties ain
 
 === Analyse d'un menu <Scan>
 
-Cette fonctionnalité est visible sur la premiere page de notre application, elle consiste, dans un premier temps, à reconnaitre le text contenu sur une image choisie par l'utilisateur depuis sa galerie decrit par la figure @2. Pour cela l'utilisateur appuis sur le bouton *Choisir une image*. Par defaut, il y a une image d'un menu du restaurant administratif, confer @1. Les images de sa galerie s'affichent puis il clique sur celle qu'il veut analyser. Si une fois les images de la galerie affichées, il (l'utilisateur) ne clique sur aucune image et referme l'affichage, un message d'alert s'affiche indiquant qu'aucune image n'a été selectionné confer @3, sinon l'image est mise à jour confer @4.
+Cette fonctionnalité est visible sur la premiere page de notre application, elle consiste, dans un premier temps, à reconnaitre le text contenu sur une image choisie par l'utilisateur depuis sa galerie decrit par la figure @2. Pour cela l'utilisateur appuis sur le bouton *Choisir une image*. Par defaut, il y a une image d'un menu du restaurant administratif, (voir @1). Les images de sa galerie s'affichent puis il clique sur celle qu'il veut analyser. Si une fois les images de la galerie affichées, il (l'utilisateur) ne clique sur aucune image et referme l'affichage, un message d'alert s'affiche indiquant qu'aucune image n'a été selectionné (voir @3), sinon l'image est mise à jour (voir @4).
 
 *A revoir (update l'image)*
 
 L'utilisateur, peut rentrer le nom du restaurant dont il va analyser le menu ainsi que l'adresse s'il l'a. Ces deux informations ne sont pas obligatoires.
 
 #figure(table(columns: 3)[#figure(image("Images/scanpage.png",width: auto,height: 300pt),caption: "page scan")<1>][#figure(image("Images/selectImage.png",width: auto,height: 300pt),caption: "Choisir une photo")<2>][#figure(image("Images/ImageNotselected.png",width: auto,height: 300pt),caption: "image non selectionné")<3>],caption: "Analyse menu")
-
+\
 Une fois ceci fait, il peut cliquer sur le bouton *Analyser*. On effectue l'analyse textuelle de l'image et on recupere le nom des plats du menu ou du moins le texte reconnu. Une fois les noms recuperés, on verifie pour chaque plat, s'il existe dans notre base de données pour pouvoir ensuite recuperer la liste des ingredients, leurs quantités dans le plat et effectuer le calcule de score. En fonction du score du plat, on lui attribue une couleur qui sera la même que celle de la pastille qui sera affiche pour ce plat, comme l'indique le @couleur.
 
 
@@ -198,19 +198,50 @@ Le score d'un plat est la somme des Score unique EF
 #cite(<ef>)
 (EF = Environmental Footprint) = Somme (impact catégorie $*$ facteur de pondération) de chacun de ses ingredients.
 
+
+\
 #figure(table(columns: 3,
-table.header([*Intervale de score*],[*Couleur*],[*Niveau d'Impact*]))[score >=0 et score <= 1][#text(green)[Verte]][Faible][score > 1 et score <= 5][#text(orange)[Orange]][Moyen][score >5][#text(red)[Rouge]][Elevé],caption: "Tableau descriptif de l'attribution des couleurs")<couleur>
-\
-Apres l'analyse, on affiche la liste des plats avec une pastille en forme d'etoile juste devant le nom ayant une couleur descriptif de l'impact ecologique du plat comme l'indique la @5. 
-\
+table.header([*Intervale de score*],[*Couleur*],[*Niveau d'Impact*]))[score >=0 et score <= 1][#text(green)[Verte]][Faible][score > 1 et score <= 5][#text(orange)[Orange]][Moyen][score >5][#text(red)[Rouge]][Elevé][Plat non reconnu][Noire][-],caption: "Tableau descriptif de l'attribution des couleurs")<couleur>
 \
 
-#figure(table(columns: 2)[#figure(image("Images/platReconnu.png",width:auto,height: 300pt),caption: "Mise à jour de l'image")<4>][#figure(image("Images/platReconnu.png",width:auto,height: 300pt),caption: "Apres analyse d'un menu")<5>],caption: "Update image et resultat de l'analyse")
+#figure(table(columns: 2)[#figure(image("Images/platReconnu.png",width:auto,height: 300pt),caption: "Mise à jour de l'image")<4>][#figure(image("Images/platReconnu.png",width:auto,height: 300pt),caption: "Après analyse d'un menu")<5>],caption: "Update image et resultat de l'analyse")
+
+\
+
+Avant l'affichage du texte ou des plats reconnu(s), les informations renseignées sont stockées dans la base de données locale de l'application. Ces données sont aussi envoyées au serveur si l'utilisateur est connecté à internet et donc au serveur ou attend qu'il le soit pour les envoyées. Cette fonctionnalité est implementée par l'algorithme <algo1> dans la partie <algo> #text(red)[algos]. 
+
+Après l'analyse, on affiche la liste des plats avec une pastille en forme d'etoile juste devant le nom ayant une couleur descriptif de l'impact ecologique du plat comme l'indique la @5. Quand un plat n'existe pas dans notre base de données, l'etoile est de couleur noire.
+
+On peut cliquer sur chaque ligne ou plat. Et si le plat existe dans notre base de données, on est reconduit sur une autre page affichant les informations du plat ainsi que les differents ingredients qui le composent avec leur pourcentage comme decrit la @detailsP. Si Le plat n'existe pas, alors le message : "Ce plat n'existe pas dans nos données. Vous pouvez l'ajouter en allant sur la page d'ajout" dont nous parlons plus tard dans la partie @add, est affiché (voir @alert).
+\
+
+#figure(table(columns: 2)[#figure(image("Images/AlertImage.png"),caption: "Page avec infos sur le plat")<detailsP>][#figure(image("Images/AlertImage.png"),caption: "Message ")<alert>],caption: "Page de details d'un plat et alert si le plat n'existe pas dans la base de données")
 
 #pagebreak()
+=== Historique <Historique>
+\
+Sur cette page, on retrouve tous les menus que l'utilisateur a scanné. Pour cela on recupere stockées dans la base de données locale de l'application (voir @menuHisto). On peut aussi les trier par date, du plus anciens au plus recents ou et vice versa (voir @histo2 et @histo1). En cliquant sur un menu, on est redirigé vers la page de détails du plat (voir @detailsP).
+
+#figure(table(columns: 3)[#figure(image("Images/menuHisto.png",width: auto,height: 300pt),caption: "Un menu de la page Historique")<menuHisto>][#figure(image("Images/historique1.png",width: auto,height: 300pt),caption: "Historique")<histo1>][#figure(image("Images/historique2.png",width: auto,height: 300pt),caption: "Tri par date")<histo2>],caption: "Historique des plats scannés")
+
 === Recherche <Recherche>
 
+#h(1em) Cette page est constuié de 3 parties. 
+
+La première partie est un champ de recherche qui permet de rechercher un plat dans la base de données. Il suffit de commencer par taper le nom du plat et une liste déroulante s'affiche avec les plats existant dans notre base de données et qui correspondent à la recherche (voir @rech). En cliquant sur un plat, on est redirigé vers la page de détails du plat (voir @detailsP).
+
+La deuxième partie (Favoris) est une liste de plats existant dans notre base de données et qui sont les plus recherchés par les utilisateurs (voir @list). En cliquant sur un plat, on est redirigé vers la page de détails du plat (voir @detailsP).
+
+La troisième partie (Suggestions) est une liste de plats existant dans notre base de donnée et qui sont les moins polluants (voir @list). En cliquant sur un plat, on est redirigé vers la page de détails du plat (voir @detailsP).
+
+#figure(table(columns: 3)[#figure(image("Images/recherche.png",width: auto,height: 300pt),caption: "Page de recherche")<rech>][#figure(image("Images/Fav-suggest.png",width: auto,height: 300pt),caption: "Liste déroulante")<list>][#figure(image("Images/side-menu.png"),caption:"Side-menu")],caption: "Page de recherche et liste déroulante et side-menu")
+
+On a aussi tout en haut à gauche de la page, un bouton de menu qui permet d'afficher un side-menu. Ce menu permet d'avoir accès deux fonctinonalités de l'application. La première est la possibilité de vider le cache de l'application grace au bouton *Vider le cache*. En effet, l'application stocke les données permettant de faire l'affiche de cette page, dans le cache de l'appareil, pour permettre la fluidité de l'affichage et d'eviter de nombreuses requetes à la base de données. Il est donc possible de vider le cache pour libérer de la place sur l'appareil. La deuxième fonctionnalité est la possibilité de faire une demande de mise à jour des données de l'application manuellement grace à un bouton *Demande de MàJ*, même si la mise à jour se fait automatiquement une fois par jour, lorsque l'utilisateur est connecté à internet. En cliquant sur ce bouton, on envoie une requête au serveur pour lui demander de mettre à jour les données de l'application. Le serveur va alors envoyer une réponse à l'application avec les données qui manquent s'il y en a. Sinon, juste une réponse pour dire que tout est à jour.
+Cette fonctionnalité est implémentée par l'algorithme <algo2> dans la partie <algo> #text(red)[algos].
+
 === Ajout de plat et vote <add>
+
+
 
 === Design <design>
 Nous avons commencé par faire des croquis de l'application sur figma afin de réflechir à quelle fonctinonalité nous allions implémenté. ...
