@@ -162,7 +162,7 @@ describe('Fonctions API', () => {
 
     const result = await Ping();
     expect(fetch).toHaveBeenCalledWith(
-      `http://${IP}:${port}/ping`,
+      `https://${IP}/ping`,
       {
         method: "GET",
         headers: {
