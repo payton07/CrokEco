@@ -53,7 +53,7 @@ Entre 2009 et 2019, la quantité de viande consommée a baissé de 5 % en France
 . On constate donc une volonté en France de consommer plus écologiquement, et la demande concernant des applications permettant de se renseigner devient de plus en plus grande. On note également une augmentation de projets allant dans ce sens, que ce soit avec la nourriture mais également d'autres produits du quotidien comme les cosmétiques et les textiles, qui sont des domaines eux aussi très polluants.
 
 #figure(image("Images/repas.png", width: 90%), caption: [Emission de kg de CO2 en fonction du type de rapas\ 
-Source: ADEME #cite(<ademe>)])
+Source: ADEME #cite(<ademe>)], kind:"fig", supplement: "Image")
 
 == Approche du sujet
 \
@@ -77,7 +77,7 @@ Nous avons donc choisi de faire une application collaborative qui calcule l'impa
 
 Globalement, le temps estimé pour chaque étapes du projet a été respecté selon nos prévisions, à part pour la base données que nous avons dû retravailler au cours du projet à cause du manque de pertinence des données, ce qui a necessité une réadaptation du code de différentes parties de l'application.
 
-#figure(image("Images/Diagramme de Gantt.png",height: 40%, width: 90%), caption: "Diagramme de Gantt")
+#figure(image("Images/Diagramme de Gantt.png",height: 40%, width: 90%), caption: "Diagramme de Gantt", kind:"fig", supplement: "Image")
 <diagGant>
 
 #pagebreak()
@@ -112,7 +112,7 @@ Les données que nous utilisons pour notre base de données proviennent toutes d
 
 == Architectures de l'application
 
-#figure(image("Images/Architecture de l'application.png"), caption: "Architecture de l'application") <Architecture>
+#figure(image("Images/Architecture de l'application.png"), caption: "Architecture de l'application", kind:"fig", supplement: "Image") <Architecture>
 
 La @Architecture illustre l'architecture de notre application du point de vue de l'utilisateur.
 L'application s'organise autour de la barre de navigation qui permet d'atteindre les 5 pages principales (Scan, Historique, Recherche, Votes, add). Ces 5 pages peuvent être redivisé en 2 catégories. Les pages permettant de rechercher et d'afficher la composition d'un plat et la partie permettant d'ajouter un plat à la base de données .
@@ -123,7 +123,7 @@ Dans la partie de recherche et d'affichage de plat on retrouve dans un premier t
 
 Lorsque l'utilisateur se sert de l'application, celle-ci communique avec le serveur afin de traiter les requêtes émises. Le diagramme de séquence(@diagramme) ci-dessous illustre les échanges entre l'application et le serveur en fonction des actions réalisé par l'utilisateur.
 
-#figure(image("Images/Diagramme de séquence.png"), caption:"Diagramme de séquence") <diagramme>
+#figure(image("Images/Diagramme de séquence.png"), caption:"Diagramme de séquence", kind:"fig", supplement: "Image") <diagramme>
 
 Les différentes requêtes présentes sur ce diagramme sont détaillés dans le @userApp.
 
@@ -135,7 +135,7 @@ Les différentes requêtes présentes sur ce diagramme sont détaillés dans le 
 
 === Recherche <Recherchebdd>
 \
-#let fig1 = figure(image("Images/logoAGRIBALISE.png", width: 40%), caption: "Logo AGRIBALYSE")
+#let fig1 = figure(image("Images/logoAGRIBALISE.png", width: 40%), caption: "Logo AGRIBALYSE", kind:"fig", supplement: "Image")
 #let body = [
 Afin de connaitre l'impact ecologique d'un plat nous avons choisi dans un premier temps de se servir de la base de données fournie par l'ADEME. La base de l'ADEME sur la consommation CO2 est une immense base regroupant tout les types d'emission de gaz à effet de serre tel que celle du au textiles, à l'industrie ou autres, ainsi que toute les emissions liée à l'alimentation.
 
@@ -159,7 +159,7 @@ Pour connaitre le poids de chaque aliment dans un plat et pour remplir la table 
 \
 Pour l'application nous avions besoin d'une base de données regroupant d'une part les informations du CSV fournit par AGRIBALYSE ainsi que les nouvelles données tel que les plats ou les menus.
 
-#figure(image("Images/EA.svg", width:100%), caption: "Schéma du modèle Entité Association de la base de données final") <EA>
+#figure(image("Images/EA.svg", width:100%), caption: "Schéma du modèle Entité Association de la base de données final", kind:"fig", supplement: "Image") <EA>
 
 Nous avons donc défnini un modèle Entité-Association (E-A) afin de représenter la structure de notre base de données. La @EA met en évidence les différentes tables que comporte la base ainsi que les liaisons entre elles.
 
@@ -190,7 +190,7 @@ Dans cette partie, nous allons decrire et expliquer les différentes parties ain
 Cette fonctionnalité est visible sur la premiere page de notre application, elle consiste, dans un premier temps, à reconnaitre le text contenu sur une image choisie par l'utilisateur depuis sa galerie decrit par la figure @2. Pour cela l'utilisateur appuis sur le bouton *Choisir une image*. Par defaut, il y a une image (voir @1). Les images de sa galerie s'affichent puis il clique sur celle qu'il veut analyser. Si une fois les images de la galerie affichées, il (l'utilisateur) ne clique sur aucune image et referme l'affichage, un message d'alert s'affiche indiquant qu'aucune image n'a été selectionné (voir @3), sinon l'image est mise à jour (voir @4).
 
 
-#figure(table(columns: 3)[#figure(image("Images/scanpage.png",width: auto,height: 300pt),caption: "page scan")<1>][#figure(image("Images/selectImage.png",width: auto,height: 300pt),caption: "Choisir une photo")<2>][#figure(image("Images/ImageNotselected.png",width: auto,height: 300pt),caption: "image non selectionné")<3>],caption: "Analyse menu")
+#figure(table(columns: 3)[#figure(image("Images/scanpage.png",width: auto,height: 300pt),caption: "page scan")<1>][#figure(image("Images/selectImage.png",width: auto,height: 300pt),caption: "Choisir une photo")<2>][#figure(image("Images/ImageNotselected.png",width: auto,height: 300pt),caption: "image non selectionné")<3>],caption: "Analyse menu", kind:"fig", supplement: "Tableau")
 \
 L'utilisateur, peut rentrer le nom du restaurant dont il va analyser le menu ainsi que l'adresse s'il l'a. Ces deux informations ne sont pas obligatoires.
 
@@ -204,15 +204,15 @@ Le score d'un plat est la somme des Score unique EF
 
 \
 #figure(table(columns: 3,
-table.header([*Intervale de score*],[*Couleur*],[*Niveau d'Impact*]))[score >=0 et score <= 1][#text(green)[Verte]][Faible][score > 1 et score <= 5][#text(orange)[Orange]][Moyen][score >5][#text(red)[Rouge]][Elevé][Plat non reconnu][Noire][-],caption: "Tableau descriptif de l'attribution des couleurs")<couleur>
+table.header([*Intervale de score*],[*Couleur*],[*Niveau d'Impact*]))[score >=0 et score <= 1][#text(green)[Verte]][Faible][score > 1 et score <= 5][#text(orange)[Orange]][Moyen][score >5][#text(red)[Rouge]][Elevé][Plat non reconnu][Noire][-],caption: "Tableau descriptif de l'attribution des couleurs", kind:"fig", supplement: "Tableau")<couleur>
 \
 *A revoir (update l'image de maj image)*
 
-#figure(table(columns: 2)[#figure(image("Images/platReconnu.png",width:auto,height: 300pt),caption: "Mise à jour de l'image")<4>][#figure(image("Images/platReconnu.png",width:auto,height: 300pt),caption: "Après analyse d'un menu")<5>],caption: "Update image et resultat de l'analyse")
+#figure(table(columns: 2)[#figure(image("Images/platReconnu.png",width:auto,height: 300pt),caption: "Mise à jour de l'image")<4>][#figure(image("Images/platReconnu.png",width:auto,height: 300pt),caption: "Après analyse d'un menu")<5>],caption: "Update image et resultat de l'analyse", kind:"fig", supplement: "Tableau")
 
 \
 
-Avant l'affichage du texte ou des plats reconnu(s), les informations renseignées sont stockées dans la base de données locale de l'application. Ces données sont aussi envoyées au serveur si l'utilisateur est connecté à internet et donc au serveur ou attend qu'il le soit pour les envoyées. Cette fonctionnalité est implementée par l'algorithme <algo1> dans la partie <algo> #text(red)[algos]. 
+Avant l'affichage du texte ou des plats reconnu(s), les informations renseignées sont stockées dans la base de données locale de l'application. Ces données sont aussi envoyées au serveur si l'utilisateur est connecté à internet et donc au serveur ou attend qu'il le soit pour les envoyées. /*Cette fonctionnalité est implementée par l'algorithme <algo1> dans la partie <algo> #text(red)[algos]. */
 
 Après l'analyse, on affiche la liste des plats avec une pastille en forme d'etoile juste devant le nom ayant une couleur descriptif de l'impact ecologique du plat comme l'indique la @5. Quand un plat n'existe pas dans notre base de données, l'etoile est de couleur noire.
 
@@ -221,14 +221,14 @@ On peut cliquer sur chaque ligne ou plat. Et si le plat existe dans notre base d
 
 *ICI image de infos sur plats à modif*
 
-#figure(table(columns: 2)[#figure(image("Images/AlertImage.png"),caption: "Page avec infos sur le plat")<detailsP>][#figure(image("Images/AlertImage.png"),caption: "Message ")<alert>],caption: "Page de details d'un plat et alert si le plat n'existe pas dans la base de données")
+#figure(table(columns: 2)[#figure(image("Images/AlertImage.png"),caption: "Page avec infos sur le plat")<detailsP>][#figure(image("Images/AlertImage.png"),caption: "Message ")<alert>],caption: "Page de details d'un plat et alert si le plat n'existe pas dans la base de données", kind:"fig", supplement: "Tableau")
 
 #pagebreak()
 === Historique <Historique>
 \
 Sur cette page, on retrouve tous les menus que l'utilisateur a scanné. Pour cela on recupere stockées dans la base de données locale de l'application (voir @menuHisto). On peut aussi les trier par date, du plus anciens au plus recents ou et vice versa (voir @histo2 et @histo1). En cliquant sur un menu, on est redirigé vers la page de détails du plat (voir @detailsP).
 
-#figure(table(columns: 3)[#figure(image("Images/menuHisto.png",width: auto,height: 300pt),caption: "Un menu de la page Historique")<menuHisto>][#figure(image("Images/historique1.png",width: auto,height: 300pt),caption: "Historique")<histo1>][#figure(image("Images/historique2.png",width: auto,height: 300pt),caption: "Tri par date")<histo2>],caption: "Historique des plats scannés")
+#figure(table(columns: 3)[#figure(image("Images/menuHisto.png",width: auto,height: 300pt),caption: "Un menu de la page Historique")<menuHisto>][#figure(image("Images/historique1.png",width: auto,height: 300pt),caption: "Historique")<histo1>][#figure(image("Images/historique2.png",width: auto,height: 300pt),caption: "Tri par date")<histo2>],caption: "Historique des plats scannés", kind:"fig", supplement: "Tableau")
 
 === Recherche <Recherche>
 
@@ -240,10 +240,10 @@ La deuxième partie (Favoris) est une liste de plats existant dans notre base de
 
 La troisième partie (Suggestions) est une liste de plats existant dans notre base de donnée et qui sont les moins polluants (voir @list). En cliquant sur un plat, on est redirigé vers la page de détails du plat (voir @detailsP).
 
-#figure(table(columns: 3)[#figure(image("Images/recherche.png",width: auto,height: 300pt),caption: "Liste déroulante")<rech>][#figure(image("Images/Fav-suggest.png",width: auto,height: 300pt),caption: "Page de recherche")<list>][#figure(image("Images/side-menu.png"),caption:"Side-menu")],caption: "Page de recherche et liste déroulante et side-menu")
+#figure(table(columns: 3)[#figure(image("Images/recherche.png",width: auto,height: 300pt),caption: "Liste déroulante")<rech>][#figure(image("Images/Fav-suggest.png",width: auto,height: 300pt),caption: "Page de recherche")<list>][#figure(image("Images/side-menu.png"),caption:"Side-menu")],caption: "Page de recherche et liste déroulante et side-menu", kind:"fig", supplement: "Tableau")
 
 On a aussi tout en haut à gauche de la page, un bouton de menu qui permet d'afficher un side-menu. Ce menu permet d'avoir accès deux fonctinonalités de l'application. La première est la possibilité de vider le cache de l'application grace au bouton *Vider le cache*. En effet, l'application stocke les données permettant de faire l'affiche de cette page, dans le cache de l'appareil, pour permettre la fluidité de l'affichage et d'eviter de nombreuses requetes à la base de données. Il est donc possible de vider le cache pour libérer de la place sur l'appareil. La deuxième fonctionnalité est la possibilité de faire une demande de mise à jour des données de l'application manuellement grace à un bouton *Demande de MàJ*, même si la mise à jour se fait automatiquement une fois par jour, lorsque l'utilisateur est connecté à internet. En cliquant sur ce bouton, on envoie une requête au serveur pour lui demander de mettre à jour les données de l'application. Le serveur va alors envoyer une réponse à l'application avec les données qui manquent s'il y en a. Sinon, juste une réponse pour dire que tout est à jour.
-Cette fonctionnalité est implémentée par l'algorithme <algo2> dans la partie <algo> #text(red)[algos].
+/*Cette fonctionnalité est implémentée par l'algorithme <algo2> dans la partie <algo> #text(red)[algos].*/
 
 === Ajout de plat et vote <add>
 
@@ -253,7 +253,7 @@ Cette page permet à l'utilisateur d'ajouter un plat à la base de données. Pou
 Chaque ingredient ajouté est affiché avec son nom et sa quantité dans le plat, sur la page. On a la possibilité de supprimer un ingredient en cliquant sur le bouton *Supprimer* à droite de chaque ingredient de la liste (voir @inglist).
 \
 
-#figure(table(columns: 4)[#figure(image("Images/ingredient.png"),caption: "liste ingredient")<ing>][#figure(image("Images/ingredientliste.png"),caption: "Ajout d'un ingredient")<inglist>][#figure(image("Images/addplat.png"),caption: "ajout d'un plat")<ajout>][#figure(image("Images/vote.png"),caption: "ajout d'un plat")<vote>],caption: "Liste des ingredients, ajout d'un ingredient et d'un plat + vote")
+#figure(table(columns: 4)[#figure(image("Images/ingredient.png"),caption: "liste ingredient")<ing>][#figure(image("Images/ingredientliste.png"),caption: "Ajout d'un ingredient")<inglist>][#figure(image("Images/addplat.png"),caption: "ajout d'un plat")<ajout>][#figure(image("Images/vote.png"),caption: "ajout d'un plat")<vote>],caption: "Liste des ingredients, ajout d'un ingredient et d'un plat + vote", kind:"fig", supplement: "Tableau")
 \
 
 Une fois le formulaire rempli, il peut cliquer sur le bouton *Ajouter* pour envoyer les données au serveur. Avant l'envoie des données, on verifie la connection au serveur en fesant un ping. Et si on est connecté, les données sont envoyé et on affiche un message avec le nom du palt et le nombre d'ingredient ajouté (voir @ajout). Sinon, on affiche un message d'erreur : "Erreur de connexion : Veuillez verifier votre connexion au serveur et reessayer".
@@ -267,26 +267,32 @@ Les plats ajoutés par les utilisateurs pourront être ajoutés à la base de do
 #pagebreak()
 
 === Design <design>
-Nous avons commencé par faire des croquis de l'application sur figma afin de réflechir à quelle fonctinonalité nous allions implémenté. ...
+
+Afin de réfléchier au fonctionnalité de l'application et de son design général, nous avons commencé le projet en créant des croquis de l'application sur Figma. Cela nous a permi de nous orienter tout au long du projet en se mettant d'accord sur la base de celui-ci. Sur Figma, nous pouvions créer des design de page, ajouter des boutons pour passer d'une page à l'autre.
+
+#figure(table(columns: 3)[#figure(image("Images/PageScanner.png"), caption:"Page du scanner")][#figure(image("Images/PageRecherche.png"), caption:"Page de recherche")][#figure(image("Images/PageItem.png"), caption:"Page d'un plat")], caption:"Design établi sur Figma au début du projet", kind:"fig", supplement: "Tableau")
+
 
 == Fonctionnalités non implémenté
 
-Malgré que l'application soit fonctionnel, plusieurs fonctinonalités non pas pu être implémenté. Ces fonctionnalités non pas été implementé par manque de temps, ou par lacune technique. Nous allons présenter les pistes les plus intéressantes sur lesquels nous pourrions travailler pour une future version de l'application.
+Bien que l'application soit fonctionnelle, plusieurs fonctionnalités n'ont pas pu être implémentées. Cela principalement par manque de temps, ou par lacune technique. Nous allons présenter les pistes les plus intéressantes sur lesquelles nous pourrions travailler pour une future version de l'application.
 
-Dans la première page du menu, nous avions envisagé que l'utilisateur puisse choisir entre prendre une photo directement dans l'application ou la séléctionné dans la galerie de son appareil.
+Dans la première page du menu, nous avions envisagé que l'utilisateur puisse choisir entre prendre une photo directement dans l'application ou la sélectionner dans la galerie de son appareil. Finalement, nous n'avons gardé que la deuxième solution pour simplifier l'application durant son développement.
 
-Ensuite, il serait vraiment intéressant que les utilisateurs puissent se créer un compte. Cette ajout serait très important avant la publication de l'application pour pouvoir modérer les ajouts de plat ou pour limiter le nombre de vote par plat par utilisateur. Les autres fonctionnalités seraient toujours accesibles sans se créer de compte.
+Ensuite, il serait vraiment intéressant que les utilisateurs puissent se créer un compte. Cet ajout serait très important avant la publication de l'application pour pouvoir modérer les ajouts de plat ou pour limiter le nombre de votes par plat par utilisateur. Les autres fonctionnalités seraient toujours accessibles sans se créer de compte.
 
-
-
-Caméra
-Localisation
-Compte user
-Amélioration des suggestions
+Enfin, nous avions pensé à géolocaliser les restaurants dont les utilisateurs ont scanné un menu. Avec cela, on pourrait chercher sur une carte les restaurants en fonction de l'impact écologique des plats qu'il propose. Nous avons déjà ajouté les attributs dans les tables pour que cela puisse être mis en place, mais n'avons pas fini cette partie de l'application.
 
 == Statistiques
 
-#pagebreak()
+Pour faire un bilan de notre application, elle se compose de 48 fichiers rédigés par nos soins, répartis de cette manière :  
+- 34 fichiers pour l'application frontend,  
+- 10 fichiers pour le serveur backend,  
+- 4 fichiers pour le code externe (SQL et Python).  
+
+En tout, nous avons écrit *5 432 lignes de code* dans ce projet. Cela inclut les fichiers TypeScript, JavaScript, HTML, CSS, Python et SQL. Ce volume reflète l'ampleur du travail accompli pour développer une application complète et fonctionnelle.
+
+\
 
 = Conclusion
 
@@ -298,31 +304,10 @@ Enfin, ce projet nous a permis de mettre en pratique nos connaissances acquises 
 
 #pagebreak()
 
-= Bibliographie
-
 
 #bibliography("works.bib", style: "american-institute-of-aeronautics-and-astronautics")
 
 #outline(
   title: [Tables des figures],
-  target: figure,
+  target: figure.where(kind: "fig"),
 )
-
-
-#pagebreak()
-
-CORRIGER L'ORTHOGRAPHE \
-si on en a besoin
-#footnote[test] \
-partie a finir : 
-+ statistiques
-+ fonctinonalités non implementé
-+ design
-+ recherche
-+ ajout de plat et vote
-
-
-#grid(columns: 2, gutter: -30pt)[Afin de connaitre l'impact ecologique d'un plat nous avons choisi dans un premier temps de se servir de la base de données fournie par l'ADEME. La base de l'ADEME sur la consommation CO2 est une immense base regroupant tout les types d'emission de gaz à effet de serre tel que celle du au textiles, à l'industrie ou autres, ainsi que toute les emissions liee à l'alimentation.
-][#figure(image("Images/logoAGRIBALISE.png", width: 50%), caption: "Logo AGRIBALYSE")]
-
-En inspectant la base de données nous avons remarqué que toutes les informations liée à la nourriture provenait de deux bases de données qui sont AGRIBALYSE et AGRIBALYSE 2.0. AGRIBALYSE est un programme collectif et innovant qui met à disposition des données de référence sur les impacts environnementaux des produits agricoles et alimentaires à travers une base de données construite selon la méthodologie des Analyses du Cycle de Vie. Il est possible de se servir du site web d'AGRIBALYSE pour connaitre l'impact environnemental d'un aliment ou bien de télécharger leur base de données.
