@@ -200,9 +200,9 @@ Ce programme permet à la fois de créer la base de données pour l'application 
 Avec ce programme Python, si la base de données d'AGRIBALYSE venait d'être mise à jour, il suffirait d'exécuter le programme pour obtenir la nouvelle base. Une amélioration possible pour ce programme serait de récupérer les autres données des anciennes bases pour les rajouter aux nouvelles.
 #pagebreak()
 == Application utilisateur <userApp>
-
+\
 Dans cette partie, nous allons décrire et expliquer les différentes parties ainsi que les différentes fonctionnalités implémentées tout en montrant leur fonctionnement avec des images. 
-
+\
 === Analyse d'un menu <Scan>
 
 Cette fonctionnalité est visible sur la première page de notre application, elle consiste, dans un premier temps, à reconnaître le texte contenu sur une image choisie par l'utilisateur depuis sa galerie décrit par la figure @2. Pour cela l'utilisateur appuis sur le bouton *Choisir une image*. Par défaut, il y a une image (voir @1). Les images de sa galerie s'affichent puis il clique sur celle qu'il veut analyser. Si une fois les images de la galerie affichées, il (l'utilisateur) ne clique sur aucune image et referme l'affichage, un message d'alerte s'affiche indiquant qu'aucune image n'a été sélectionné (voir @3), sinon l'image est mise à jour (voir @4).
@@ -214,7 +214,7 @@ L'utilisateur, peut rentrer le nom du restaurant dont il va analyser le menu ain
 Une fois ceci fait, il peut cliquer sur le bouton *Analyser*. On effectue l'analyse textuelle de l'image et on récupère le nom des plats du menu ou du moins le texte reconnu. Une fois les noms récupérés, on vérifie pour chaque plat, s'il existe dans notre base de données, pour pouvoir ensuite récupérer la liste des ingrédients, leurs quantités dans le plat et effectuer le calcule de score. En fonction du score du plat, on lui attribue une couleur qui sera la même que celle de la pastille qui sera affichée pour ce plat, comme l'indique le @couleur.
 
 
-Le score d'un plat est la somme des Score unique EF
+Le score d'un plat est la somme des Scores Uniques EF
 #cite(<ef>)
 (EF = Environmental Footprint) = Somme (impact catégorie $*$ facteur de pondération) de chacun de ses ingrédients.
 
@@ -228,13 +228,13 @@ table.header([*Intervale de score*],[*Couleur*],[*Niveau d'Impact*]))[score >=0 
 
 \
 
-Avant l'affichage du texte ou des plats reconnu(s), les informations renseignées sont stockées dans la base de données locale de l'application. Ces données sont aussi envoyées au serveur si l'utilisateur est connecté à internet et donc au serveur ou attend qu'il le soit pour les envoyées. Cette fonctionnalité est implementée par l'algorithme @algo1 (voir Annexe @annexe).
+Avant l'affichage du texte ou des plats reconnu(s), les informations renseignées sont stockées dans la base de données locale de l'application. Ces données sont aussi envoyées au serveur si l'utilisateur est connecté à Internet et donc au serveur ou attend qu'il le soit pour les envoyer. Cette fonctionnalité est implémentée par l'algorithme @algo1 (voir Annexe @annexe).
 
-Après l'analyse, on affiche la liste des plats avec une pastille en forme d'etoile juste devant le nom ayant une couleur descriptif de l'impact ecologique du plat comme l'indique la @5. Quand un plat n'existe pas dans notre base de données, l'etoile est de couleur noire.
+Après l'analyse, on affiche la liste des plats avec une pastille en forme d'étoile juste devant le nom ayant une couleur descriptif de l'impact écologique du plat comme l'indique la @5. Quand un plat n'existe pas dans notre base de données, l'étoile est de couleur noire.
 
-On peut cliquer sur chaque ligne ou plat. Et si le plat existe dans notre base de données, on est reconduit sur une autre page affichant les informations du plat ainsi que les differents ingrédients qui le composent avec leur pourcentage comme decrit la @detailsP.
-\
-Si Le plat n'existe pas, alors le message : "Ce plat n'existe pas dans nos données. Vous pouvez l'ajouter en allant sur la page d'ajout" dont nous parlons plus tard dans le @add, est affiché (voir @alert).
+On peut cliquer sur chaque ligne ou plat. Et si le plat existe dans notre base de données, on est reconduit sur une autre page affichant les informations du plat ainsi que les différents ingrédients qui le composent avec leur pourcentage comme décrit la @detailsP.
+
+Si le plat n'existe pas, alors le message : "Ce plat n'existe pas dans nos données. Vous pouvez l'ajouter en allant sur la page d'ajout" dont nous parlons plus tard dans le @add, est affiché (voir @alert).
 \
 
 #figure(table(columns: 2)[#figure(image("Images/details.jpg"),caption: "Page avec infos sur le plat")<detailsP>][#figure(image("Images/platReconnu.jpg"),caption: "Message ")<alert>],caption: "Page de details d'un plat et alert si le plat n'existe pas dans la base de données", kind:"fig", supplement: "Tableau")
@@ -242,28 +242,29 @@ Si Le plat n'existe pas, alors le message : "Ce plat n'existe pas dans nos donn�
 #pagebreak()
 === Historique <Historique>
 \
-Sur cette page, on retrouve tous les menus que l'utilisateur a scanné. Pour cela on recupere stockées dans la base de données locale de l'application (voir @menuHisto). On peut aussi les trier par date, du plus anciens au plus recents ou et vice versa (voir @histo2 et @histo1). En cliquant sur un menu, on est redirigé vers la page de détails du plat (voir @detailsP).
+Sur cette page, on retrouve tous les menus que l'utilisateur a scannés. Pour cela, on récupère stockées dans la base de données locale de l'application (voir @menuHisto). On peut aussi les trier par date, du plus ancien au plus récents et vice-versa (voir @histo2 et @histo1). En cliquant sur un menu, on est redirigé vers la page de détails du plat (voir @detailsP).
 
 #figure(table(columns: 3)[#figure(image("Images/menuHisto.jpg",width: auto,height: 300pt),caption: "Un menu de la page Historique")<menuHisto>][#figure(image("Images/plusRecent.jpg",width: auto,height: 300pt),caption: "Historique trié par date plus recents")<histo1>][#figure(image("Images/plusAncien.jpg",width: auto,height: 300pt),caption: "Trié par date plus anciens")<histo2>],caption: "Historique des plats scannés", kind:"fig", supplement: "Tableau")
 
 // #pagebreak()
 === Recherche <Recherche>
 
-#h(1em) Cette page est constuié de 3 parties. 
+#h(1em) Cette page est constituée de 3 parties. 
 
 La première partie est un champ de recherche qui permet de rechercher un plat dans la base de données. Il suffit de commencer par taper le nom du plat et une liste déroulante s'affiche avec les plats existant dans notre base de données et qui correspondent à la recherche (voir @rech). En cliquant sur un plat, on est redirigé vers la page de détails du plat (voir @detailsP).
 
 La deuxième partie (Favoris) est une liste de plats existant dans notre base de données et qui sont les plus recherchés par les utilisateurs (voir @list). En cliquant sur un plat, on est redirigé vers la page de détails du plat (voir @detailsP).
 
-La troisième partie (Suggestions) est une liste de plats existant dans notre base de donnée et qui sont les moins polluants (voir @list). En cliquant sur un plat, on est redirigé vers la page de détails du plat (voir @detailsP).
+La troisième partie (Suggestions) est une liste de plats existant dans notre base de données et qui sont les moins polluants (voir @list). En cliquant sur un plat, on est redirigé vers la page de détails du plat (voir @detailsP).
 
 #figure(table(columns: 3)[#figure(image("Images/recherche.png",width: auto,height: 300pt),caption: "Liste déroulante")<rech>][#figure(image("Images/Fav-suggest.png",width: auto,height: 300pt),caption: "Page de recherche")<list>][#figure(image("Images/side-menu.png"),caption:"Side-menu")],caption: "Page de recherche et liste déroulante et side-menu", kind:"fig", supplement: "Tableau")
 
-On a aussi tout en haut à gauche de la page, un bouton de menu qui permet d'afficher un side-menu. Ce menu permet d'avoir accès deux fonctinonalités de l'application. La première est la possibilité de vider le cache de l'application grace au bouton *Vider le cache*. En effet, l'application stocke les données permettant de faire l'affiche de cette page, dans le cache de l'appareil, pour permettre la fluidité de l'affichage et d'eviter de nombreuses requetes à la base de données. Il est donc possible de vider le cache pour libérer de la place sur l'appareil. La deuxième fonctionnalité est la possibilité de faire une demande de mise à jour des données de l'application manuellement grace à un bouton *Demande de MàJ*, même si la mise à jour se fait automatiquement une fois par jour, lorsque l'utilisateur est connecté à internet. En cliquant sur ce bouton, on envoie une requête au serveur pour lui demander de mettre à jour les données de l'application. Le serveur va alors envoyer une réponse à l'application avec les données qui manquent s'il y en a. Sinon, juste une réponse pour dire que tout est à jour.
+On a aussi tout en haut à gauche de la page, un bouton de menu qui permet d'afficher un side-menu. Ce menu permet d'avoir accès à deux fonctionnalités de l'application. La première est la possibilité de vider le cache de l'application grâce au bouton *Vider le cache*. En effet, l'application stocke les données permettant de faire l'affiche de cette page, dans le cache de l'appareil, pour permettre la fluidité de l'affichage et d'éviter de nombreuses requêtes à la base de données. Il est donc possible de vider le cache pour libérer de la place sur l'appareil. La deuxième fonctionnalité est la possibilité de faire une demande de mise à jour des données de l'application manuellement grâce à un bouton *Demande de MàJ*, même si la mise à jour se fait automatiquement une fois par jour, lorsque l'utilisateur est connecté à Internet. En cliquant sur ce bouton, on envoie une requête au serveur pour lui demander de mettre à jour les données de l'application. Le serveur va alors envoyer une réponse à l'application avec les données qui manquent s'il y en a. Sinon, juste une réponse pour dire que tout est à jour.
 Cette fonctionnalité est implémentée par l'algorithme @algo2, voir dans la partie Annexe (@annexe).
+
 === Ajout de plat et vote <add>
 \
-Cette page permet à l'utilisateur d'ajouter un plat à la base de données. Pour cela, il doit remplir un formulaire avec le nom du plat, chaque ingrédient et la quantité de chaque ingrédient dans le plat. Pour ajouter un ingrédient, il suffit de commencer par entrer le nom de l'ingrédient et une liste déroulante s'affiche avec des ingrédients de notre base de données, qui correspondent au nom entré (voir @ing) et il choisit. Ensuite, il doit entrer la quantité de l'ingrédient dans le plat. Une fois cela fait, il doit appuyer sur le bouton *+* pour ajouter l'ingrédient à la liste des ingrédients du plat. Cette operation est répétable pour chaque ingrédient du plat. 
+Cette page permet à l'utilisateur d'ajouter un plat à la base de données. Pour cela, il doit remplir un formulaire avec le nom du plat, chaque ingrédient et la quantité de chaque ingrédient dans le plat. Pour ajouter un ingrédient, il suffit de commencer par entrer le nom de l'ingrédient et une liste déroulante s'affiche avec des ingrédients de notre base de données, qui correspondent au nom entré (voir @ing) et il choisit. Ensuite, il doit entrer la quantité de l'ingrédient dans le plat. Une fois cela fait, il doit appuyer sur le bouton *+* pour ajouter l'ingrédient à la liste des ingrédients du plat. Cette opération est répétable pour chaque ingrédient du plat. 
 \
 
 Chaque ingrédient ajouté est affiché avec son nom et sa quantité dans le plat, sur la page. On a la possibilité de supprimer un ingrédient en cliquant sur le bouton *Supprimer* à droite de chaque ingrédient de la liste (voir @inglist).
@@ -272,19 +273,19 @@ Chaque ingrédient ajouté est affiché avec son nom et sa quantité dans le pla
 #figure(table(columns: 4)[#figure(image("Images/ingredient.png"),caption: "liste ingrédient")<ing>][#figure(image("Images/ingredientliste.png"),caption: "Ajout d'un ingrédient")<inglist>][#figure(image("Images/addplat.png"),caption: "ajout d'un plat")<ajout>][#figure(image("Images/vote.png"),caption: "ajout d'un plat")<vote>],caption: "Liste des ingrédients, ajout d'un ingrédient et d'un plat + vote", kind:"fig", supplement: "Tableau")
 \
 
-Une fois le formulaire rempli, il peut cliquer sur le bouton *Ajouter* pour envoyer les données au serveur. Avant l'envoie des données, on verifie la connection au serveur en fesant un ping. Et si on est connecté, les données sont envoyé et on affiche un message avec le nom du plat et le nombre d'ingrédient ajouté (voir @ajout). Sinon, on affiche un message d'erreur : "Erreur de connexion : Veuillez verifier votre connexion au serveur et reessayer".
+Une fois le formulaire rempli, il peut cliquer sur le bouton *Ajouter* pour envoyer les données au serveur. Avant l'envoi des données, on vérifie la connexion au serveur en faisant un ping. Et si on est connecté, les données sont envoyées et on affiche un message avec le nom du plat et le nombre d'ingrédients ajouté (voir @ajout). Sinon, on affiche un message d'erreur : "Erreur de connexion : Veuillez vérifier votre connexion au serveur et réessayer".
 
-Les plats ajoutés et envoyés au serveur sont stockés sur le serveur et sont visibles par tous les utilisateurs de l'application en allant sur la page vote. Ils peuvent aussi voter positivement pour le plat en cliquant sur le pouce bleu ou voter negativement en cliquant sur le pouce rouge (voir @vote). Chaque utilisateur peut voter pour un plat une seule fois. Et il peut voir le nombre de vote qu'a eu un plat (il est affiché. Si l'utilisateur a déjà voté pour le plat, il ne peut plus voter. Le vote est stocké dans la base de données du serveur.
+Les plats ajoutés et envoyés au serveur sont stockés sur le serveur et sont visibles par tous les utilisateurs de l'application en allant sur la page vote. Ils peuvent aussi voter positivement pour le plat en cliquant sur le pouce bleu ou voter négativement en cliquant sur le pouce rouge (voir @vote). Chaque utilisateur peut voter pour un plat une seule fois. Et il peut voir le nombre de votes qu'a eu un plat. Si l'utilisateur a déjà voté pour le plat, il ne peut plus voter. Le vote est stocké dans la base de données du serveur.
 
 En cliquant sur le nom du plat, on est redirigé vers la page de détails du plat comme pour les plats depuis la page research (voir @detailsP).
 
-Les plats ajoutés par les utilisateurs pourront être ajoutés à la base de données de l'application si le plat est validé par un administrateur depuis le serveur, de la table des plats ajoutés par les utilisateurs vers la tables de plats definitif de l'application. Une fois cette action effectuée, lors de la mise à jour journaliére, la base de données de l'application sera mise à jour avec les nouveaux plats.
+Les plats ajoutés par les utilisateurs pourront être ajoutés à la base de données de l'application si le plat est validé par un administrateur depuis le serveur, de la table des plats ajoutés par les utilisateurs vers la table de plats définitif de l'application. Une fois cette action effectuée, lors de la mise à jour journalière, la base de données de l'application sera mise à jour avec les nouveaux plats.
 
 #pagebreak()
 
 === Design <design>
 
-Afin de réfléchier au fonctionnalité de l'application et de son design général, nous avons commencé le projet en créant des croquis de l'application sur Figma. Cela nous a permis de nous orienter tout au long du projet en se mettant d'accord sur la base de celui-ci. Sur Figma, nous pouvions créer des design de page, ajouter des boutons pour passer d'une page à l'autre.
+Afin de réfléchir aux fonctionnalités de l'application et de son design général, nous avons commencé le projet en créant des croquis de l'application sur Figma. Cela nous a permis de nous orienter tout au long du projet en se mettant d'accord sur la base de celui-ci. Sur Figma, nous pouvions créer des designs de page, ajouter des boutons pour passer d'une page à l'autre.
 
 #figure(table(columns: 3)[#figure(image("Images/PageScanner.png"), caption:"Page du scanner")][#figure(image("Images/PageRecherche.png"), caption:"Page de recherche")][#figure(image("Images/PageItem.png"), caption:"Page d'un plat")], caption:"Design établi sur Figma au début du projet", kind:"fig", supplement: "Tableau")
 
@@ -292,8 +293,8 @@ Afin de réfléchier au fonctionnalité de l'application et de son design géné
 
 Pour le backend, nous avons choisi d'utiliser *Fastify*, un framework Node.js qui permet de créer des applications web et des API rapidement et facilement. Fastify est connu pour sa rapidité et sa simplicité d'utilisation, ce qui en fait un excellent choix pour notre projet.
 Nous avons mis en place un serveur qui gère les requêtes de l'application mobile. Le serveur est responsable de la gestion des données, de la communication avec la base de données et de l'envoi des réponses à l'application. Il utilise une base de données SQLite pour stocker les informations sur les plats, les utilisateurs et les votes.
-Les plats ajoutés et votés par les utilisateurs sont visibles sur la page ajout de la backend. Le(s) administrateur(s) peuvent valider ou supprimer les plats ajoutés par les utilisateurs. Les plats validés sont ajoutés à la base de données de l'application mobile lors de la mise à jour journalière.
-Le serveur de l'application est herbergé, ce qui rend l'utilisation de l'application utilisable par tous le monde.
+Les plats ajoutés et votés par les utilisateurs sont visibles sur la page ajout du backend. Les administrateurs peuvent valider ou supprimer les plats ajoutés par les utilisateurs. Les plats validés sont ajoutés à la base de données de l'application mobile lors de la mise à jour journalière.
+Le serveur de l'application est hébergé, ce qui rend l'utilisation de l'application utilisable par tout le monde.
 
 == Fonctionnalités non implémenté
 
@@ -301,7 +302,7 @@ Bien que l'application soit fonctionnelle, plusieurs fonctionnalités n'ont pas 
 
 Dans la première page du menu, nous avions envisagé que l'utilisateur puisse choisir entre prendre une photo directement dans l'application ou la sélectionner dans la galerie de son appareil. Finalement, nous n'avons gardé que la deuxième solution pour simplifier l'application durant son développement.
 
-L'APK de l'application n'est disponible que sur Android. Nous avions prévu de le rendre disponible sur iOS, mais le processus de création d'un APK pour iOS est plus complexe que pour Android et après plusieurs tentatives de build infructueuses, nous avons décidé de ne le laisser en suspend. Il serait donc intéressant de le rendre disponible sur iOS pour la prochaine version de l'application.
+L'APK de l'application n'est disponible que sur Android. Nous avions prévu de le rendre disponible sur iOS, mais le processus de création d'un APK pour iOS est plus complexe que pour Android et après plusieurs tentatives de build infructueuses, nous avons décidé de ne le laisser en suspens. Il serait donc intéressant de le rendre disponible sur iOS pour la prochaine version de l'application.
 
 Ensuite, il serait vraiment intéressant que les utilisateurs puissent se créer un compte. Cet ajout serait très important avant la publication de l'application pour pouvoir modérer les ajouts de plat ou pour limiter le nombre de votes par plat par utilisateur. Les autres fonctionnalités seraient toujours accessibles sans se créer de compte.
 
@@ -324,7 +325,7 @@ Pour conclure, l'application Crok'eco répond efficacement aux objectifs fixés 
 
 Cependant, certaines fonctionnalités prévues n'ont pas pu être implémentées, comme l'intégration de la caméra ou la gestion des comptes utilisateurs. Ces éléments représentent des pistes d'amélioration pour les futures versions de l'application. Malgré ces limitations, le projet a permis de développer des compétences techniques variées, allant de la gestion de bases de données à l'utilisation de frameworks modernes comme Expo.
 
-Enfin, ce projet nous a permis de mettre en pratique nos connaissances acquises en Licence Informatique mais aussi de développer de nouvelles compétences essentielles pour la suite de notre parcours.
+Enfin, ce projet nous a permis de mettre en pratique nos connaissances acquises en Licence Informatique, mais aussi de développer de nouvelles compétences essentielles pour la suite de notre parcours.
 
 #pagebreak()
 
