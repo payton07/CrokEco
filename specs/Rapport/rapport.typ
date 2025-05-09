@@ -210,9 +210,8 @@ Le score d'un plat est la somme des Score unique EF
 #figure(table(columns: 3,
 table.header([*Intervale de score*],[*Couleur*],[*Niveau d'Impact*]))[score >=0 et score <= 1][#text(green)[Verte]][Faible][score > 1 et score <= 5][#text(orange)[Orange]][Moyen][score >5][#text(red)[Rouge]][Elevé][Plat non reconnu][Noire][-],caption: "Tableau descriptif de l'attribution des couleurs", kind:"fig", supplement: "Tableau")<couleur>
 \
-*A revoir (update l'image de maj image)*
 
-#figure(table(columns: 2)[#figure(image("Images/platReconnu.png",width:auto,height: 300pt),caption: "Mise à jour de l'image")<4>][#figure(image("Images/platReconnu.png",width:auto,height: 300pt),caption: "Après analyse d'un menu")<5>],caption: "Update image et resultat de l'analyse", kind:"fig", supplement: "Tableau")
+#figure(table(columns: 2)[#figure(image("Images/updatedphoto.jpg",width:auto,height: 300pt),caption: "Mise à jour de l'image")<4>][#figure(image("Images/platReconnu.jpg",width:auto,height: 300pt),caption: "Après analyse d'un menu")<5>],caption: "Update image et resultat de l'analyse", kind:"fig", supplement: "Tableau")
 
 \
 
@@ -225,16 +224,14 @@ On peut cliquer sur chaque ligne ou plat. Et si le plat existe dans notre base d
 Si Le plat n'existe pas, alors le message : "Ce plat n'existe pas dans nos données. Vous pouvez l'ajouter en allant sur la page d'ajout" dont nous parlons plus tard dans le @add, est affiché (voir @alert).
 \
 
-*ICI image de infos sur plats à modif*
-
-#figure(table(columns: 2)[#figure(image("Images/AlertImage.png"),caption: "Page avec infos sur le plat")<detailsP>][#figure(image("Images/AlertImage.png"),caption: "Message ")<alert>],caption: "Page de details d'un plat et alert si le plat n'existe pas dans la base de données", kind:"fig", supplement: "Tableau")
+#figure(table(columns: 2)[#figure(image("Images/details.jpg"),caption: "Page avec infos sur le plat")<detailsP>][#figure(image("Images/platReconnu.jpg"),caption: "Message ")<alert>],caption: "Page de details d'un plat et alert si le plat n'existe pas dans la base de données", kind:"fig", supplement: "Tableau")
 
 #pagebreak()
 === Historique <Historique>
 \
 Sur cette page, on retrouve tous les menus que l'utilisateur a scanné. Pour cela on recupere stockées dans la base de données locale de l'application (voir @menuHisto). On peut aussi les trier par date, du plus anciens au plus recents ou et vice versa (voir @histo2 et @histo1). En cliquant sur un menu, on est redirigé vers la page de détails du plat (voir @detailsP).
 
-#figure(table(columns: 3)[#figure(image("Images/menuHisto.png",width: auto,height: 300pt),caption: "Un menu de la page Historique")<menuHisto>][#figure(image("Images/historique1.png",width: auto,height: 300pt),caption: "Historique")<histo1>][#figure(image("Images/historique2.png",width: auto,height: 300pt),caption: "Tri par date")<histo2>],caption: "Historique des plats scannés", kind:"fig", supplement: "Tableau")
+#figure(table(columns: 3)[#figure(image("Images/menuHisto.jpg",width: auto,height: 300pt),caption: "Un menu de la page Historique")<menuHisto>][#figure(image("Images/plusRecent.jpg",width: auto,height: 300pt),caption: "Historique trié par date plus recents")<histo1>][#figure(image("Images/plusAncien.jpg",width: auto,height: 300pt),caption: "Trié par date plus anciens")<histo2>],caption: "Historique des plats scannés", kind:"fig", supplement: "Tableau")
 
 // #pagebreak()
 === Recherche <Recherche>
