@@ -98,24 +98,12 @@ export default function Index() {
 
   // Charger les données de localisation , Insert les données en local ensuite les envoyer au serveur
   async function LoadLocAndInsertClient_SendDataToServeur(lines: any[]) {
-    let Longitude = 0;
-    let Latitude = 0;
-    if (!loc) {
-      await getLocation();
-    }
+    let Longitude = 0; let Latitude = 0;
+    if (!loc) { await getLocation(); }
     if (location) {
       Longitude = location.coords.longitude;
       Latitude = location.coords.latitude;
-
-      // Pas besoin de tout mettre sous forme cle : valeur , car ceux qui ne le sont pas , sont explicites par leur nom
-      // equivalent à la clé
-      const resto = {
-        NomResto: nomResto,
-        Latitude,
-        Longitude,
-        Adresse,
-      };
-
+      const resto = { NomResto: nomResto, Latitude,Longitude,Adresse,};
       // Insertion des données dans la base de données locale
       const idresto = await addRestaurants_Historique(resto);
 

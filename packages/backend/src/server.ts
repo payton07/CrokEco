@@ -85,7 +85,7 @@ const port = { port: PORT, host: HOST };
 
 fastify.register(fastifyStatic, {
   root: path.join(__dirname),
-  prefix: "/", // Accès direct aux fichiers
+  prefix: "/", 
 });
 
 // Route pour la page d'accueil
@@ -104,18 +104,6 @@ fastify.get("/ping", async (request, reply) => {
 });
 
 fastify.post("/login", async (request, reply) => {
-  // const name = "admin";
-  // const mdpadmin = "123";
-  // bcrypt.hash(mdpadmin, 10, async (err, hash) => {
-  //   if (err) {
-  //         console.error("Erreur de hachage :", err);
-  //         return;
-  //     }
-  //     const user = {'Nom':name,'Mdp':hash};
-  //     const res =await addUsers(user);
-  //     console.log("user inserer : id ", res);
-
-  // });
   const { nom, mdp } = request.body as { nom: string; mdp: string };
 
   console.log("le nv mdp ,", mdp);
@@ -123,11 +111,8 @@ fastify.post("/login", async (request, reply) => {
   try {
     // Récupère les utilisateurs (supposons que getUsers() retourne une liste d'objets utilisateurs)
     const res1 = await getUsers(false, true, true, false);
-    console.log(res1);
-    
-    // Si l'utilisateur est trouvé et que le nom correspond
+    console.log(res1);    
     if (res1 !== undefined && nom === res1.at(0).Nom) {
-      // Utilisation de la version asynchrone de bcrypt.compare avec await
       const isMatch = await bcrypt.compare(mdp, res1.at(0).Mdp);
 
       if (isMatch) {
