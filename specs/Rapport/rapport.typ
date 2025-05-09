@@ -73,15 +73,18 @@ Nous avons donc choisi de faire une application collaborative qui calcule l'impa
 
 = Gestion du projet
 
-#h(1em) Le projet s'est déroulé en 4 grandes étapes, comme le decrit la @diagGant ci dessous, qui sont, la mise en place de la base de données, le développement des différentes fonctionnalités de l'application, la création du serveur distant ainsi qu'une base de données permettant de stocker et d'effectuer des mises à jour de données et enfin l'Implémentation complete et finition du design de l'application ainsi que les tests de fonctinonalités.
+#h(1em) Le projet s'est déroulé en 4 grandes étapes, comme le decrit l'@diagGant ci dessous, qui sont, la mise en place de la base de données, le développement des différentes fonctionnalités de l'application, la création du serveur distant ainsi qu'une base de données permettant de stocker et d'effectuer des mises à jour de données et enfin l'Implémentation complete et finition du design de l'application ainsi que les tests de fonctinonalités.
 
-Globalement, le temps estimé pour chaque étapes du projet a été respecté selon nos prévisions, à part pour la base données que nous avons dû retravailler au cours du projet à cause du manque de pertinence des données, ce qui a necessité une réadaptation du code de différentes parties de l'application.
+Nous avions initié le projet en décembre 2024, en choisissant les différents outils que nous allions utilisé et en créant une maquette de l'application sur Figma. 
 
-#figure(image("Images/Diagramme de Gantt.png",height: 40%, width: 90%), caption: "Diagramme de Gantt", kind:"fig", supplement: "Image")
+La deuxième étape a été de préparer une première version la base de donnée de l'application avant de commencer à implémenter les différentes pages et les fonctionnalités de l'application.
+
+Vers la fin du projet, nous avons ajouté un serveur afin que l'application ne fonctionne pas que en local, puis améliorer le design de l'interface. Pour finir, nous avons ajouté des tests à l'application.
+
+#figure(image("Images/Diagramme de Gantt.png", width: 100%), caption: "Diagramme de Gantt", kind:"fig", supplement: "Image")
 <diagGant>
 
 #pagebreak()
-
 = Choix technique
 \
 
