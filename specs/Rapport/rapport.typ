@@ -286,6 +286,7 @@ Afin de réfléchier au fonctionnalité de l'application et de son design géné
 Pour le backend, nous avons choisi d'utiliser *Fastify*, un framework Node.js qui permet de créer des applications web et des API rapidement et facilement. Fastify est connu pour sa rapidité et sa simplicité d'utilisation, ce qui en fait un excellent choix pour notre projet.
 Nous avons mis en place un serveur qui gère les requêtes de l'application mobile. Le serveur est responsable de la gestion des données, de la communication avec la base de données et de l'envoi des réponses à l'application. Il utilise une base de données SQLite pour stocker les informations sur les plats, les utilisateurs et les votes.
 Les plats ajoutés et votés par les utilisateurs sont visibles sur la page ajout de la backend. Le(s) administrateur(s) peuvent valider ou supprimer les plats ajoutés par les utilisateurs. Les plats validés sont ajoutés à la base de données de l'application mobile lors de la mise à jour journalière.
+Le serveur de l'application est herbergé, ce qui rend l'utilisation de l'application utilisable par tous le monde.
 
 == Fonctionnalités non implémenté
 
