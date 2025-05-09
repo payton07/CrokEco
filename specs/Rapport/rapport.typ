@@ -17,7 +17,7 @@ Nous tenons à exprimer notre sincère gratitude envers toutes les personnes qui
 
 Nous souhaitons exprimer nos sincères remerciements à M. Eric Bourreau pour nous avoir permis de travailler sur ce sujet. Sa confiance et son soutien nous ont permis de le réaliser avec succès. Nous lui sommes reconnaissants pour cette opportunité qui nous a permis d'acquérir une expérience en génie logiciel.
 
-Nous souhaitons tout particulièrement remercier Ewen PHILIPOT, pour nous avoir aidés à initier le projet malgré qu'il soit parti au cours de cette année scolaire. Ses connaissances approfondies nous ont permis d'avoir une base solide pour l'application.
+Nous souhaitons tout particulièrement remercier Ewen PHILIPOT, pour nous avoir aider à initier le projet malgré qu'il soit parti au cours de cette année scolaire. Ses connaissances approfondies nous ont permis d'avoir une base solide pour l'application.
 
 Nous tenons également à exprimer notre gratitude envers Mme Elisabeth BAERT, responsable de la licence 3 Informatique, pour nous avoir permis de réaliser ces projets durant le second semestre.
 
@@ -36,11 +36,11 @@ Enfin, nous aimerions remercier chaleureusement toutes les personnes qui nous on
 = Introduction
 \
 
-Nous réalisons ce projet dans le cadre de notre troisième année en Licence Informatique. Le projet a débuté en décembre 2024 et nous a accompagnés tout au long de notre 2e semestre. Le sujet que nous avons choisi est celui de Monsieur Bourreau. Le but du projet est de créer une application permettant de noter l'impact écologique avec une couleur. Celle-ci peut être de couleur Verte, Orange ou Rouge, respectivement d'une empreinte carbone faible à élevée, de la même manière que le nutriscore.
+Nous réalisons ce projet dans le cadre de notre troisième année en Licence Informatique. Le projet a débuté en décembre 2024 et nous a accompagné tout au long de notre 2e semestre. Le sujet que nous avons choisi est celui de Monsieur Bourreau. Le but du projet est de créer une application permettant de noter l'impact écologique des plats avec une couleur. Celle-ci peut être de couleur Verte, Orange ou Rouge, respectivement d'une empreinte carbone faible à élevée, de la même manière que le nutriscore.
 
 #align(center)[#image("Images/th.png", width: 50%)]
 
-Ce projet a été réalisé avec KEGLO Patrice, BARATAY Mallory et PHILIPOT Ewen. PHILIPOT Ewen ayant arrêté la Licence avant les vacances de février, nous avons réalisé la majeure partie du projet à deux.
+Ce projet a été réalisé par KEGLO Patrice, BARATAY Mallory et PHILIPOT Ewen. PHILIPOT Ewen ayant arrêté la Licence avant les vacances de février, nous avons réalisé la majeure partie du projet à deux.
 
 #pagebreak()
 
@@ -147,21 +147,21 @@ Les différentes requêtes présentes sur ce diagramme sont détaillés dans le 
 \
 #let fig1 = figure(image("Images/logoAGRIBALISE.png", width: 40%), caption: "Logo AGRIBALYSE", kind:"fig", supplement: "Image")
 #let body = [
-Afin de connaitre l'impact ecologique d'un plat nous avons choisi dans un premier temps de se servir de la base de données fournie par l'ADEME. La base de l'ADEME sur la consommation CO2 est une immense base regroupant tout les types d'emission de gaz à effet de serre tel que celle du au textiles, à l'industrie ou autres, ainsi que toute les emissions liée à l'alimentation.
+Afin de connaitre l'impact ecologique d'un plat nous avons choisi dans un premier temps de se servir de la base de données fournie par l'ADEME. La base de l'ADEME sur la consommation CO2 est une immense base regroupant tous les types d'emission de gaz à effet de serre tel que celle dû au textiles, à l'industrie ou autres, ainsi que toutes les emissions liée à l'alimentation.
 
 En inspectant la base de données nous avons remarqué que toutes les informations liée à la nourriture provenait de deux bases de données qui sont AGRIBALYSE et AGRIBALYSE 2.0. AGRIBALYSE est un programme collectif et innovant qui met à disposition des données de référence sur les impacts environnementaux des produits agricoles et alimentaires à travers une base de données construite selon la méthodologie des Analyses du Cycle de Vie. Il est possible de se servir du site web d'AGRIBALYSE pour connaitre l'impact environnemental d'un aliment ou bien de télécharger leur base de données.]
 
 #wrap-content(fig1, body, align: top+right)
 
-Nous avons donc télécharger la base de données concernant dans un premier temps uniquement les plats ayant nécessité une transformation. Cette base de données etait disponible au format CSV. Afin de traiter de rendre les données utilisable nous avons coder un programme python servant à initialiser une base de données en sql comportant tous les plats décrit dans le CSV.
+Nous avons donc télécharger la base de données concernant dans un premier temps uniquement les plats ayant nécessité une transformation. Cette base de données était disponible au format CSV. Afin de traiter, et  de rendre les données utilisables nous avons codé un programme python servant à initialiser une base de données en sql comportant tous les plats décrit dans le CSV.
 
-Le CSV etait construit de la maniere suivante : par plat présent dans la base, il y avait une ligne pour chaque ingredient. Cela signifie qu'on retrouve l'impact écologique d'un ingredient pour que dans chaque plats comportant cette ingredient, mais l'impact différé en fonction de la proportion de cette aliment dans le plat.
+Le CSV était construit de la maniere suivante : par plat présent dans la base, il y avait une ligne pour chaque ingredient. Cela signifie qu'on retrouve l'impact écologique qu'a un ingredient dans chaque plats le comportant, mais pas l'impact différé en fonction de la proportion de cette aliment dans le plat.
 
-En analysant plus precisement nos besoins, nous avons remarqué un manque de plats trop important dans la base de données actuelle. Pour résoudre ce problème, nous avons changé une nouvelle fois de base de données, cette fois-ci comportant uniquement les ingredients avec l'impact écologique associé par kilo d'aliment. Les données étaient fournies sous forme d'un fichier Excel comportant plusieurs onglets, dont un dédié uniquement aux ingrédients. Chaque ingredient est associé vers un code Ciqual
+En analysant plus précisement nos besoins, nous avons remarqué un manque de plats trop important dans la base de données actuelle. Pour résoudre ce problème, nous avons changé une nouvelle fois de base de données, cette fois-ci comportant uniquement les ingredients avec l'impact écologique associé par kilo d'aliment. Les données étaient fournies sous forme d'un fichier Excel comportant plusieurs onglets, dont un dédié uniquement aux ingrédients. À chaque ingredient est associé un code Ciqual
 #cite(<ciqual>)
 qui sert d'indetifiant unique. 
 
-Pour connaitre le poids de chaque aliment dans un plat et pour remplir la table sql des plats nous avons choisi de faire confiance au utilisateur de l'application. Une page de l'application permet d'enregistrer la composition d'un plat (voir @add). Connaissant le poids de chaque aliment et son impact écologique, il devient alors possible de calculer l’impact environnemental de chaque ingrédient au sein d’un plat, mais également l’impact écologique global du plat lui-même. Pour cela, on doit donc realisé la somme de l'impact de chaque ingredient dans le palt et faire un produit en croix pour le ramener à un kilogramme de nourriture.
+Pour connaitre le poids de chaque aliment dans un plat et pour remplir la table sql des plats nous avons choisi de faire confiance au utilisateur de l'application, même si ceci sera verifié lors de sa validation. Une page de l'application permet d'enregistrer la composition d'un plat (voir @add). Connaissant le poids de chaque aliment et son impact écologique, il devient alors possible de calculer l'impact environnemental de chaque ingrédient au sein d'un plat, mais également l'impact écologique global du plat lui-même. Pour cela, on doit donc realisé la somme de l'impact de chaque ingredient dans le plat et faire un produit en croix pour le ramener à un kilogramme de nourriture.
 
 #pagebreak()
 
@@ -173,15 +173,15 @@ Pour l'application nous avions besoin d'une base de données regroupant d'une pa
 
 Nous avons donc défnini un modèle Entité-Association (E-A) afin de représenter la structure de notre base de données. La @EA met en évidence les différentes tables que comporte la base ainsi que les liaisons entre elles.
 
-Les données que nous récupérons via la le fichier Excel sont rangés dans la table ingredients. Afin de trier les ingredients par catégories on retrouve les tables groupes et sous-groupes. Chaque ingredient a une clé étrangère qui mène vers un sous groupes lequel possédant à son tour une clé étrangère menant vers la tables des groupes.
+Les données que nous récupérons via le fichier Excel sont rangés dans la table ingredients. Afin de trier les ingredients par catégories on retrouve les tables groupes et sous-groupes. Chaque ingredient a une clé étrangère qui mène vers un sous groupe, lequel possédant à son tour une clé étrangère menant vers la table des groupes.
 
-Ensuite, les plats sont composé de plusieurs ingredients et un ingredient peut être présent dans plusieurs plat. On a donc une table intermediaire entre les plats et les ingredients. Cette table est composé d'une clé étrangère menant vers l'ID des ingredients 
+Ensuite, les plats sont composés de plusieurs ingredients et un ingredient peut être présent dans plusieurs plats. On a donc une table intermediaire entre les plats et les ingredients. Cette table est composé d'une clé étrangère menant vers l'ID des ingredients.
 
 Après avoir modéliser les deux bases de données, on rédige leur structure dans un fichier .sql qui servira pour leurs implémentations (voir @Implémentation).
 #pagebreak()
 === Implémentation <Implémentation>
 \
-Afin de convertir les données d'AGRIBALYSE dans notre base de données décrites dans la partie précedente, nous avons choisi de coder un programme Python. Le but du programme est de créer à partir de 0 la base de données.
+Afin de convertir les données d'AGRIBALYSE dans notre base de données décrites dans la partie précedente, nous avons choisi de coder un programme Python. Le but du programme est de créer à partir de zero la base de données.
 
 Pour cela, on commence par créer le fichier qui contiendra la base de données. Ce fichier aura une extension .db et s'il était déjà existant, il est remplacé. Ensuite on importe le fichier .sql contenant l'agencement des tables décrit dans la partie Modélisation(voir @Modelisation). Cela permet d'initialiser toutes les tables mais elles sont encores vides.
 
@@ -197,14 +197,14 @@ Dans cette partie, nous allons decrire et expliquer les différentes parties ain
 
 === Analyse d'un menu <Scan>
 
-Cette fonctionnalité est visible sur la premiere page de notre application, elle consiste, dans un premier temps, à reconnaitre le text contenu sur une image choisie par l'utilisateur depuis sa galerie decrit par la figure @2. Pour cela l'utilisateur appuis sur le bouton *Choisir une image*. Par defaut, il y a une image (voir @1). Les images de sa galerie s'affichent puis il clique sur celle qu'il veut analyser. Si une fois les images de la galerie affichées, il (l'utilisateur) ne cliqu sur aucune image et referme l'affichage, un message d'alert s'affiche indiquant qu'aucune image n'a été selectionné (voir @3), sinon l'image est mise à jour (voir @4).
+Cette fonctionnalité est visible sur la premiere page de notre application, elle consiste, dans un premier temps, à reconnaitre le text contenu sur une image choisie par l'utilisateur depuis sa galerie decrit par la figure @2. Pour cela l'utilisateur appuis sur le bouton *Choisir une image*. Par defaut, il y a une image (voir @1). Les images de sa galerie s'affichent puis il clique sur celle qu'il veut analyser. Si une fois les images de la galerie affichées, il (l'utilisateur) ne clique sur aucune image et referme l'affichage, un message d'alert s'affiche indiquant qu'aucune image n'a été selectionné (voir @3), sinon l'image est mise à jour (voir @4).
 
 
 #figure(table(columns: 3)[#figure(image("Images/scanpage.png",width: auto,height: 300pt),caption: "page scan")<1>][#figure(image("Images/selectImage.png",width: auto,height: 300pt),caption: "Choisir une photo")<2>][#figure(image("Images/ImageNotselected.png",width: auto,height: 300pt),caption: "image non selectionné")<3>],caption: "Analyse menu", kind:"fig", supplement: "Tableau")
 \
 L'utilisateur, peut rentrer le nom du restaurant dont il va analyser le menu ainsi que l'adresse s'il l'a. Ces deux informations ne sont pas obligatoires.
 
-Une fois ceci fait, il peut cliquer sur le bouton *Analyser*. On effectue l'analyse textuelle de l'image et on recupere le nom des plats du menu ou du moins le texte reconnu. Une fois les noms recuperés, on verifie pour chaque plat, s'il existe dans notre base de données pour pouvoir ensuite recuperer la liste des ingredients, leurs quantités dans le plat et effectuer le calcule de score. En fonction du score du plat, on lui attribue une couleur qui sera la même que celle de la pastille qui sera affiche pour ce plat, comme l'indique le @couleur.
+Une fois ceci fait, il peut cliquer sur le bouton *Analyser*. On effectue l'analyse textuelle de l'image et on recupere le nom des plats du menu ou du moins le texte reconnu. Une fois les noms recuperés, on verifie pour chaque plat, s'il existe dans notre base de données, pour pouvoir ensuite recuperer la liste des ingredients, leurs quantités dans le plat et effectuer le calcule de score. En fonction du score du plat, on lui attribue une couleur qui sera la même que celle de la pastille qui sera affiche pour ce plat, comme l'indique le @couleur.
 
 
 Le score d'un plat est la somme des Score unique EF
@@ -221,7 +221,7 @@ table.header([*Intervale de score*],[*Couleur*],[*Niveau d'Impact*]))[score >=0 
 
 \
 
-Avant l'affichage du texte ou des plats reconnu(s), les informations renseignées sont stockées dans la base de données locale de l'application. Ces données sont aussi envoyées au serveur si l'utilisateur est connecté à internet et donc au serveur ou attend qu'il le soit pour les envoyées. Cette fonctionnalité est implementée par l'algorithme @algo1 dans la partie Annexe (@annexe).
+Avant l'affichage du texte ou des plats reconnu(s), les informations renseignées sont stockées dans la base de données locale de l'application. Ces données sont aussi envoyées au serveur si l'utilisateur est connecté à internet et donc au serveur ou attend qu'il le soit pour les envoyées. Cette fonctionnalité est implementée par l'algorithme @algo1 (voir Annexe @annexe).
 
 Après l'analyse, on affiche la liste des plats avec une pastille en forme d'etoile juste devant le nom ayant une couleur descriptif de l'impact ecologique du plat comme l'indique la @5. Quand un plat n'existe pas dans notre base de données, l'etoile est de couleur noire.
 
@@ -277,7 +277,7 @@ Les plats ajoutés par les utilisateurs pourront être ajoutés à la base de do
 
 === Design <design>
 
-Afin de réfléchier au fonctionnalité de l'application et de son design général, nous avons commencé le projet en créant des croquis de l'application sur Figma. Cela nous a permi de nous orienter tout au long du projet en se mettant d'accord sur la base de celui-ci. Sur Figma, nous pouvions créer des design de page, ajouter des boutons pour passer d'une page à l'autre.
+Afin de réfléchier au fonctionnalité de l'application et de son design général, nous avons commencé le projet en créant des croquis de l'application sur Figma. Cela nous a permis de nous orienter tout au long du projet en se mettant d'accord sur la base de celui-ci. Sur Figma, nous pouvions créer des design de page, ajouter des boutons pour passer d'une page à l'autre.
 
 #figure(table(columns: 3)[#figure(image("Images/PageScanner.png"), caption:"Page du scanner")][#figure(image("Images/PageRecherche.png"), caption:"Page de recherche")][#figure(image("Images/PageItem.png"), caption:"Page d'un plat")], caption:"Design établi sur Figma au début du projet", kind:"fig", supplement: "Tableau")
 
@@ -292,6 +292,8 @@ Les plats ajoutés et votés par les utilisateurs sont visibles sur la page ajou
 Bien que l'application soit fonctionnelle, plusieurs fonctionnalités n'ont pas pu être implémentées. Cela principalement par manque de temps, ou par lacune technique. Nous allons présenter les pistes les plus intéressantes sur lesquelles nous pourrions travailler pour une future version de l'application.
 
 Dans la première page du menu, nous avions envisagé que l'utilisateur puisse choisir entre prendre une photo directement dans l'application ou la sélectionner dans la galerie de son appareil. Finalement, nous n'avons gardé que la deuxième solution pour simplifier l'application durant son développement.
+
+L'APK de l'application n'est disponible que sur Android. Nous avions prévu de le rendre disponible sur iOS, mais le processus de création d'un APK pour iOS est plus complexe que pour Android et après plusieurs tentatives de build infructueuses, nous avons décidé de ne le laisser en suspend. Il serait donc intéressant de le rendre disponible sur iOS pour la prochaine version de l'application.
 
 Ensuite, il serait vraiment intéressant que les utilisateurs puissent se créer un compte. Cet ajout serait très important avant la publication de l'application pour pouvoir modérer les ajouts de plat ou pour limiter le nombre de votes par plat par utilisateur. Les autres fonctionnalités seraient toujours accessibles sans se créer de compte.
 
