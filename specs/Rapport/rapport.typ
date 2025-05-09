@@ -18,7 +18,7 @@ Nous tenons à exprimer notre sincère gratitude envers toutes les personnes qui
 
 Nous souhaitons exprimer nos sincères remerciements à M. Eric Bourreau pour nous avoir permis de travailler sur ce sujet. Sa confiance et son soutien nous ont permis de le réaliser avec succès. Nous lui sommes reconnaissants pour cette opportunité qui nous a permis d'acquérir une expérience en génie logiciel.
 
-Nous souhaitons tout particulièrement remercier Ewen PHILIPOT, pour nous avoir aidés à initier le projet malgré qu'il soit parti au cours de cette année scolaire. Ses connaissances approfondies nous ont permis d'avoir une base solide pour l'application.
+Nous souhaitons tout particulièrement remercier Ewen PHILIPOT, pour nous avoir aider à initier le projet malgré qu'il soit parti au cours de cette année scolaire. Ses connaissances approfondies nous ont permis d'avoir une base solide pour l'application.
 
 Nous tenons également à exprimer notre gratitude envers Mme Elisabeth BAERT, responsable de la licence 3 Informatique, pour nous avoir permis de réaliser ces projets durant le second semestre.
 
@@ -41,7 +41,7 @@ Nous réalisons ce projet dans le cadre de notre troisième année en Licence In
 
 #align(center)[#image("Images/th.png", width: 50%)]
 
-Ce projet a été réalisé avec KEGLO Patrice, BARATAY Mallory et PHILIPOT Ewen. PHILIPOT Ewen ayant arrêté la Licence avant les vacances de février, nous avons réalisé la majeure partie du projet à deux.
+Ce projet a été réalisé par KEGLO Patrice, BARATAY Mallory et PHILIPOT Ewen. PHILIPOT Ewen ayant arrêté la Licence avant les vacances de février, nous avons réalisé la majeure partie du projet à deux.
 
 #pagebreak()
 
@@ -160,15 +160,16 @@ En inspectant la base de données, nous avons remarqué que toutes les informati
 
 #wrap-content(fig1, body, align: top+right)
 
-Nous avons donc téléchargé la base de données concernant dans un premier temps uniquement les plats ayant nécessité une transformation. Cette base de données étaient disponibles au format CSV. Afin de traiter de rendre les données utilisables, nous avons codé un programme python servant à initialiser une base de données en SQL comportant tous les plats décrit dans le CSV.
+Nous avons donc téléchargé la base de données concernant dans un premier temps uniquement les plats ayant nécessité une transformation. Cette base de données était disponible au format CSV. Afin de traiter, et de rendre les données utilisables, nous avons codé un programme python servant à initialiser une base de données en SQL comportant tous les plats décrit dans le CSV.
 
-Le CSV était construit de la manière suivante : par plat présent dans la base, il y avait une ligne pour chaque ingrédient. Cela signifie qu'on retrouve l'impact écologique d'un ingrédient pour que dans chaque plat comportant cet ingrédient, mais l'impact différé en fonction de la proportion de cet aliment dans le plat.
+Le CSV était construit de la manière suivante : par plat présent dans la base, il y avait une ligne pour chaque ingrédient. Cela signifie qu'on retrouve l'impact écologique qu'a un ingrédient dans chaque plat le comportant, mais pas l'impact différé en fonction de la proportion de cet aliment dans le plat.
 
-En analysant plus précisément nos besoins, nous avons remarqué un manque de plats trop important dans la base de données actuelle. Pour résoudre ce problème, nous avons changé une nouvelle fois de base de données, cette fois-ci comportant uniquement les ingrédients avec l'impact écologique associé par kilo d'aliment. Les données étaient fournies sous forme d'un fichier Excel comportant plusieurs onglets, dont un dédié uniquement aux ingrédients. Chaque ingrédient est associé vers un code Ciqual
+En analysant plus précisément nos besoins, nous avons remarqué un manque de plats trop important dans la base de données actuelle. Pour résoudre ce problème, nous avons changé une nouvelle fois de base de données, cette fois-ci comportant uniquement les ingrédients avec l'impact écologique associé par kilo d'aliment. Les données étaient fournies sous forme d'un fichier Excel comportant plusieurs onglets, dont un dédié uniquement aux ingrédients. À chaque ingrédient, est associé un code Ciqual
+
 #cite(<ciqual>)
 qui sert d'identifiant unique. 
 
-Pour connaître le poids de chaque aliment dans un plat et pour remplir la table SQL des plats nous avons choisi de faire confiance au utilisateur de l'application. Une page de l'application permet d'enregistrer la composition d'un plat (voir @add). Connaissant le poids de chaque aliment et son impact écologique, il devient alors possible de calculer l’impact environnemental de chaque ingrédient au sein d’un plat, mais également l’impact écologique global du plat lui-même. Pour cela, on doit donc réalisé la somme de l'impact de chaque ingrédient dans le plat et faire un produit en croix pour le ramener à un kilogramme de nourriture.
+Pour connaître le poids de chaque aliment dans un plat et pour remplir la table SQL des plats nous avons choisi de faire confiance au utilisateur de l'application, même si ceci sera vérifié lors de sa validation. Une page de l'application permet d'enregistrer la composition d'un plat (voir @add). Connaissant le poids de chaque aliment et son impact écologique, il devient alors possible de calculer l'impact environnemental de chaque ingrédient au sein d'un plat, mais également l'impact écologique global du plat lui-même. Pour cela, on doit donc réaliser la somme de l'impact de chaque ingrédient dans le plat et faire un produit en croix pour le ramener à un kilogramme de nourriture.
 
 #pagebreak()
 
@@ -188,7 +189,7 @@ Après avoir modélisé les deux bases de données, on rédige leur structure da
 #pagebreak()
 === Implémentation <Implémentation>
 \
-Afin de convertir les données d'AGRIBALYSE dans notre base de données décrites dans la partie précédente, nous avons choisi de coder un programme Python. Le but du programme est de créer à partir de 0 la base de données.
+Afin de convertir les données d'AGRIBALYSE dans notre base de données décrites dans la partie précédente, nous avons choisi de coder un programme Python. Le but du programme est de créer à partir de zéro la base de données.
 
 Pour cela, on commence par créer le fichier qui contiendra la base de données. Ce fichier aura une extension .db et s'il était déjà existant, il est remplacé. Ensuite, on importe le fichier .sql contenant l'agencement des tables décrit dans la partie Modélisation(voir @Modelisation). Cela permet d'initialiser toutes les tables, mais elles sont encore vides.
 
@@ -210,7 +211,7 @@ Cette fonctionnalité est visible sur la première page de notre application, el
 \
 L'utilisateur, peut rentrer le nom du restaurant dont il va analyser le menu ainsi que l'adresse s'il l'a. Ces deux informations ne sont pas obligatoires.
 
-Une fois ceci fait, il peut cliquer sur le bouton *Analyser*. On effectue l'analyse textuelle de l'image et on recupere le nom des plats du menu ou du moins le texte reconnu. Une fois les noms recuperés, on verifie pour chaque plat, s'il existe dans notre base de données pour pouvoir ensuite recuperer la liste des ingrédients, leurs quantités dans le plat et effectuer le calcule de score. En fonction du score du plat, on lui attribue une couleur qui sera la même que celle de la pastille qui sera affiche pour ce plat, comme l'indique le @couleur.
+Une fois ceci fait, il peut cliquer sur le bouton *Analyser*. On effectue l'analyse textuelle de l'image et on récupère le nom des plats du menu ou du moins le texte reconnu. Une fois les noms récupérés, on vérifie pour chaque plat, s'il existe dans notre base de données, pour pouvoir ensuite récupérer la liste des ingrédients, leurs quantités dans le plat et effectuer le calcule de score. En fonction du score du plat, on lui attribue une couleur qui sera la même que celle de la pastille qui sera affichée pour ce plat, comme l'indique le @couleur.
 
 
 Le score d'un plat est la somme des Score unique EF
@@ -227,7 +228,7 @@ table.header([*Intervale de score*],[*Couleur*],[*Niveau d'Impact*]))[score >=0 
 
 \
 
-Avant l'affichage du texte ou des plats reconnu(s), les informations renseignées sont stockées dans la base de données locale de l'application. Ces données sont aussi envoyées au serveur si l'utilisateur est connecté à internet et donc au serveur ou attend qu'il le soit pour les envoyées. Cette fonctionnalité est implementée par l'algorithme @algo1 dans la partie Annexe (@annexe).
+Avant l'affichage du texte ou des plats reconnu(s), les informations renseignées sont stockées dans la base de données locale de l'application. Ces données sont aussi envoyées au serveur si l'utilisateur est connecté à internet et donc au serveur ou attend qu'il le soit pour les envoyées. Cette fonctionnalité est implementée par l'algorithme @algo1 (voir Annexe @annexe).
 
 Après l'analyse, on affiche la liste des plats avec une pastille en forme d'etoile juste devant le nom ayant une couleur descriptif de l'impact ecologique du plat comme l'indique la @5. Quand un plat n'existe pas dans notre base de données, l'etoile est de couleur noire.
 
@@ -283,7 +284,7 @@ Les plats ajoutés par les utilisateurs pourront être ajoutés à la base de do
 
 === Design <design>
 
-Afin de réfléchier au fonctionnalité de l'application et de son design général, nous avons commencé le projet en créant des croquis de l'application sur Figma. Cela nous a permi de nous orienter tout au long du projet en se mettant d'accord sur la base de celui-ci. Sur Figma, nous pouvions créer des design de page, ajouter des boutons pour passer d'une page à l'autre.
+Afin de réfléchier au fonctionnalité de l'application et de son design général, nous avons commencé le projet en créant des croquis de l'application sur Figma. Cela nous a permis de nous orienter tout au long du projet en se mettant d'accord sur la base de celui-ci. Sur Figma, nous pouvions créer des design de page, ajouter des boutons pour passer d'une page à l'autre.
 
 #figure(table(columns: 3)[#figure(image("Images/PageScanner.png"), caption:"Page du scanner")][#figure(image("Images/PageRecherche.png"), caption:"Page de recherche")][#figure(image("Images/PageItem.png"), caption:"Page d'un plat")], caption:"Design établi sur Figma au début du projet", kind:"fig", supplement: "Tableau")
 
@@ -292,12 +293,15 @@ Afin de réfléchier au fonctionnalité de l'application et de son design géné
 Pour le backend, nous avons choisi d'utiliser *Fastify*, un framework Node.js qui permet de créer des applications web et des API rapidement et facilement. Fastify est connu pour sa rapidité et sa simplicité d'utilisation, ce qui en fait un excellent choix pour notre projet.
 Nous avons mis en place un serveur qui gère les requêtes de l'application mobile. Le serveur est responsable de la gestion des données, de la communication avec la base de données et de l'envoi des réponses à l'application. Il utilise une base de données SQLite pour stocker les informations sur les plats, les utilisateurs et les votes.
 Les plats ajoutés et votés par les utilisateurs sont visibles sur la page ajout de la backend. Le(s) administrateur(s) peuvent valider ou supprimer les plats ajoutés par les utilisateurs. Les plats validés sont ajoutés à la base de données de l'application mobile lors de la mise à jour journalière.
+Le serveur de l'application est herbergé, ce qui rend l'utilisation de l'application utilisable par tous le monde.
 
 == Fonctionnalités non implémenté
 
 Bien que l'application soit fonctionnelle, plusieurs fonctionnalités n'ont pas pu être implémentées. Cela principalement par manque de temps, ou par lacune technique. Nous allons présenter les pistes les plus intéressantes sur lesquelles nous pourrions travailler pour une future version de l'application.
 
 Dans la première page du menu, nous avions envisagé que l'utilisateur puisse choisir entre prendre une photo directement dans l'application ou la sélectionner dans la galerie de son appareil. Finalement, nous n'avons gardé que la deuxième solution pour simplifier l'application durant son développement.
+
+L'APK de l'application n'est disponible que sur Android. Nous avions prévu de le rendre disponible sur iOS, mais le processus de création d'un APK pour iOS est plus complexe que pour Android et après plusieurs tentatives de build infructueuses, nous avons décidé de ne le laisser en suspend. Il serait donc intéressant de le rendre disponible sur iOS pour la prochaine version de l'application.
 
 Ensuite, il serait vraiment intéressant que les utilisateurs puissent se créer un compte. Cet ajout serait très important avant la publication de l'application pour pouvoir modérer les ajouts de plat ou pour limiter le nombre de votes par plat par utilisateur. Les autres fonctionnalités seraient toujours accessibles sans se créer de compte.
 
