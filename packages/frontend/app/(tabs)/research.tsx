@@ -100,36 +100,26 @@ export default function Research() {
     await clearAllCache();
   }
 
-  // Fonction qui effectue la mise à jour
-  // des plats et des associations plat - ingredients
-  async function DoUpdates(data: {
-    message: string;
-    code: number | string;
-    last: string;
-  }) {
-    console.log("Lance la MAJ");
+/**
+ *
+ * @param data : {message: string;code: number | string;last: string;}
+ * @description Fonction qui effectue la mise à jour de la base de données
+ * en fonction des données reçues
+ * @returns {Promise<void>}
+ */
+  async function DoUpdates(data: {message: string;code: number | string;last: string;}) {
+    // console.log("Lance la MAJ");
     if (data.code === DO_MAJ_CODE) {
       const objet = JSON.parse(data.message);
       const plats: any[] = objet.plats;
       const plats_ingredients: any[] = objet.plats_ingredients;
-
-      console.log("Les plats : ", plats);
-      console.log("Les plats ingredients : ", plats_ingredients);
-
       // Inserer les plats dans la bd de l'appli
       for (const plat of plats) {
         await addPlats(plat);
       }
-
       // Inserer les associations plat - ingredients
       for (const plat_ingredient of plats_ingredients) {
-        const id = await addPlats_Ingredients(plat_ingredient);
-        console.log(
-          "Ajout de l'association plat - ingredient avec id : ",
-          id,
-          plat_ingredient.ID_plat,
-          plat_ingredient.ID_ingredient,
-        );
+        await addPlats_Ingredients(plat_ingredient);
       }
 
       const last_plat = await getLastElementPlats();
@@ -143,11 +133,14 @@ export default function Research() {
     }
   }
 
-  // Fonction pour vérifier les mises à jour
-  // et effectuer la mise à jour si nécessaire
-  async function CheckForUpdates2() {
+
+  /**
+   * Fonction qui vérifie si une mise à jour est disponible
+   * et effectue la mise à jour si nécessaire
+   * @returns {Promise<void>}
+   */
+  async function CheckForUpdates2(): Promise<void> {
     console.log("Demande de maj");
-    const el = await getPlats(false, true, false);
     const ele = await getLastElementPlats();
     if (ele != null) {
       const data = { ID_plat: ele?.ID_plat };
@@ -157,11 +150,13 @@ export default function Research() {
         console.log("Pas de mise à jour disponible");}
       await loadData();
     } else {
-      // TODO : Voir les cas de merde
-      console.log("Y a pas de plats dans ta BD !");
+      // TODO : gerer le cas ou il n'y a pas de plats dans la bd
+      console.log("Y a pas de plats dans la BD !");
     }
   }
-
+/**
+ * Fonction qui vérifie si une mise à jour est disponible
+ */
   async function CheckForUpdates() {
     await checkForDailyUpdate(CheckForUpdates2);
   }

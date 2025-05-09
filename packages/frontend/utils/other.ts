@@ -238,7 +238,6 @@ export async function DoSomethingWhenServerReady(
     }
   } else {
     console.log("Serveur ou réseau indisponible. En attente de reconnexion...");
-
     return new Promise<any>((resolve) => {
       const interval = setInterval(async () => {
         const online = await NetInfo.fetch().then((state) => state.isConnected);
@@ -275,7 +274,7 @@ export async function checkForDailyUpdate(UpdateFonction: Function) {
     const lastUpdate = await AsyncStorage.getItem(LAST_UPDATE_KEY);
 
     if (lastUpdate !== today) {
-      // Appelle ton backend ici
+      // Fait appel à la fonction de mise à jour
       await DoSomethingWhenServerReady(null, UpdateFonction);
 
       // Mets à jour la date locale
