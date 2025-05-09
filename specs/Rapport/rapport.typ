@@ -1,3 +1,6 @@
+#import "@preview/grayness:0.1.0": grayscale-image
+#import "@preview/grayness:0.1.0": grayscale-image
+#import "@preview/grayness:0.1.0": grayscale-image
 #import "@preview/modern-report-umfds:0.1.2": umfds
 #import "@preview/wrap-it:0.1.1": wrap-content
 // #let wi = "60pt" ;
@@ -5,7 +8,7 @@
 
 #show : umfds.with(lang: "fr", title: "Crok'eco
 Projet de Programmation 2", authors: ("BATATAY Mallory
-KEGLO Partice",), abstract: "Crok'eco est une application collaborative permettant à chacun de s'informer sur l'imapct écologique d'un plat.", date: "2024 - 2025", department: [Informatique], img: block(clip:true,
+KEGLO Partice",), abstract: "Crok'eco est une application collaborative permettant à chacun de s'informer sur l'impact écologique d'un plat.", date: "2024 - 2025", department: [Informatique], img: block(clip:true,
   radius: 20pt, image("Images/logo_vf.png", width: 60%)))
 
 #text(1.5em)[*Remerciements*]
@@ -16,9 +19,9 @@ Nous souhaitons exprimer nos sincères remerciements à M. Eric Bourreau pour no
 
 Nous souhaitons tout particulièrement remercier Ewen PHILIPOT, pour nous avoir aidés à initier le projet malgré qu'il soit parti au cours de cette année scolaire. Ses connaissances approfondies nous ont permis d'avoir une base solide pour l'application.
 
-Je tiens également à exprimer ma gratitude envers Mme Elisabeth BAERT, responsable de la licence 3 Informatique, pour nous avoir permis de réaliser ces projets durant le second semestre.
+Nous tenons également à exprimer notre gratitude envers Mme Elisabeth BAERT, responsable de la licence 3 Informatique, pour nous avoir permis de réaliser ces projets durant le second semestre.
 
-Enfin, j'aimerais remercier chaleureusement toutes les personnes qui m'ont aidé dans la création de l'application ainsi que dans la rédaction de ce rapport et qui ont relu ce dernier. Leur soutien et leurs précieux commentaires ont grandement amélioré la qualité de ce travail.
+Enfin, nous aimerions remercier chaleureusement toutes les personnes qui nous ont aidé dans la création de l'application ainsi que dans la rédaction de ce rapport et qui ont relu ce dernier. Leur soutien et leurs précieux commentaires ont grandement amélioré la qualité de ce travail.
 
 #pagebreak()
 
@@ -33,7 +36,9 @@ Enfin, j'aimerais remercier chaleureusement toutes les personnes qui m'ont aidé
 = Introduction
 \
 
-Nous réalisons ce projet dans le cadre de notre troisième année en Licence Informatique. Le projet a débuté en décembre 2024 et nous a accompagnés tout au long de notre 2e semestre. Le sujet que nous avons choisi est celui de Monsieur Bourreau. Le but du projet est de créer une application permettant de noter l'impact écologique avec une couleur. Celle-ci peut être de couleur Verte, Orange ou Rouge, respectivement d'une empreinte carbone faible à élevée.
+Nous réalisons ce projet dans le cadre de notre troisième année en Licence Informatique. Le projet a débuté en décembre 2024 et nous a accompagnés tout au long de notre 2e semestre. Le sujet que nous avons choisi est celui de Monsieur Bourreau. Le but du projet est de créer une application permettant de noter l'impact écologique avec une couleur. Celle-ci peut être de couleur Verte, Orange ou Rouge, respectivement d'une empreinte carbone faible à élevée, de la même manière que le nutriscore.
+
+#align(center)[#image("Images/th.png", width: 50%)]
 
 Ce projet a été réalisé avec KEGLO Patrice, BARATAY Mallory et PHILIPOT Ewen. PHILIPOT Ewen ayant arrêté la Licence avant les vacances de février, nous avons réalisé la majeure partie du projet à deux.
 
@@ -56,17 +61,18 @@ Entre 2009 et 2019, la quantité de viande consommée a baissé de 5 % en France
 #figure(image("Images/repas.png", width: 90%), caption: [Emission de kg de CO2 en fonction du type de rapas\ 
 Source: ADEME #cite(<ademe>)], kind:"fig", supplement: "Image")
 
+#pagebreak()
 == Approche du sujet
 \
 
-Afin d'aider la population à faire des gestes écologiques, il est important de lui donner les outils permettant d'atteindre ses objectifs. La composition d'un plat étant la première cause de l'impact écologique du plat, il serait intéressant de pouvoir être informé de l'empreinte écologique du plat que l'on souhaite manger.
+Afin d'aider la population à faire des gestes écologiques, il est important de lui donner les outils permettant d'atteindre ses objectifs. La composition d'un plat étant la première cause de l'impact écologique de celui-ci, il serait intéressant de pouvoir être informé de l'empreinte écologique du plat que l'on souhaite manger.
 Afin de pallier ce problème, nous avons imaginé plusieurs solutions : 
 
 Afin de proposer une solution aux étudiants, dans un premier temps, il serait possible de s'accorder avec le Crous ou les gérants des restaurants de la Faculté des Sciences pour faire afficher sur les téléviseurs l'impact écologique de chaque plat. L'affichage pourrait se faire à l'aide d'une pastille de couleur correspondant au degré de pollution.
 
 Sinon, nous pourrions afficher le résultat à l'aide d'un QR Code. Le QR Code redirigerait vers une page qui détaillerait l'empreinte carbone de chaque plat.
 
-Ces deux solutions avaient déjà été envisagées l'année dernière, mais sans succès, car, comme la première, elle présente un problème. En effet, elle nécessite un accord avec les gérants des restaurants qui sont assez réticents à voir l'impact écologique de leurs plats révélé. De plus, même s'il avait été possible d'avoir l'accord pour les restaurants de la Faculté des Sciences, ces solutions demanderaient énormément d'efforts pour être déployées à l'échelle de la France, car elles nécessiteraient l'accord de chaque restaurant.
+Ces deux solutions avaient déjà été envisagées l'année dernière, mais sans succès, car elle présente un problème. En effet, elle nécessite un accord avec les gérants des restaurants qui sont assez réticents à voir l'impact écologique de leurs plats révélé. De plus, même s'il avait été possible d'avoir l'accord pour les restaurants de la Faculté des Sciences, ces solutions demanderaient énormément d'efforts pour être déployées à l'échelle de la France, car elles nécessiteraient l'accord de chaque restaurant.
 
 Nous avons donc choisi de faire une application collaborative qui calcule l'impact écologique de tous les plats en scannant leurs noms sur un menu. Le but de cette dernière méthode est de permettre à tout le monde de participer à améliorer l'écologie en rendant l'application collaborative. Cette méthode peut fonctionner dans n'importe quel restaurant traditionnel et peut être étendue au self et cantine scolaire.
 
@@ -316,10 +322,11 @@ Enfin, ce projet nous a permis de mettre en pratique nos connaissances acquises 
   target: figure.where(kind: "fig"),
 )
 
+#pagebreak()
 = Annexes <annexe>
 
 #figure(image("Images/algo1.png"),caption: "Algorithme d'envoie de donneés avec attente si l'utilisateur n'est pas connecté")<algo1>
 
 #pagebreak()
-#figure(image("Images/algo2.png"),caption: "Algorithmes de demande de la mise à jour ")<algo2>
-#figure(image("Images/algo3.png"),caption: "Algorithme de Realisation de la mise à jour automatique")<algo3>
+#figure(image("Images/algo2.png"),caption: "Algorithme de demande de la mise à jour")<algo2>
+#figure(image("Images/algo3.png"),caption: "Algorithme de réalisation de la mise à jour automatique")<algo3>
