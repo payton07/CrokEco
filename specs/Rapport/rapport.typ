@@ -202,9 +202,9 @@ Avec ce programme Python, si la base de données d'AGRIBALYSE venait d'être mis
 == Application utilisateur <userApp>
 \
 Dans cette partie, nous allons décrire et expliquer les différentes parties ainsi que les différentes fonctionnalités implémentées tout en montrant leur fonctionnement avec des images. 
-\
-=== Analyse d'un menu <Scan>
 
+=== Analyse d'un menu <Scan>
+\
 Cette fonctionnalité est visible sur la première page de notre application, elle consiste, dans un premier temps, à reconnaître le texte contenu sur une image choisie par l'utilisateur depuis sa galerie décrit par la figure @2. Pour cela l'utilisateur appuis sur le bouton *Choisir une image*. Par défaut, il y a une image (voir @1). Les images de sa galerie s'affichent puis il clique sur celle qu'il veut analyser. Si une fois les images de la galerie affichées, il (l'utilisateur) ne clique sur aucune image et referme l'affichage, un message d'alerte s'affiche indiquant qu'aucune image n'a été sélectionné (voir @3), sinon l'image est mise à jour (voir @4).
 
 #figure(table(columns: 3)[#figure(image("Images/scanpage.png",width: auto,height: 300pt),caption: "page scan")<1>][#figure(image("Images/selectImage.png",width: auto,height: 300pt),caption: "Choisir une photo")<2>][#figure(image("Images/ImageNotselected.png",width: auto,height: 300pt),caption: "image non selectionné")<3>],caption: "Analyse menu", kind:"fig", supplement: "Tableau")
@@ -310,10 +310,11 @@ Enfin, nous avions pensé à géolocaliser les restaurants dont les utilisateurs
 
 == Statistiques
 
-Pour faire un bilan de notre application, elle se compose de 48 fichiers rédigés par nos soins, répartis de cette manière :  
+Pour faire un bilan de notre application, elle se compose de 66 fichiers rédigés par nos soins, répartis de cette manière :  
 - 34 fichiers pour l'application frontend,  
 - 10 fichiers pour le serveur backend,  
-- 4 fichiers pour le code externe (SQL et Python).  
+- 4 fichiers pour le code externe (SQL et Python).
+- 18 fichiers pour les tests.
 
 En tout, nous avons écrit *5 432 lignes de code* dans ce projet. Cela inclut les fichiers TypeScript, JavaScript, HTML, CSS, Python et SQL. Ce volume reflète l'ampleur du travail accompli pour développer une application complète et fonctionnelle.
 
