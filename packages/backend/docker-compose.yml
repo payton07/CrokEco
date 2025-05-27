@@ -1,11 +1,16 @@
+version: '3.9'  # Version recommandée (moderne et compatible)
+
 services:
   backend:
-    build: .  # Utilise le Dockerfile du répertoire courant pour construire l'image du coup backend/ quoi
+    build: .              # Construit à partir du Dockerfile dans le répertoire courant
     ports:
-      - "8008:8008"  # Mappe le port 3000 du conteneur au port 3000 de l'hôte
+      - "8008:8008"       # Redirige le port 8008 du conteneur vers le port 8008 de l'hôte
     networks:
-      - backend-network  # Connecte le backend au réseau Docker personnalisé qu'il crée automatiquement avec les lignes ci-dessous
+      - backend-network   # Se connecte au réseau nommé
+    restart: unless-stopped  # Redémarre automatiquement sauf si tu l’arrêtes manuellement
+    environment:
+      - NODE_ENV=production  # Définit l'environnement d'exécution
 
 networks:
-  backend-network:  # Crée un réseau Docker
-    driver: bridge  # Utilise le driver 'bridge' par défaut ?? 
+  backend-network:
+    driver: bridge         # Utilise le driver bridge (par défaut mais bien de le préciser)
