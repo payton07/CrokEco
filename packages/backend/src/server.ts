@@ -49,7 +49,7 @@ dotenv.config();
 
 const SECRET_KEY = process.env.SECRET_KEY ?? "";
 const HOST = '0.0.0.0';
-const PORT: number = process?.env?.PORT ? parseInt(process.env.PORT) : 3000;
+const PORT: number = process?.env?.PORT ? parseInt(process.env.PORT) : 8008;
 
 function verifyHMACSignature(
   method: string,
