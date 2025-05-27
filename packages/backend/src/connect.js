@@ -1,6 +1,6 @@
 
 const HOST = '127.0.0.1'; 
-const PORT = 3000;
+const PORT = 8008;
 
 document.getElementById("loginForm").addEventListener("submit", async function(event) {
     event.preventDefault();
