@@ -95,8 +95,8 @@ fastify.get("/", async (request, reply) => {
 });
 
 fastify.get("/accueil", async (request, reply) => {
+  
   console.log("Dans accueil");
-
   return reply.sendFile("accueil.html");
 });
 fastify.get("/ajout", async (request, reply) => {

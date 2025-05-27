@@ -6,13 +6,12 @@ import path from "path";
 import { fileURLToPath } from "url";
 import fastifyStatic from "@fastify/static";
 import bcrypt from "bcrypt";
-const DO_MAJ_CODE = 3333;
+const DO_MAJ_CODE = "3333DOMAJ";
 // Charger les variables d'environnement depuis le fichier .env
 dotenv.config();
-const SECRET_KEY = process.env.SECRET_KEY ?? '';
-// const HOST = '0.0.0.0';
-const HOST = '172.24.10.219';
-const PORT = process?.env?.PORT ? parseInt(process.env.PORT) : 3000;
+const SECRET_KEY = process.env.SECRET_KEY ?? "";
+const HOST = '0.0.0.0';
+const PORT = process?.env?.PORT ? parseInt(process.env.PORT) : 8008;
 function verifyHMACSignature(method, table, data, timestamp, clientSignature) {
     const body = JSON.stringify(data);
     const message = `${method}\n/api/${table}\n${body}\n${timestamp}`;
@@ -29,7 +28,7 @@ const fastify = Fastify();
 const port = { port: PORT, host: HOST };
 fastify.register(fastifyStatic, {
     root: path.join(__dirname),
-    prefix: "/", // Accès direct aux fichiers
+    prefix: "/",
 });
 // Route pour la page d'accueil
 fastify.get("/", async (request, reply) => {
@@ -40,29 +39,21 @@ fastify.get("/accueil", async (request, reply) => {
     console.log("Dans accueil");
     return reply.sendFile("accueil.html");
 });
+fastify.get("/ajout", async (request, reply) => {
+    console.log("Dans accueil");
+    return reply.sendFile("ajout.html");
+});
 fastify.get("/ping", async (request, reply) => {
     return reply.code(201).send({ message: "ping reussi !", code: 201 });
 });
 fastify.post("/login", async (request, reply) => {
-    // const name = "admin";
-    // const mdpadmin = "123";
-    // bcrypt.hash(mdpadmin, 10, async (err, hash) => {
-    //   if (err) {
-    //         console.error("Erreur de hachage :", err);
-    //         return;
-    //     }
-    //     const user = {'Nom':name,'Mdp':hash};
-    //     const res =await addUsers(user);
-    //     console.log("user inserer : id ", res);
-    // });
     const { nom, mdp } = request.body;
     console.log("le nv mdp ,", mdp);
     try {
         // Récupère les utilisateurs (supposons que getUsers() retourne une liste d'objets utilisateurs)
         const res1 = await getUsers(false, true, true, false);
-        // Si l'utilisateur est trouvé et que le nom correspond
+        console.log(res1);
         if (res1 !== undefined && nom === res1.at(0).Nom) {
-            // Utilisation de la version asynchrone de bcrypt.compare avec await
             const isMatch = await bcrypt.compare(mdp, res1.at(0).Mdp);
             if (isMatch) {
                 console.log("Le mot de passe est correct !");
@@ -110,8 +101,25 @@ fastify.get("/api/platsClient", async (request, reply) => {
     console.log("get platsClient");
     try {
         const data = await getPlats_Client(false, true, false);
-        console.log("la data", data?.length, data);
-        return reply.send(JSON.stringify(data));
+        // console.log("la data", data?.length, data);
+        const dico_assoc = {};
+        if (data != undefined && data.length > 0) {
+            // Pour chaque plat, on va chercher les associations etre lui et ses ingredients puis  les ajouter au dico_assoc
+            for (const plat of data) {
+                const id = plat.ID_plat;
+                const assoc = await getPlats_Ingredients_Client({ ID_plat: id }, true, false, false);
+                if (dico_assoc[id] == undefined) {
+                    dico_assoc[id] = [];
+                }
+                if (assoc != undefined && assoc.length > 0) {
+                    dico_assoc[id].push(...assoc);
+                }
+            }
+        }
+        if (data == undefined || data.length == 0) {
+            return reply.status(404).send({ plats: JSON.stringify([]) });
+        }
+        return reply.send({ plats: JSON.stringify(data), assocs: JSON.stringify(dico_assoc) });
     }
     catch (err) {
         console.error("Erreur lors de la récupération des plats clients:", err);
@@ -234,6 +242,7 @@ fastify.post("/api/platsInsert", async (request, reply) => {
         const plat = plats?.at(0);
         const id = plats?.at(0).ID_plat;
         delete plat.ID_plat;
+        plat.Certified = 1;
         const res = await addPlats(plat);
         if (res && assoc != undefined && assoc.length > 0) {
             for (const a of assoc) {
@@ -250,6 +259,39 @@ fastify.post("/api/platsInsert", async (request, reply) => {
                 .send({ message: "Plat ajouté avec succès", code: 201 });
         }
         return reply.status(201).send({ message: "Failed ", code: 404 });
+    }
+    catch (err) {
+        console.error("Erreur lors de l'ajout du Plat:", err);
+        return reply.status(500).send({ error: "Erreur interne du serveur" });
+    }
+});
+fastify.post("/api/platsDelete", async (request, reply) => {
+    const obj = request.body;
+    // const {name,ingredients} = data;
+    console.log(`Tentative de suppression d'un plat avec Nom_plat: ${obj}`);
+    // const clientSignature = request.headers['x-signature'] as string;
+    // const timestamp = request.headers['x-timestamp'] as string;
+    // if (!verifyHMACSignature('POST', 'plats', data, timestamp, clientSignature)) {
+    //   return reply.status(400).send({ status: 'error', message: 'Signature invalide' });
+    // }
+    try {
+        const plats = await getPlats_Client(obj, true, true, 1);
+        const plat = plats?.at(0);
+        const id = plats?.at(0).ID_plat;
+        delete plat.ID_plat;
+        const query = { ID_plat: id };
+        console.log("l'id plat : ", id);
+        const del = await deletePlats_Ingredients_Client(query);
+        const del1 = await deletePlats_Client(query);
+        if (del && del1) {
+            console.log("plat delete : ", del, del1);
+            return reply
+                .status(201)
+                .send({ message: "Plat supprimé avec succès", code: 201 });
+        }
+        else {
+            return reply.status(201).send({ message: "Failed ", code: 404 });
+        }
     }
     catch (err) {
         console.error("Erreur lors de l'ajout du Plat:", err);
