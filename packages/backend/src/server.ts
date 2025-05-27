@@ -99,6 +99,11 @@ fastify.get("/accueil", async (request, reply) => {
 
   return reply.sendFile("accueil.html");
 });
+fastify.get("/ajout", async (request, reply) => {
+  console.log("Dans accueil");
+
+  return reply.sendFile("ajout.html");
+});
 fastify.get("/ping", async (request, reply) => {
   return reply.code(201).send({ message: "ping reussi !", code: 201 });
 });
