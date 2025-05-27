@@ -5,6 +5,8 @@ const IP = HOST;
 const port = PORT;
 const url = `http://${IP}:${port}/api/platsClient`;
 async function fetchPlats() {
+    try {
+        
     const response = await fetch(url,{
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -31,6 +33,10 @@ async function fetchPlats() {
         `;
         tableBody.appendChild(row);
     });
+    }
+    }
+    catch (error) {
+        console.log(error);
     }
 }
 

@@ -23,7 +23,7 @@ import {
   getRestaurant_Client,
   getUsers,
   updatePlats_Client,
-} from "../utils/acces_bdd.js";
+} from "../utils/acces_bdd.ts";
 import crypto from "crypto";
 import dotenv from "dotenv";
 import path, { dirname } from "path";
