@@ -37,7 +37,7 @@ Follow these steps to set up the project locally:
 ### Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Yvaniak/projet-Co2Score.git
+   git clone https://github.com/payton07/CrokEco.git
    ```
 2. Navigate to the project directory:
    cd projet-Co2Score/frontend
